@@ -1,15 +1,16 @@
 // src/app/shell/shell.component.ts
-import { Component, inject } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../shared/service/auth.service';
+import { Component, inject } from "@angular/core";
+import { RouterOutlet, RouterLink, RouterLinkActive } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { Router } from "@angular/router";
+import { AuthService } from "../../../shared/service/auth.service";
 
 @Component({
   standalone: true,
-  selector: 'app-shell',
+  selector: "app-shell",
   imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
-  templateUrl: './shell.html',
+  templateUrl: "./shell.html",
+  styleUrls: ["./shell.css"],
 })
 export class ShellComponent {
   auth = inject(AuthService);
@@ -17,6 +18,6 @@ export class ShellComponent {
 
   logout() {
     this.auth.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
   }
 }
