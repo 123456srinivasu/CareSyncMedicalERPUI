@@ -1,0 +1,399 @@
+<!-- <div class="max-w-sm mx-auto mt-10 p-4 border rounded">
+  <h2>Sign in</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-3">
+    <div>
+      <label>Email</label>
+      <input
+        type="email"
+        class="w-full border-1 border-black p-2 rounded"
+        formControlName="email"
+      />
+    </div>
+    <div>
+      <label>Password</label>
+      <input
+        type="password"
+        class="w-full border-1 border-black p-2 rounded"
+        formControlName="password"
+      />
+    </div>
+    <button
+      type="submit"
+      class="w-full mt-4 p-2 border-2 border-black bg-black-alpha-90 text-white"
+    >
+      Login
+    </button>
+  </form>
+
+  <p *ngIf="error()" class="text-red-600 mt-3">{{ error() }}</p>
+</div> -->
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container border-topmenu">
+    <!-- <img src="/assets/images/logoimg.png" alt="" style="margin-left:5px;margin-top:5px; max-width:100%;height:51px;"> -->
+
+    <a class="navbar-brand fw-bold" href="#">GBR FOUNDATION</a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="" id="mainNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">
+            Customer Support : +91 966-624-9551
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home</a>
+        </li>
+
+        <!-- MEGA MENU -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button">
+            Services
+          </a>
+
+          <div class="dropdown-menu mega-menu">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-4">
+                  <h6 class="text-uppercase fw-bold">Healthcare</h6>
+                  <ul class="list-unstyled">
+                    <li>
+                      <a class="dropdown-item" href="#">Medical Camps</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">Diagnostics</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">Telemedicine</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="col-md-4">
+                  <h6 class="text-uppercase fw-bold">Education</h6>
+                  <ul class="list-unstyled">
+                    <li>
+                      <a class="dropdown-item" href="#">Scholarships</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">Training Programs</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#">Workshops</a></li>
+                  </ul>
+                </div>
+
+                <div class="col-md-4">
+                  <h6 class="text-uppercase fw-bold">Support</h6>
+                  <ul class="list-unstyled">
+                    <li><a class="dropdown-item" href="#">Donations</a></li>
+                    <li>
+                      <a class="dropdown-item" href="#">Volunteers</a>
+                    </li>
+                    <li><a class="dropdown-item" href="#">Partners</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#"
+      >GOPALAM BRAMARAMBA, RAMASWAMY FOUNDATION(GBR)</a
+    >
+
+    <div class="elementor-button-wrapper">
+      <a
+        class="elementor-button elementor-button-link elementor-size-md"
+        href="#"
+      >
+        <span class="elementor-button-content-wrapper">
+          <span class="elementor-button-icon elementor-align-icon-left"> </span>
+          <span class="elementor-button-text">Make an Appointment</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= CAROUSEL ================= -->
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div
+      class="carousel-item active"
+      style="background-image: url('/assets/images/main-slider-img-1.jpg')"
+    >
+      <div class="carousel-caption">
+        <h2>Healthcare for Everyone</h2>
+        <p>Delivering quality medical support</p>
+      </div>
+    </div>
+
+    <div
+      class="carousel-item"
+      style="background-image: url('/assets/images/main-slider-img-2.jpg')"
+    >
+      <div class="carousel-caption">
+        <h2>Education & Empowerment</h2>
+        <p>Building a better future</p>
+      </div>
+    </div>
+
+    <div
+      class="carousel-item"
+      style="background-image: url('/assets/images/main-slider-img-3.jpg')"
+    >
+      <div class="carousel-caption">
+        <h2>Community Support</h2>
+        <p>Working together for change</p>
+      </div>
+    </div>
+  </div>
+
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#mainCarousel"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#mainCarousel"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<!-- ================= CONTENT ================= -->
+<section class="py-5">
+  <div class="container text-center">
+    <h3 class="fw-bold mb-3">Welcome to GBR Foundation</h3>
+    <p class="text-muted">
+      GBR Foundation is a non-profit organization that conducts health camps for
+      Diabetes and BP patients at various locations in Andhra Pradesh and
+      Telangana.
+    </p>
+  </div>
+  <div class="container h-p100">
+    <div class="row align-items-center justify-content-md-center h-p100">
+      <div class="col-12">
+        <div class="row justify-content-center g-0">
+          <div class="col-lg-5 col-md-5 col-12">
+            <div class="bg-white rounded10 shadow-lg">
+              <div class="content-top-agile p-20 pb-0">
+                <p class="mb-0">Sign in to continue to GBR Foundation.</p>
+              </div>
+              <div class="p-40">
+                <!-- <form action="main/" method="post"> -->
+                <form
+                  [formGroup]="form"
+                  (ngSubmit)="onSubmit()"
+                  class="space-y-3"
+                >
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text bg-transparent"
+                        ><i class="ti-user"></i
+                      ></span>
+                      <input
+                        type="text"
+                        class="form-control ps-15 bg-transparent"
+                        placeholder="Username"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <span class="input-group-text bg-transparent"
+                        ><i class="ti-lock"></i
+                      ></span>
+                      <input
+                        type="password"
+                        class="form-control ps-15 bg-transparent"
+                        placeholder="Password"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Select your camp location to login</label
+                    >
+                    <select class="form-control select2" style="width: 100%">
+                      <option selected="selected">SELECT CAMP</option>
+                      <option>JANA VIGNANA VEDIKA TIRUVURU</option>
+                      <option>PAYAKAPURAM VIJAYAWADA</option>
+                      <option disabled="disabled">CHALLAPALLI</option>
+                      <option>BAPATLA</option>
+                      <option>MANGALAGIRI</option>
+                      <option>
+                        Dachuri Ramireddy Vignana Kendram - ONGOLE
+                      </option>
+                      <option>ELURU</option>
+                    </select>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="checkbox">
+                        <input type="checkbox" id="basic_checkbox_1" />
+                        <label for="basic_checkbox_1">Remember Me</label>
+                      </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-6">
+                      <div class="fog-pwd text-end">
+                        <a href="javascript:void(0)" class="hover-warning"
+                          ><i class="ion ion-locked"></i> Forgot pwd?</a
+                        ><br />
+                      </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12 text-center">
+                      <button type="submit" class="btn btn-danger mt-10">
+                        SIGN IN
+                      </button>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                </form>
+                <div class="text-center">
+                  <p class="mt-15 mb-0">
+                    Don't have an account?
+                    <a href="auth_register.html" class="text-warning ms-5"
+                      >Sign Up</a
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <p class="mt-20 text-white">- Sign With -</p>
+              <p class="gap-items-2 mb-20">
+                <a class="btn btn-social-icon btn-round btn-facebook" href="#"
+                  ><i class="fa fa-facebook"></i
+                ></a>
+                <a class="btn btn-social-icon btn-round btn-twitter" href="#"
+                  ><i class="fa fa-twitter"></i
+                ></a>
+                <a class="btn btn-social-icon btn-round btn-instagram" href="#"
+                  ><i class="fa fa-instagram"></i
+                ></a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ================= FOOTER ================= -->
+
+<footer class="site-footer" style="background-color: #2b618e; color: #fff">
+  <div class="container">
+    <div class="row align-items-start">
+      <!-- LEFT -->
+      <div class="col-md-4 mb-3">
+        <p class="mb-1">Copyright 2017, Welcome to GBR Foundation,</p>
+        <p class="mb-0">All Rights Reserved</p>
+      </div>
+
+      <!-- CENTER -->
+      <div class="col-md-5 mb-3 text-md-start text-center">
+        <p class="mb-1"><strong>📞</strong> 939-328-5767, 996-688-7774</p>
+        <p class="mb-1">
+          <strong>📍</strong> Gopalam Bhramaramga Ramaswamy Fundation, 6-139/1,
+          C/O Girija Neuro Centre
+        </p>
+        <p class="mb-1">
+          Opp Penamaluru Police Station, Kanuru, Vijayawada-7, Andhra Pradesh
+        </p>
+        <p class="mb-0">
+          Donations made to us are exempted under sec. 80G, Income Tax Act.
+        </p>
+        <p class="mb-0">
+          1961 Under Lr. No. (153)/R-1/GNT/04-05, Dated : 20/05/2004
+        </p>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="col-md-3 mb-3 text-md-end text-center">
+        <div class="footer-social">
+          <!-- Facebook -->
+          <i class="fab fa-facebook-f fa-2x" style="color: #3b5998"></i>
+
+          <!-- Twitter -->
+          <i class="fab fa-twitter fa-2x" style="color: #55acee"></i>
+
+          <!-- Google -->
+          <i class="fab fa-google fa-2x" style="color: #dd4b39"></i>
+
+          <!-- Instagram -->
+          <i class="fab fa-instagram fa-2x" style="color: #ac2bac"></i>
+
+          <!-- Linkedin -->
+          <i class="fab fa-linkedin-in fa-2x" style="color: #0082ca"></i>
+
+          <!-- Pinterest -->
+          <i class="fab fa-pinterest fa-2x" style="color: #c61118"></i>
+
+          <!-- Vkontakte -->
+          <i class="fab fa-vk fa-2x" style="color: #4c75a3"></i>
+
+          <!-- Stack overflow -->
+          <i class="fab fa-stack-overflow fa-2x" style="color: #ffac44"></i>
+
+          <!-- Youtube -->
+          <i class="fab fa-youtube fa-2x" style="color: #ed302f"></i>
+
+          <!-- Slack -->
+          <i class="fab fa-slack-hash fa-2x" style="color: #481449"></i>
+
+          <!-- Github -->
+          <i class="fab fa-github fa-2x" style="color: #333333"></i>
+
+          <!-- Dribbble -->
+          <i class="fab fa-dribbble fa-2x" style="color: #ec4a89"></i>
+
+          <!-- Reddit -->
+          <i class="fab fa-reddit-alien fa-2x" style="color: #ff4500"></i>
+
+          <!-- Whatsapp -->
+          <i class="fab fa-whatsapp fa-2x" style="color: #25d366"></i>
+          <a href="#" title="YouTube">Y</a>
+          <a href="#" title="Skype">S</a>
+          <a href="#" title="Twitter">T</a>
+          <a href="#" title="LinkedIn">in</a>
+          <a href="#" title="Google Plus">G+</a>
+          <a href="#" title="Facebook">f</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      © 2025 GOPALAM BRAMARAMBA RAMASWAMY FOUNDATION (GBR)
+    </div>
+  </div>
+</footer>

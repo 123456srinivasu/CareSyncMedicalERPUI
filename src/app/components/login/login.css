@@ -1,0 +1,98 @@
+ body {
+        font-family: "Montserrat", "Inter", sans-serif;
+      }
+
+      /* Mega Menu */
+      .mega-menu {
+        width: 100%;
+        padding: 20px;
+      }
+
+      .dropdown-menu {
+        border-radius: 0;
+        margin-top: 0;
+      }
+
+      .dropdown:hover .dropdown-menu {
+        display: block;
+      }
+
+      /* Carousel height */
+      .carousel-item {
+        height: 500px;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .carousel-caption {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 20px;
+        border-radius: 6px;
+        padding: 018px 30px 018px 30px;
+        background-color: #54595f00;
+        color: #ffffff;
+        border-style: solid;
+        border-width: 1px 1px 1px 1px;
+        border-color: #ffffff59;
+        border-radius: 3px 3px 3px 3px;
+      }
+
+      .navbar-expand-lg .navbar-nav .dropdown-menu {
+        position: absolute;
+        right: 0;
+      }
+      .dropdown,
+      .dropdown-center,
+      .dropend,
+      .dropstart,
+      .dropup,
+      .dropup-center {
+        position: static;
+      }
+      .sticky-top {
+        position: -webkit-sticky;
+        position: absolute;
+
+        /* background-color: rgb(134 181 213 / 80%); */
+        top: 0;
+        z-index: 1020;
+        height: 140px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        display: block;
+      }
+
+      .border-topmenu {
+        border-style: solid;
+        border-width: 0px 0px 1px 0px;
+        border-color: rgba(255, 255, 255, 0.2);
+        transition: background 0.3s, border 0.3s, border-radius 0.3s,
+          box-shadow 0.3s;
+        padding: 0px 0px 0px 0px;
+      }
+      .elementor-button {
+        font-family: "Lato", Sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-style: normal;
+        text-decoration: none;
+        line-height: 1.1em;
+        letter-spacing: 2px;
+        fill: #ffffff;
+        color: #ffffff;
+        background-color: rgba(255, 255, 255, 0);
+        border-style: solid;
+        border-width: 1px 1px 1px 1px;
+        border-color: #ffffff;
+        padding: 21px 32px 19px 32px;
+      }
+      .elementor-button:hover,
+      .elementor-button:focus {
+        color: #ffffff;
+        background-color: #89e3ff;
+        border-color: #89e3ff;
+      }
+      .elementor-button-wrapper {
+        margin-top: 35px;
+      }
