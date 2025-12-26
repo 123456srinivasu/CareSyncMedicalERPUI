@@ -30,6 +30,18 @@ export const routes: Routes = [
             (m) => m.SessionInfoComponent
           ),
       },
+      {
+        path: "camp",
+        loadComponent: () =>
+          import("./app/components/camp/camp").then((m) => m.CampComponent),
+      },
+      {
+        path: "patient",
+        loadComponent: () =>
+          import("./app/components/patient-details/patient-details").then(
+            (m) => m.PatientDetailsComponent
+          ),
+      },
       { path: "", pathMatch: "full", redirectTo: "dashboard" },
     ],
   },

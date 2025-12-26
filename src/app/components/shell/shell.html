@@ -80,7 +80,9 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="#">Camp</a>
+            <a class="nav-link" routerLink="/camp" routerLinkActive="active"
+              >New Camp setup
+            </a>
           </li>
 
           <li class="nav-item">
@@ -117,11 +119,23 @@
       <div class="col-10">
         <ul class="nav nav-pills menu-nav">
           <li class="nav-item">
-            <a class="nav-link active" href="#">Patient</a>
+            <a class="nav-link" routerLink="/patient" routerLinkActive="active"
+              >Patient</a
+            >
           </li>
-          <li class="nav-item"><a class="nav-link" href="#">Camp</a></li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/camp" routerLinkActive="active"
+              >Camp</a
+            >
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Patient Visit</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/patient" routerLinkActive="active"
+              >Patient Details</a
+            >
           </li>
           <li class="nav-item"><a class="nav-link" href="#">Vendor</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Orders</a></li>
@@ -148,7 +162,9 @@
       <div class="col-2">Pharmacy</div>
       <div class="col-2">Cashier</div>
       <div class="col-2">Insulin</div>
-      <div class="col-2">Exit</div>
+      <div class="col-2" routerLink="/login" routerLinkActive="active">
+        Exit
+      </div>
     </div>
   </div>
   <!-- <nav class="flex align-items-center justify-iitems-center gap-3">

@@ -1,0 +1,99 @@
+<div class="p-4">
+  <section class="content">
+    <div class="row">
+      <div class="col-12">
+        <!-- Basic Forms -->
+        <div class="box">
+          <div class="box-header with-border">
+            <h1 class="font-semibold">New Camp setup</h1>
+          </div>
+          <!-- /.box-header -->
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" role="form">
+            <div class="box-body">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >New Camp Name <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter camp name"
+                      formControlName="name"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >New Camp location
+                      <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Enter location"
+                      formControlName="location"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Mobile Contact <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="tel"
+                      class="form-control"
+                      placeholder="Phone number"
+                      formControlName="mobile"
+                    />
+                    <div
+                      *ngIf="form.controls['mobile'].invalid && form.controls['mobile'].touched"
+                      class="text-danger"
+                    >
+                      Starts with 6, 7, 8, or 9 and Enter a valid 10-digit
+                      mobile number
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Camp Address <span class="text-danger">*</span></label
+                    >
+                    <textarea
+                      rows="4"
+                      class="form-control"
+                      placeholder="New Camp Address, GBR Foundation,  Street, City, Country"
+                      formControlName="address"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="form.reset()"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-success pull-right"
+                [disabled]="form.invalid"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+  </section>
+</div>
