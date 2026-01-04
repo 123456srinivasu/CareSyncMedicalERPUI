@@ -1,0 +1,126 @@
+.medicines-container {
+  // h1 styles are now in .header-section
+}
+
+.header-section {
+  margin-bottom: 20px;
+  padding: 20px 24px;
+
+  h1 {
+    color: var(--medical-text);
+    margin: 0;
+    font-weight: 600;
+  }
+}
+
+.tab-content {
+  padding: 20px 0;
+
+  .tab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .search-field {
+      width: 300px;
+
+      @media (max-width: 768px) {
+        width: 100%;
+      }
+    }
+
+    button {
+      mat-icon {
+        margin-right: 5px;
+      }
+    }
+  }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-weight: 500;
+      color: var(--p-text-color);
+      font-size: 14px;
+      margin-bottom: 4px;
+
+      &::after {
+        content: '';
+      }
+    }
+
+    &.full-width {
+      width: 100%;
+    }
+
+    // PrimeNG Input styling
+    ::ng-deep {
+      .p-inputtext,
+      .p-dropdown,
+      .p-calendar {
+        width: 100%;
+      }
+
+      .p-dropdown,
+      .p-calendar {
+        .p-inputtext {
+          width: 100%;
+        }
+      }
+
+      // Required field indicator
+      input[required] + label::after,
+      .p-dropdown[required] + label::after,
+      .p-calendar[required] + label::after {
+        content: ' *';
+        color: var(--p-danger-color);
+      }
+    }
+  }
+}
+
+.stock-breakdown-container {
+  padding: 10px 0;
+
+  .medicine-info {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+
+    p {
+      margin: 5px 0;
+      color: #333;
+    }
+  }
+}
+
+a {
+  cursor: pointer;
+  color: #1976d2;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #1565c0;
+    text-decoration: underline;
+  }
+}
+

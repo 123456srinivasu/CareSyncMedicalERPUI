@@ -1,0 +1,62 @@
+.patients-container {
+  // h1 styles are now in .header-section
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+
+  h1 {
+    color: var(--medical-text);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  button {
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+}
+
+.search-card {
+  margin-bottom: 20px;
+
+  mat-card-content {
+    padding: 20px !important;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+}
+
+::ng-deep .p-datatable {
+  .p-datatable-header {
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .p-datatable-thead > tr > th {
+    background-color: #f5f5f5;
+    font-weight: 500;
+    color: #333;
+  }
+
+  .p-datatable-tbody > tr {
+    &:hover {
+      background-color: #f9f9f9;
+    }
+  }
+}
+

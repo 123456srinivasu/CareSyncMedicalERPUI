@@ -1,0 +1,65 @@
+<div class="reports-container">
+  <div class="header-section">
+    <h1>Reports & Analytics</h1>
+    <div class="header-actions">
+      <div class="field">
+        <label for="reportType">Report Type</label>
+        <p-dropdown id="reportType" [(ngModel)]="reportType" [options]="reportTypeOptions" optionLabel="label" optionValue="value" class="w-full"></p-dropdown>
+      </div>
+      <p-button label="Export Report" icon="pi pi-download" (onClick)="exportReport()" styleClass="p-button-raised"></p-button>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <p-card header="Revenue Trends" class="chart-card">
+      <p-chart type="line" [data]="revenueData" [options]="revenueOptions" [style]="{'height': '350px'}"></p-chart>
+    </p-card>
+
+    <p-card header="Department Distribution" class="chart-card">
+      <p-chart type="doughnut" [data]="departmentData" [options]="departmentOptions" [style]="{'height': '350px'}"></p-chart>
+    </p-card>
+  </div>
+
+  <div class="stats-grid">
+    <p-card class="stat-card">
+      <div class="stat-item">
+        <i class="pi pi-chart-line stat-icon"></i>
+        <div>
+          <h3>$850K</h3>
+          <p>Total Revenue (This Month)</p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="stat-card">
+      <div class="stat-item">
+        <i class="pi pi-users stat-icon"></i>
+        <div>
+          <h3>1,234</h3>
+          <p>Total Patients</p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="stat-card">
+      <div class="stat-item">
+        <i class="pi pi-calendar stat-icon"></i>
+        <div>
+          <h3>345</h3>
+          <p>Appointments (This Month)</p>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="stat-card">
+      <div class="stat-item">
+        <i class="pi pi-building stat-icon"></i>
+        <div>
+          <h3>28</h3>
+          <p>Active Staff Members</p>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+

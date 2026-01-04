@@ -1,0 +1,50 @@
+.staff-container {
+  // h1 styles are now in .header-section
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+
+  h1 {
+    color: var(--medical-text);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  button {
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contact-cell {
+  display: flex;
+  flex-direction: column;
+
+  small {
+    color: #666;
+    font-size: 12px;
+  }
+}
+
+::ng-deep .mat-mdc-chip {
+  font-size: 12px;
+}
+

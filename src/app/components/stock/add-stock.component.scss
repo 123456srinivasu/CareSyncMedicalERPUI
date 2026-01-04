@@ -1,0 +1,177 @@
+.add-stock-container {
+  padding: 0;
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px 0;
+
+    .form-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--medical-text);
+        margin: 0 0 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--medical-border);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+
+        .section-title {
+          margin: 0;
+          border: none;
+          padding: 0;
+        }
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
+
+        @media (max-width: 1400px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (max-width: 1200px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+
+        .field {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          label {
+            font-weight: 500;
+            color: var(--medical-text);
+            font-size: 14px;
+            margin-bottom: 4px;
+
+            &::after {
+              content: '';
+            }
+          }
+
+          // PrimeNG Input styling
+          ::ng-deep {
+            .p-inputtext,
+            .p-dropdown,
+            .p-calendar,
+            .p-inputnumber {
+              width: 100%;
+            }
+
+            .p-dropdown,
+            .p-calendar {
+              .p-inputtext {
+                width: 100%;
+              }
+            }
+
+            // Required field indicator
+            input[required] + label::after,
+            .p-dropdown[required] + label::after,
+            .p-calendar[required] + label::after {
+              content: ' *';
+              color: var(--p-danger-color);
+            }
+          }
+        }
+      }
+    }
+
+    .medicines-table-container {
+      margin-top: 15px;
+      position: relative;
+
+      ::ng-deep {
+        .p-datatable {
+          .p-datatable-wrapper {
+            overflow: visible;
+          }
+
+          .p-datatable-scrollable-wrapper {
+            overflow: visible;
+          }
+
+          .p-datatable-scrollable-body {
+            overflow: visible;
+          }
+
+          .p-datatable-thead > tr > th {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--medical-text);
+            font-weight: 600;
+            padding: 12px;
+            border-bottom: 2px solid var(--medical-border);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+          }
+
+          .p-datatable-tbody > tr > td {
+            padding: 12px;
+            border-bottom: 1px solid var(--medical-border);
+            position: relative;
+
+            .p-dropdown,
+            .p-calendar,
+            .p-inputnumber,
+            .p-inputtext {
+              width: 100%;
+            }
+
+            .p-dropdown {
+              .p-dropdown-panel {
+                z-index: 1100 !important;
+              }
+            }
+          }
+
+          .p-datatable-tbody > tr:hover {
+            background-color: #f8f9fa;
+          }
+        }
+
+        // Ensure dropdown panel appears above everything
+        .p-dropdown-panel {
+          z-index: 1100 !important;
+        }
+      }
+    }
+
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      color: var(--medical-text-light);
+      margin-top: 15px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--medical-border);
+    }
+  }
+}
+

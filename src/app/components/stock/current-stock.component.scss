@@ -1,0 +1,141 @@
+.current-stock-container {
+  padding: 0;
+
+  .stock-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px 0;
+
+    .selection-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: 400px;
+
+        label {
+          font-weight: 500;
+          color: var(--medical-text);
+          font-size: 14px;
+          margin-bottom: 4px;
+        }
+
+        .loading-text {
+          color: var(--medical-primary);
+          font-size: 12px;
+          font-style: italic;
+          margin-top: 4px;
+        }
+
+        .error-text {
+          color: var(--medical-danger);
+          font-size: 12px;
+          margin-top: 4px;
+        }
+
+        ::ng-deep {
+          .p-dropdown {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .table-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--medical-border);
+
+        h3 {
+          font-size: 18px;
+          font-weight: 600;
+          color: var(--medical-text);
+          margin: 0;
+        }
+
+        .total-quantity {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 8px 16px;
+          background: linear-gradient(135deg, rgba(44, 90, 160, 0.1) 0%, rgba(44, 90, 160, 0.05) 100%);
+          border-radius: 8px;
+          border: 1px solid var(--medical-primary);
+
+          .label {
+            font-weight: 500;
+            color: var(--medical-text);
+            font-size: 14px;
+          }
+
+          .value {
+            font-weight: 700;
+            color: var(--medical-primary);
+            font-size: 18px;
+          }
+        }
+      }
+
+      ::ng-deep {
+        .p-datatable {
+          .p-datatable-thead > tr > th {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--medical-text);
+            font-weight: 600;
+            padding: 12px;
+            border-bottom: 2px solid var(--medical-border);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+          }
+
+          .p-datatable-tbody > tr > td {
+            padding: 12px;
+            border-bottom: 1px solid var(--medical-border);
+
+            .quantity-badge {
+              display: inline-block;
+              padding: 4px 12px;
+              background: linear-gradient(135deg, rgba(44, 90, 160, 0.1) 0%, rgba(44, 90, 160, 0.05) 100%);
+              color: var(--medical-primary);
+              border-radius: 6px;
+              font-weight: 600;
+              font-size: 14px;
+            }
+          }
+
+          .p-datatable-tbody > tr:hover {
+            background-color: #f8f9fa;
+          }
+        }
+      }
+    }
+
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      color: var(--medical-text-light);
+      margin-top: 15px;
+
+      p {
+        margin: 0;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
