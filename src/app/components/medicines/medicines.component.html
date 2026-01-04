@@ -1,0 +1,228 @@
+<div class="medicines-container">
+  <div class="header-section">
+    <h1>Medicine & Pharmacy Management</h1>
+  </div>
+
+  <p-card>
+    <p-tabView>
+      <p-tabPanel header="Medicines">
+        <div class="tab-content">
+          <div class="tab-header">
+            <p-button label="New Medicine" icon="pi pi-plus" (onClick)="openNewMedicine()" styleClass="p-button-raised"></p-button>
+            <div class="search-field">
+              <label for="search">Search</label>
+              <input pInputText id="search" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Search medicines" class="w-full">
+            </div>
+          </div>
+
+            <p-table [value]="filteredMedicines" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Medicine Name</th>  
+                  <th>Supplier</th>
+                  <th>Quantity</th>
+                  <th>Manufacture Date</th>
+                  <th>Expiry Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-medicine>
+                <tr>
+                  <td>
+                    <a (click)="openStockBreakdown(medicine)">
+                      {{ medicine.medicition_code }}
+                    </a>
+                  </td>                 
+                  <td>{{ getSupplierName(medicine.supplier_id) }}</td>
+                  <td>{{ medicine.quantity || 'N/A' }}</td>
+                  <td>{{ formatDate(medicine.manufacture_date) }}</td>
+                  <td>{{ formatDate(medicine.expiry_date) }}</td>
+                  <td>
+                    <p-tag [value]="medicine.is_active ? 'Active' : 'Inactive'" [severity]="getSeverity(medicine.is_active)"></p-tag>
+                  </td>
+                  <td>
+                    <p-button icon="pi pi-pencil" (onClick)="editMedicine(medicine)" [text]="true" severity="info" [rounded]="true" title="Edit"></p-button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+      </p-tabPanel>
+
+      <p-tabPanel header="Suppliers">
+        <div class="tab-content">
+          <div class="tab-header">
+            <p-button label="New Supplier" icon="pi pi-plus" (onClick)="openNewSupplier()" styleClass="p-button-raised"></p-button>
+          </div>
+
+            <p-table [value]="filteredSuppliers" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Code</th>
+                  <th>Supplier Name</th>
+                  <th>Status</th>
+                  <th>Created By</th>
+                  <th>Actions</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-supplier>
+                <tr>
+                  <td>{{ supplier.supplier_code || 'N/A' }}</td>
+                  <td>{{ supplier.supplier_name }}</td>
+                  <td>
+                    <p-tag [value]="supplier.is_active ? 'Active' : 'Inactive'" [severity]="getSeverity(supplier.is_active)"></p-tag>
+                  </td>
+                  <td>{{ supplier.created_by || 'N/A' }}</td>
+                  <td>
+                    <p-button icon="pi pi-pencil" [text]="true" severity="info" [rounded]="true" title="Edit"></p-button>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+      </p-tabPanel>
+    </p-tabView>
+  </p-card>
+
+  <!-- Medicine Dialog -->
+  <p-dialog [(visible)]="displayMedicineDialog" [header]="isEditMode ? 'Edit Medicine' : 'New Medicine'" [modal]="true" [style]="{width: '700px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="medicineCode">Medicine Code *</label>
+        <input pInputText id="medicineCode" [(ngModel)]="medicineForm.medicition_code" [required]="true" class="w-full">
+      </div>
+
+      <div class="field full-width">
+        <label for="medicineType">Medicine Type *</label>
+        <input pInputText id="medicineType" [(ngModel)]="medicineForm.medicine_type" [required]="true" class="w-full">
+      </div>
+
+      <div class="field full-width">
+        <label for="timePeriod">Time Period</label>
+        <input pInputText id="timePeriod" [(ngModel)]="medicineForm.medicine_time_period" class="w-full">
+      </div>
+
+      <div class="field full-width">
+        <label for="manufacturingCompany">Manufacturing Company</label>
+        <input pInputText id="manufacturingCompany" [(ngModel)]="medicineForm.manufaturing_company" class="w-full">
+      </div>
+
+      <div class="field full-width">
+        <label for="order">Order</label>
+        <input pInputText id="order" type="number" [(ngModel)]="medicineForm.medicition_order" class="w-full">
+      </div>
+
+      <div class="field full-width">
+        <label for="supplier">Supplier *</label>
+        <p-dropdown id="supplier" [(ngModel)]="medicineForm.supplier_id" [options]="suppliers" optionLabel="supplier_name" optionValue="pharmacy_supplier_id" placeholder="Select Supplier" [required]="true" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width">
+        <label for="drugName">Drug Name *</label>
+        <p-dropdown id="drugName" [(ngModel)]="medicineForm.drug_name" [options]="medicines" optionLabel="label" optionValue="medicition_code" placeholder="Select Drug" [required]="true" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width">
+        <label for="manufactureDate">Manufacture Date *</label>
+        <p-calendar id="manufactureDate" [(ngModel)]="medicineForm.manufacture_date" [required]="true" dateFormat="yy-mm-dd" [showIcon]="true" class="w-full"></p-calendar>
+      </div>
+
+      <div class="field full-width">
+        <label for="expiryDate">Expiry Date *</label>
+        <p-calendar id="expiryDate" [(ngModel)]="medicineForm.expiry_date" [required]="true" dateFormat="yy-mm-dd" [showIcon]="true" class="w-full"></p-calendar>
+      </div>
+
+      <div class="field full-width">
+        <label for="batchNo">Batch No *</label>
+        <input pInputText id="batchNo" [(ngModel)]="medicineForm.batch_no" [required]="true" class="w-full">
+      </div>
+
+      <div class="field full-width">
+        <label for="quantity">Quantity *</label>
+        <input pInputText id="quantity" type="number" [(ngModel)]="medicineForm.quantity" [required]="true" class="w-full">
+      </div>
+
+      <div class="field">
+        <p-checkbox [(ngModel)]="medicineForm.is_active" binary="true" inputId="is_active"></p-checkbox>
+        <label for="is_active" class="ml-2">Active</label>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="displayMedicineDialog = false" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="saveMedicine()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Supplier Dialog -->
+  <p-dialog [(visible)]="displaySupplierDialog" [header]="isEditMode ? 'Edit Supplier' : 'New Supplier'" [modal]="true" [style]="{width: '500px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="supplierCode">Supplier Code</label>
+        <input pInputText id="supplierCode" [(ngModel)]="supplierForm.supplier_code" class="w-full">
+      </div>
+
+      <div class="field full-width">
+        <label for="supplierName">Supplier Name *</label>
+        <input pInputText id="supplierName" [(ngModel)]="supplierForm.supplier_name" [required]="true" class="w-full">
+      </div>
+
+      <div class="field">
+        <p-checkbox [(ngModel)]="supplierForm.is_active" binary="true" inputId="supplier_active"></p-checkbox>
+        <label for="supplier_active" class="ml-2">Active</label>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="displaySupplierDialog = false" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="saveSupplier()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Stock Breakdown Dialog -->
+  <p-dialog [(visible)]="displayStockBreakdownDialog" [header]="'Stock Breakdown - ' + (selectedMedicine?.medicition_code || '')" [modal]="true" [style]="{width: '900px'}">
+    <div class="stock-breakdown-container">
+      <div class="medicine-info" *ngIf="selectedMedicine">
+        <p><strong>Medicine:</strong> {{ selectedMedicine.medicition_code }} - {{ selectedMedicine.medicine_type }}</p>
+        <p><strong>Total Quantity:</strong> {{ selectedMedicine.quantity || 0 }}</p>
+      </div>
+
+      <p-table [value]="stockBreakdown" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Date</th>
+            <th>Batch No</th>
+            <th>Quantity In</th>
+            <th>Quantity Out</th>
+            <th>Quantity Remaining</th>
+            <th>Supplier</th>
+            <th>Transaction Type</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-stock>
+          <tr>
+            <td>{{ formatDate(stock.date) }}</td>
+            <td>{{ stock.batch_no }}</td>
+            <td>{{ stock.quantity_in }}</td>
+            <td>{{ stock.quantity_out }}</td>
+            <td><strong>{{ stock.quantity_remaining }}</strong></td>
+            <td>{{ stock.supplier_name || 'N/A' }}</td>
+            <td>
+              <p-tag [value]="stock.transaction_type" [severity]="stock.transaction_type === 'Purchase' ? 'success' : 'info'"></p-tag>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px;">
+              No stock breakdown data available
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Close" (onClick)="displayStockBreakdownDialog = false" [text]="true"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+

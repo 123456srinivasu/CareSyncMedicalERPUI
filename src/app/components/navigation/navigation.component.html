@@ -1,0 +1,54 @@
+<div class="sidenav-container">
+  <p-drawer 
+    [(visible)]="opened" 
+    [modal]="false" 
+    position="left"
+    [style]="{ width: getDrawerWidth() }"
+    [styleClass]="collapsed ? 'sidenav sidenav-collapsed' : 'sidenav'">
+    <ng-template pTemplate="header">
+      <div class="sidenav-header" [class.collapsed]="collapsed">
+        <i class="pi pi-building logo-icon"></i>
+        <h2 *ngIf="!collapsed">CareSync</h2>
+        <p-button 
+          [icon]="collapsed ? 'pi pi-angle-right' : 'pi pi-angle-left'"
+          [text]="true" 
+          [rounded]="true"
+          (onClick)="toggleCollapse()"
+          styleClass="collapse-btn"
+          [pTooltip]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+          tooltipPosition="right"></p-button>
+      </div>
+    </ng-template>
+    <nav>
+      <a *ngFor="let item of menuItems" 
+         [routerLink]="item.route" 
+         routerLinkActive="active" 
+         class="menu-item" 
+         [class.collapsed]="collapsed"
+         [routerLinkActiveOptions]="{exact: false}"
+         [pTooltip]="collapsed ? item.label : ''"
+         tooltipPosition="right">
+        <i [class]="item.icon"></i>
+        <span class="menu-label" *ngIf="!collapsed">{{ item.label }}</span>
+      </a>
+    </nav>
+  </p-drawer>
+
+  <div class="main-content-wrapper" [style.margin-left]="opened ? getDrawerWidth() : '0'">
+    <p-toolbar styleClass="toolbar">
+      <div class="p-toolbar-group-start">
+        <p-button icon="pi pi-bars" (onClick)="toggleSidenav()" [text]="true" styleClass="menu-button"></p-button>
+        <span class="toolbar-title">Medical ERP System</span>
+      </div>
+      <div class="p-toolbar-group-end">
+        <p-button icon="pi pi-user" [text]="true" [rounded]="true" (onClick)="menu.toggle($event)"></p-button>
+        <p-tieredMenu #menu [model]="userMenuItems" [popup]="true"></p-tieredMenu>
+      </div>
+    </p-toolbar>
+    
+    <div class="main-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
+

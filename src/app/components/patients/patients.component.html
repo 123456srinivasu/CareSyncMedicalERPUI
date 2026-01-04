@@ -1,0 +1,48 @@
+<div class="patients-container">
+  <div class="header-section">
+    <h1>Patients Management</h1>
+    <p-button label="Add New Patient" icon="pi pi-user-plus" styleClass="p-button-raised"></p-button>
+  </div>
+
+  <p-card class="search-card">
+    <div class="search-field">
+      <label for="search">Search Patients</label>
+      <input pInputText id="search" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Search by name, ID, or email" class="w-full">
+    </div>
+  </p-card>
+
+  <p-card>
+      <p-table [value]="filteredPatients" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10, 25, 50]"
+        styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Patient ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Date of Birth</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-patient>
+          <tr>
+            <td>{{ patient.patient_id }}</td>
+            <td>{{ patient.first_name }} {{ patient.last_name || '' }}</td>
+            <td>{{ calculateAge(patient.dob) }}</td>
+            <td>{{ patient.gender || 'N/A' }}</td>
+            <td>{{ patient.phone || 'N/A' }}</td>
+            <td>{{ patient.address || 'N/A' }}</td>
+            <td>{{ patient.dob ? (patient.dob | date:'shortDate') : 'N/A' }}</td>
+            <td>
+              <p-button icon="pi pi-eye" [text]="true" severity="info" [rounded]="true" title="View Details"></p-button>
+              <p-button icon="pi pi-pencil" [text]="true" severity="secondary" [rounded]="true" title="Edit"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+  </p-card>
+</div>
+

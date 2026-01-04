@@ -1,0 +1,389 @@
+<div class="camps-container">
+  <div class="header-section">
+    <h1>Camps Management</h1>
+    <p-button label="New Camp" icon="pi pi-plus" (onClick)="openNew()" styleClass="p-button-raised"></p-button>
+  </div>
+
+  <p-card class="search-card">
+    <div class="search-filters">
+      <div class="filter-row">
+        <div class="field filter-field">
+          <label for="searchState">State</label>
+          <p-dropdown id="searchState" [(ngModel)]="searchState" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+        </div>
+
+        <div class="field filter-field">
+          <label for="searchDistrict">District</label>
+          <p-dropdown id="searchDistrict" [(ngModel)]="searchDistrict" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+        </div>
+
+        <div class="field filter-field">
+          <label for="searchMandal">Mandal</label>
+          <p-dropdown id="searchMandal" [(ngModel)]="searchMandal" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="field filter-field">
+          <label for="searchCity">City</label>
+          <input pInputText id="searchCity" [(ngModel)]="searchCity" (ngModelChange)="onSearch()" placeholder="Search by city" class="w-full">
+        </div>
+        <div class="field filter-field">
+          <label for="search">Camp Name</label>
+          <input pInputText id="search" [(ngModel)]="searchText" (ngModelChange)="onSearch()" placeholder="Search by name" class="w-full">
+        </div>
+
+        <div class="field filter-field">
+          <label for="searchStatus">Status</label>
+          <p-dropdown id="searchStatus" [(ngModel)]="searchStatus" [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Select Status" (onChange)="onFilterChange()" class="w-full"></p-dropdown>
+        </div>       
+
+        <div class="field filter-field filter-actions">
+          <p-button label="Clear Filters" icon="pi pi-times" (onClick)="clearFilters()" [text]="true" severity="secondary" class="w-full"></p-button>
+        </div>
+      </div>
+    </div>
+  </p-card>
+
+    <p-card>
+      <p-table [value]="filteredCamps" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Camp Name</th>
+            <th>Camp Code</th>
+            <th>Organizer Name</th>
+            <th>Phone No</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Planned Date</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-camp>
+          <tr>
+            <td>{{ camp.camp_name }}</td>
+            <td>{{ camp.camp_code || 'N/A' }}</td>
+            <td>{{ getOrganizerName(camp) }}</td>
+            <td>{{ getOrganizerPhone(camp) }}</td>
+            <td>{{ getLocation(camp) }}</td>
+            <td>
+              <p-tag [value]="camp.is_active ? 'Active' : 'Inactive'" [severity]="getSeverity(camp.is_active)"></p-tag>
+            </td>
+            <td>{{ camp.planned_date ? (camp.planned_date | date:'shortDate') : 'N/A' }}</td>
+            <td>
+              <p-button icon="pi pi-calendar" (onClick)="openDateDialog(camp)" [text]="true" severity="secondary" [rounded]="true" title="Change Planned Date"></p-button>
+              <p-button icon="pi pi-pencil" (onClick)="editCamp(camp)" [text]="true" severity="info" [rounded]="true" title="Edit"></p-button>
+              <p-button icon="pi pi-trash" (onClick)="deleteCamp(camp)" [text]="true" severity="danger" [rounded]="true" title="Delete"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+  </p-card>
+
+  <p-dialog [(visible)]="displayDialog" [header]="isEditMode ? 'Edit Camp' : 'New Camp'" [modal]="true" [style]="{width: '1200px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="campName">Camp Name *</label>
+        <input pInputText id="campName" [(ngModel)]="campForm.camp_name" required class="w-full">
+      </div>
+
+      <h3>Organizer 1</h3>
+      <div class="organizer-row">
+        <div class="field organizer-field">
+          <label for="orgName1">Organizer Name 1</label>
+          <input pInputText id="orgName1" [(ngModel)]="campForm.organizer_name_1" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgPhone1">Organizer Phone No 1</label>
+          <input pInputText id="orgPhone1" [(ngModel)]="campForm.organizer_phone_no_1" type="tel" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgEmail1">Organizer Email 1</label>
+          <input pInputText id="orgEmail1" [(ngModel)]="campForm.organizer_email_1" type="email" class="w-full">
+        </div>
+      </div>
+
+      <h3>Organizer 2</h3>
+      <div class="organizer-row">
+        <div class="field organizer-field">
+          <label for="orgName2">Organizer Name 2</label>
+          <input pInputText id="orgName2" [(ngModel)]="campForm.organizer_name_2" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgPhone2">Organizer Phone No 2</label>
+          <input pInputText id="orgPhone2" [(ngModel)]="campForm.organizer_phone_no_2" type="tel" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgEmail2">Organizer Email 2</label>
+          <input pInputText id="orgEmail2" [(ngModel)]="campForm.organizer_email_2" type="email" class="w-full">
+        </div>
+      </div>
+
+      <div class="address-section">
+        <fieldset class="address-fieldset">
+          <legend>Shipping Address</legend>
+          <div class="field full-width">
+            <label for="shippingState">State</label>
+            <p-dropdown id="shippingState" [(ngModel)]="campForm.shipping_state" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" class="w-full"></p-dropdown>
+          </div>
+
+          <div class="field full-width">
+            <label for="shippingDistrict">District</label>
+            <p-dropdown id="shippingDistrict" [(ngModel)]="campForm.shipping_district" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" class="w-full"></p-dropdown>
+          </div>
+
+          <div class="field full-width">
+            <label for="shippingMandle">Mandle</label>
+            <p-dropdown id="shippingMandle" [(ngModel)]="campForm.shipping_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandle" class="w-full"></p-dropdown>
+          </div>
+
+          <div class="field full-width">
+            <label for="shippingAddress">Address</label>
+            <textarea pInputTextarea id="shippingAddress" [(ngModel)]="campForm.shipping_address" rows="2" class="w-full"></textarea>
+          </div>
+
+          <div class="field full-width">
+            <label for="shippingCity">City</label>
+            <input pInputText id="shippingCity" [(ngModel)]="campForm.shipping_city" class="w-full">
+          </div>
+
+          <div class="field full-width">
+            <label for="shippingPinCode">Pin Code</label>
+            <input pInputText id="shippingPinCode" [(ngModel)]="campForm.shipping_pin_code" type="text" maxlength="6" class="w-full">
+          </div>
+        </fieldset>
+
+        <fieldset class="address-fieldset">
+          <legend>Location Address</legend>
+          <div class="field full-width">
+            <label for="locationState">State</label>
+            <p-dropdown id="locationState" [(ngModel)]="campForm.location_state" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" class="w-full"></p-dropdown>
+          </div>
+
+          <div class="field full-width">
+            <label for="locationDistrict">District</label>
+            <p-dropdown id="locationDistrict" [(ngModel)]="campForm.location_district" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" class="w-full"></p-dropdown>
+          </div>
+
+          <div class="field full-width">
+            <label for="locationMandle">Mandle</label>
+            <p-dropdown id="locationMandle" [(ngModel)]="campForm.location_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandle" class="w-full"></p-dropdown>
+          </div>
+
+          <div class="field full-width">
+            <label for="locationAddress">Address</label>
+            <textarea pInputTextarea id="locationAddress" [(ngModel)]="campForm.location_address" rows="2" class="w-full"></textarea>
+          </div>
+
+          <div class="field full-width">
+            <label for="locationCity">City</label>
+            <input pInputText id="locationCity" [(ngModel)]="campForm.location_city" class="w-full">
+          </div>
+
+          <div class="field full-width">
+            <label for="locationPinCode">Pin Code</label>
+            <input pInputText id="locationPinCode" [(ngModel)]="campForm.location_pin_code" type="text" maxlength="6" class="w-full">
+          </div>
+        </fieldset>
+      </div>
+
+      <fieldset class="schedule-fieldset">
+        <legend>Schedule</legend>
+        
+        <div class="months-section">
+          <label class="months-label">Select Months:</label>
+          <div class="months-checkboxes">
+            <div class="month-checkbox-item" *ngFor="let month of months">
+              <p-checkbox 
+                [ngModel]="getMonthValue(month)"
+                (onChange)="onMonthChange(month, $event)"
+                [inputId]="month.toLowerCase()"
+                [binary]="true">
+              </p-checkbox>
+              <label [for]="month.toLowerCase()" class="month-label">{{ month }}</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="schedule-container">
+          <div class="field schedule-field">
+            <p-dropdown [(ngModel)]="campForm.january_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Week" class="w-full"></p-dropdown>
+          </div>
+          <div class="field schedule-field">
+            <p-dropdown [(ngModel)]="campForm.january_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Day" class="w-full"></p-dropdown>
+          </div>
+          
+        </div>
+      </fieldset>
+
+      <div class="medicine-responsibility-row">
+        <div class="field medicine-responsibility-field">
+          <label for="medicineResponsibility">Medicine Responsibility</label>
+          <p-dropdown id="medicineResponsibility" [(ngModel)]="campForm.medicine_responsibility" [options]="yesNoOptions" optionLabel="label" optionValue="value" (onChange)="onMedicineResponsibilityChange($event.value)" placeholder="Select" class="w-full"></p-dropdown>
+        </div>
+
+        <div *ngIf="campForm.medicine_responsibility === 'Yes'" class="medicine-responsibility-options">
+          <div class="radio-group">
+            <p-radioButton name="medicineType" value="GBR Warehouse" [(ngModel)]="campForm.medicine_responsibility_type" (onClick)="onMedicineResponsibilityTypeChange('GBR Warehouse')" inputId="gbrWarehouse"></p-radioButton>
+            <label for="gbrWarehouse">GBR Warehouse</label>
+            <p-radioButton name="medicineType" value="Outside" [(ngModel)]="campForm.medicine_responsibility_type" (onClick)="onMedicineResponsibilityTypeChange('Outside')" inputId="outside"></p-radioButton>
+            <label for="outside">Outside</label>
+          </div>
+        </div>
+
+        <div *ngIf="campForm.medicine_responsibility === 'Yes' && campForm.medicine_responsibility_type === 'Outside'" class="field medicine-responsibility-field">
+          <label for="outsideDetails">Outside Details</label>
+          <input pInputText id="outsideDetails" [(ngModel)]="campForm.medicine_responsibility_outside" placeholder="Enter outside details" class="w-full">
+        </div>
+      </div>
+
+      <div class="field full-width">
+        <label for="isActive">Status</label>
+        <div class="checkbox-field">
+          <p-checkbox [(ngModel)]="campForm.is_active" inputId="isActive" [binary]="true"></p-checkbox>
+          <label for="isActive" class="checkbox-label">{{ campForm.is_active ? 'Active' : 'Inactive' }}</label>
+        </div>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="displayDialog = false" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="saveCamp()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Planned Date Dialog -->
+  <p-dialog [(visible)]="displayDateDialog" [header]="'Change Planned Date - ' + (selectedCampForDate?.camp_name || '')" [modal]="true" [style]="{width: '800px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="plannedDate">Planned Date *</label>
+        <p-calendar id="plannedDate" [(ngModel)]="newPlannedDate" [required]="true" dateFormat="yy-mm-dd" [showIcon]="true" [showButtonBar]="true" class="w-full"></p-calendar>
+      </div>
+      <div class="field full-width" *ngIf="selectedCampForDate && selectedCampForDate.planned_date">
+        <small class="text-muted">Current Planned Date: {{ selectedCampForDate.planned_date | date:'shortDate' }}</small>
+      </div>
+
+      <!-- Organizer Name Section -->
+      <div class="field full-width">
+        <div class="editable-field-header">
+          <label>Organizer Name</label>
+          <p-button 
+            *ngIf="!editingOrganizerName" 
+            icon="pi pi-pencil" 
+            (onClick)="editOrganizerName()" 
+            [text]="true" 
+            severity="secondary" 
+            size="small" 
+            title="Edit Organizer Name">
+          </p-button>
+        </div>
+        <div *ngIf="!editingOrganizerName" class="readonly-field">
+          <span>{{ selectedCampForDate ? getOrganizerName(selectedCampForDate) : 'N/A' }}</span>
+        </div>
+        <div *ngIf="editingOrganizerName" class="editable-field-content">
+          <input pInputText [(ngModel)]="tempOrganizerName1" placeholder="Organizer Name 1" class="w-full" style="margin-bottom: 8px;">
+          <input pInputText [(ngModel)]="tempOrganizerName2" placeholder="Organizer Name 2" class="w-full">
+          <div class="field-actions">
+            <p-button label="Cancel" (onClick)="cancelEditOrganizerName()" [text]="true" size="small"></p-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Organizer Phone Section -->
+      <div class="field full-width">
+        <div class="editable-field-header">
+          <label>Organizer Phone No</label>
+          <p-button 
+            *ngIf="!editingOrganizerPhone" 
+            icon="pi pi-pencil" 
+            (onClick)="editOrganizerPhone()" 
+            [text]="true" 
+            severity="secondary" 
+            size="small" 
+            title="Edit Phone Number">
+          </p-button>
+        </div>
+        <div *ngIf="!editingOrganizerPhone" class="readonly-field">
+          <span>{{ selectedCampForDate ? getOrganizerPhone(selectedCampForDate) : 'N/A' }}</span>
+        </div>
+        <div *ngIf="editingOrganizerPhone" class="editable-field-content">
+          <input pInputText [(ngModel)]="tempOrganizerPhone1" type="tel" placeholder="Phone Number 1" class="w-full" style="margin-bottom: 8px;">
+          <input pInputText [(ngModel)]="tempOrganizerPhone2" type="tel" placeholder="Phone Number 2" class="w-full">
+          <div class="field-actions">
+            <p-button label="Cancel" (onClick)="cancelEditOrganizerPhone()" [text]="true" size="small"></p-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field full-width">
+        <label for="selectedDoctors">Providers (Doctors) *</label>
+        <p-multiSelect 
+          id="selectedDoctors" 
+          [(ngModel)]="selectedDoctors" 
+          [options]="doctors" 
+          optionLabel="label" 
+          optionValue="value"
+          placeholder="Select Doctors" 
+          [filter]="true"
+          [showClear]="true"
+          class="w-full">
+        </p-multiSelect>
+      </div>
+
+      <div class="field full-width">
+        <label for="selectedVolunteers">Volunteers *</label>
+        <p-multiSelect 
+          id="selectedVolunteers" 
+          [(ngModel)]="selectedVolunteers" 
+          [options]="volunteers" 
+          optionLabel="label" 
+          optionValue="value"
+          placeholder="Select Volunteers" 
+          [filter]="true"
+          [showClear]="true"
+          class="w-full">
+        </p-multiSelect>
+      </div>
+
+      <!-- Medicines Table Section -->
+      <div class="field full-width">
+        <div class="medicines-section-header">
+          <label>Medicines</label>
+        </div>
+        <div class="medicines-table-container">
+          <p-table [value]="campMedicines" [paginator]="false" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Medicine Name</th>
+                <th>Medicine Type</th>
+                <th>Quantity</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-medicine>
+              <tr>
+                <td>{{ medicine.medicine_name || 'N/A' }}</td>
+                <td>{{ medicine.medicine_type || 'N/A' }}</td>
+                <td>{{ medicine.quantity || 0 }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3" style="text-align: center; padding: 20px;">
+                  No medicines available.
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="cancelDateDialog()" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="savePlannedDate()"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+
