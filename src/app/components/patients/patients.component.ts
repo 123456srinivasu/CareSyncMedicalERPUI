@@ -19,6 +19,17 @@ interface Patient {
   created_at?: Date;
 }
 
+interface PatientRecord {
+  photo?: string;
+  first_name: string;
+  father_name?: string;
+  mr_number: string;
+  city?: string;
+  age?: number;
+  gender?: string;
+  phone?: string;
+}
+
 @Component({
   selector: 'app-patients',
   standalone: true,
@@ -30,26 +41,154 @@ interface Patient {
     InputTextModule,
     TagModule,
     CardModule,
-    DialogModule
+    DialogModule,
   ],
   templateUrl: './patients.component.html',
-  styleUrl: './patients.component.scss'
+  styleUrl: './patients.component.scss',
 })
 export class PatientsComponent implements OnInit {
   patients: Patient[] = [];
   filteredPatients: Patient[] = [];
   searchText: string = '';
+  isExistingPatient: boolean = false;
+  // Table-specific data for the new PrimeNG table
+  patientTableData: PatientRecord[] = [];
+  defaultAvatar: string =
+    'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect fill="%23e6e6e6" width="100%" height="100%"/><circle cx="32" cy="22" r="14" fill="%23999"/><rect x="10" y="40" width="44" height="12" rx="6" fill="%23999"/></svg>';
+  globalFilter: string = '';
 
   ngOnInit() {
     // Sample data matching database schema
     this.patients = [
-      { patient_id: 1, first_name: 'John', last_name: 'Doe', gender: 'MALE', dob: new Date('1979-01-15'), phone: '+1 234-567-8900', address: '123 Main St', created_at: new Date('2024-01-01') },
-      { patient_id: 2, first_name: 'Jane', last_name: 'Smith', gender: 'FEMALE', dob: new Date('1992-05-20'), phone: '+1 234-567-8901', address: '456 Oak Ave', created_at: new Date('2024-01-02') },
-      { patient_id: 3, first_name: 'Robert', last_name: 'Johnson', gender: 'MALE', dob: new Date('1966-08-10'), phone: '+1 234-567-8902', address: '789 Pine Rd', created_at: new Date('2023-12-15') },
-      { patient_id: 4, first_name: 'Sarah', last_name: 'Williams', gender: 'FEMALE', dob: new Date('1996-03-25'), phone: '+1 234-567-8903', address: '321 Elm St', created_at: new Date('2024-01-10') },
-      { patient_id: 5, first_name: 'Michael', last_name: 'Brown', gender: 'MALE', dob: new Date('1972-11-30'), phone: '+1 234-567-8904', address: '654 Maple Dr', created_at: new Date('2024-01-05') },
+      {
+        patient_id: 1,
+        first_name: 'John',
+        last_name: 'Doe',
+        gender: 'MALE',
+        dob: new Date('1979-01-15'),
+        phone: '+1 234-567-8900',
+        address: '123 Main St',
+        created_at: new Date('2024-01-01'),
+      },
+      {
+        patient_id: 2,
+        first_name: 'Jane',
+        last_name: 'Smith',
+        gender: 'FEMALE',
+        dob: new Date('1992-05-20'),
+        phone: '+1 234-567-8901',
+        address: '456 Oak Ave',
+        created_at: new Date('2024-01-02'),
+      },
+      {
+        patient_id: 3,
+        first_name: 'Robert',
+        last_name: 'Johnson',
+        gender: 'MALE',
+        dob: new Date('1966-08-10'),
+        phone: '+1 234-567-8902',
+        address: '789 Pine Rd',
+        created_at: new Date('2023-12-15'),
+      },
+      {
+        patient_id: 4,
+        first_name: 'Sarah',
+        last_name: 'Williams',
+        gender: 'FEMALE',
+        dob: new Date('1996-03-25'),
+        phone: '+1 234-567-8903',
+        address: '321 Elm St',
+        created_at: new Date('2024-01-10'),
+      },
+      {
+        patient_id: 5,
+        first_name: 'Michael',
+        last_name: 'Brown',
+        gender: 'MALE',
+        dob: new Date('1972-11-30'),
+        phone: '+1 234-567-8904',
+        address: '654 Maple Dr',
+        created_at: new Date('2024-01-05'),
+      },
     ];
     this.filteredPatients = [...this.patients];
+
+    // Sample mock data for the PrimeNG table
+    this.patientTableData = [
+      {
+        photo: '',
+        first_name: 'John Doe',
+        father_name: 'Michael Doe',
+        mr_number: 'MR-1001',
+        city: 'New York',
+        age: 45,
+        gender: 'Male',
+        phone: '+1-234-567-8900',
+      },
+      {
+        photo: '',
+        first_name: 'Jane Smith',
+        father_name: 'Robert Smith',
+        mr_number: 'MR-1002',
+        city: 'Los Angeles',
+        age: 33,
+        gender: 'Female',
+        phone: '+1-234-567-8901',
+      },
+      {
+        photo: '',
+        first_name: 'Ravi Kumar',
+        father_name: 'Suresh Kumar',
+        mr_number: 'MR-1003',
+        city: 'Hyderabad',
+        age: 29,
+        gender: 'Male',
+        phone: '+91-98765-43210',
+      },
+      {
+        photo: '',
+        first_name: 'Aisha Khan',
+        father_name: 'Imran Khan',
+        mr_number: 'MR-1004',
+        city: 'Mumbai',
+        age: 38,
+        gender: 'Female',
+        phone: '+91-91234-56789',
+      },
+      {
+        photo: '',
+        first_name: 'Miguel Santos',
+        father_name: 'Carlos Santos',
+        mr_number: 'MR-1005',
+        city: 'Manila',
+        age: 52,
+        gender: 'Male',
+        phone: '+63-912-345-6789',
+      },
+      {
+        photo: '',
+        first_name: 'Fatima Ali',
+        father_name: 'Ahmed Ali',
+        mr_number: 'MR-1006',
+        city: 'Karachi',
+        age: 26,
+        gender: 'Female',
+        phone: '+92-300-1234567',
+      },
+    ];
+  }
+
+  onView(record: PatientRecord) {
+    console.log('View', record);
+  }
+
+  onEdit(record: PatientRecord) {
+    console.log('Edit', record);
+  }
+
+  onDelete(record: PatientRecord) {
+    console.log('Delete', record);
+    // Implement delete behavior as needed
   }
 
   onSearch() {
@@ -58,10 +197,15 @@ export class PatientsComponent implements OnInit {
       return;
     }
 
-    this.filteredPatients = this.patients.filter(patient =>
-      patient.first_name.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      patient.last_name?.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      patient.phone?.toLowerCase().includes(this.searchText.toLowerCase())
+    this.filteredPatients = this.patients.filter(
+      (patient) =>
+        patient.first_name
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase()) ||
+        patient.last_name
+          ?.toLowerCase()
+          .includes(this.searchText.toLowerCase()) ||
+        patient.phone?.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
@@ -71,10 +215,12 @@ export class PatientsComponent implements OnInit {
     const birthDate = new Date(dob);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
       age--;
     }
     return age;
   }
 }
-
