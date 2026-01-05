@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -9,13 +9,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
+import { SuppliersService, PharmacySupplier, Medication } from '../../core/services/suppliers.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
-interface PharmacySupplier {
-  pharmacy_supplier_id?: number;
-  supplier_code?: string;
-  supplier_name?: string;
-  is_active: boolean;
-}
 
 interface Medicine {
   medicition_id?: number;
@@ -62,10 +59,14 @@ interface StockForm {
   styleUrl: './add-stock.component.scss'
 })
 export class AddStockComponent implements OnInit {
+  private readonly suppliersService = inject(SuppliersService);
+  
   suppliers: PharmacySupplier[] = [];
   medicines: Medicine[] = [];
   medicineOptions: { label: string, value: number }[] = [];
   paymentModes: { label: string, value: string }[] = [];
+  loading: boolean = false;
+  errorMessage: string = '';
   
   stockForm: StockForm = {
     supplier_id: undefined,
@@ -97,27 +98,62 @@ export class AddStockComponent implements OnInit {
   }
 
   loadSuppliers() {
-    this.suppliers = [
-      { pharmacy_supplier_id: 1, supplier_code: 'SUP001', supplier_name: 'ABC Pharmaceuticals', is_active: true },
-      { pharmacy_supplier_id: 2, supplier_code: 'SUP002', supplier_name: 'XYZ Medical Supplies', is_active: true },
-      { pharmacy_supplier_id: 3, supplier_code: 'SUP003', supplier_name: 'MediCorp Distributors', is_active: true }
-    ];
+    this.loading = true;
+    this.errorMessage = '';
+    
+    this.suppliersService.getActivePharmacySuppliers()
+      .pipe(
+        catchError(error => {
+          console.error('Error loading suppliers:', error);
+          this.errorMessage = 'Failed to load suppliers. Please try again later.';
+          this.loading = false;
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: (suppliers: PharmacySupplier[]) => {
+          this.suppliers = suppliers;
+          this.loading = false;
+          console.log('Suppliers loaded:', this.suppliers);
+        },
+        error: (error) => {
+          console.error('Error in suppliers subscription:', error);
+          this.loading = false;
+        }
+      });
   }
 
   loadMedicines() {
-    this.medicines = [
-      { medicition_id: 1, medicition_code: 'MED001', medicine_type: 'Tablet', drug_name: 'Paracetamol', label: 'MED001 - Paracetamol (Tablet)' },
-      { medicition_id: 2, medicition_code: 'MED002', medicine_type: 'Syrup', drug_name: 'Cough Syrup', label: 'MED002 - Cough Syrup (Syrup)' },
-      { medicition_id: 3, medicition_code: 'MED003', medicine_type: 'Capsule', drug_name: 'Amoxicillin', label: 'MED003 - Amoxicillin (Capsule)' },
-      { medicition_id: 4, medicition_code: 'MED004', medicine_type: 'Tablet', drug_name: 'Ibuprofen', label: 'MED004 - Ibuprofen (Tablet)' }
-    ];
-    
-    this.medicineOptions = this.medicines
-      .filter(m => m.medicition_id !== undefined)
-      .map(m => ({
-        label: m.label || `${m.medicition_code} - ${m.drug_name}`,
-        value: m.medicition_id!
-      }));
+    // Medicines will be loaded based on selected supplier
+    this.medicineOptions = [];
+  }
+
+  onSupplierChange() {
+    if (this.stockForm.supplier_id) {
+      // Find the selected supplier
+      const selectedSupplier = this.suppliers.find(s => s.pharmacySupplierId === this.stockForm.supplier_id);
+      
+      if (selectedSupplier && selectedSupplier.medications) {
+        // Populate medicine options from the selected supplier's medications
+        this.medicineOptions = selectedSupplier.medications
+          .filter(m => m.isActive)
+          .map(m => ({
+            label: `${m.medicationCode} - ${m.medicationName} (${m.medicineType})`,
+            value: m.medicationId
+          }));
+        
+        // Clear existing medicine selections when supplier changes
+        this.stockForm.medicines.forEach(med => {
+          med.medicine_id = undefined;
+        });
+        
+        console.log('Medicine options updated for supplier:', selectedSupplier.supplierName, this.medicineOptions);
+      } else {
+        this.medicineOptions = [];
+      }
+    } else {
+      this.medicineOptions = [];
+    }
   }
 
   addMedicine() {
@@ -135,15 +171,37 @@ export class AddStockComponent implements OnInit {
   }
 
   onMedicineChange(index: number, medicineId: number) {
-    const selectedMedicine = this.medicines.find(m => m.medicition_id === medicineId);
-    if (selectedMedicine) {
-      this.stockForm.medicines[index].medicine = selectedMedicine;
+    // Find the selected medicine from the current supplier's medications
+    if (this.stockForm.supplier_id) {
+      const selectedSupplier = this.suppliers.find(s => s.pharmacySupplierId === this.stockForm.supplier_id);
+      if (selectedSupplier && selectedSupplier.medications) {
+        const selectedMedication = selectedSupplier.medications.find(m => m.medicationId === medicineId);
+        if (selectedMedication) {
+          // Map Medication to Medicine format for compatibility
+          this.stockForm.medicines[index].medicine = {
+            medicition_id: selectedMedication.medicationId,
+            medicition_code: selectedMedication.medicationCode,
+            medicine_type: selectedMedication.medicineType,
+            drug_name: selectedMedication.medicationName,
+            label: `${selectedMedication.medicationCode} - ${selectedMedication.medicationName} (${selectedMedication.medicineType})`
+          };
+        }
+      }
     }
   }
 
   getMedicineLabel(medicineId: number): string {
-    const medicine = this.medicines.find(m => m.medicition_id === medicineId);
-    return medicine ? (medicine.label || `${medicine.medicition_code} - ${medicine.drug_name}`) : '';
+    // Find medicine from selected supplier's medications
+    if (this.stockForm.supplier_id) {
+      const selectedSupplier = this.suppliers.find(s => s.pharmacySupplierId === this.stockForm.supplier_id);
+      if (selectedSupplier && selectedSupplier.medications) {
+        const medication = selectedSupplier.medications.find(m => m.medicationId === medicineId);
+        if (medication) {
+          return `${medication.medicationCode} - ${medication.medicationName} (${medication.medicineType})`;
+        }
+      }
+    }
+    return '';
   }
 
   saveStock() {

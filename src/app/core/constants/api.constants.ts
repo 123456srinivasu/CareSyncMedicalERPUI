@@ -24,6 +24,9 @@ export const API_CONFIG = {
       ADD: '/stock',
       BY_CAMP: (campId: number) => `/stock/camp/${campId}`
     },
+    CAMP_MEDICINE_STOCK_SUMMARY: {
+      BY_CAMP: (campId: number) => `/camp-medicine-stock-summary/camp/${campId}`
+    },
     MEDICINES: {
       BASE: '/medicines',
       ACTIVE: '/medicines/active'
@@ -31,6 +34,10 @@ export const API_CONFIG = {
     SUPPLIERS: {
       BASE: '/suppliers',
       ACTIVE: '/suppliers/active'
+    },
+    PHARMACY_SUPPLIER: {
+      BASE: '/pharmacy-supplier',
+      ACTIVE: '/pharmacy-supplier/active'
     }
   }
 } as const;

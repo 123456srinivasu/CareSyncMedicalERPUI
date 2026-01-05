@@ -5,7 +5,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
-import { CampsService, Camp, MedicineStock } from '../../core/services/camps.service';
+import { CampsService, Camp, MedicineStock, CampMedicineStockSummary } from '../../core/services/camps.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -183,7 +183,49 @@ export class CurrentStockComponent implements OnInit {
 
   onCampChange() {
     if (this.selectedCampId) {
-      this.filteredStockItems = this.stockItems.filter(item => item.campId === this.selectedCampId);
+      this.loading = true;
+      this.errorMessage = '';
+      
+      this.campsService.getCampMedicineStockSummary(this.selectedCampId)
+        .pipe(
+          catchError(error => {
+            console.error('Error loading camp medicine stock summary:', error);
+            this.errorMessage = 'Failed to load stock summary. Please try again later.';
+            this.loading = false;
+            this.filteredStockItems = [];
+            return of([]);
+          })
+        )
+        .subscribe({
+          next: (summary: CampMedicineStockSummary[]) => {
+            console.log('summary--->', summary);
+            
+            // Transform API response to StockItem format
+            this.filteredStockItems = summary.map(item => {
+              // Get batch info from medicineStocks array (check summary level first, then medicineLookupNew level)
+              const stockInfo = item.medicineStocks && item.medicineStocks.length > 0 
+                ? item.medicineStocks[0] 
+                : (item.medicineLookupNew?.medicineStocks && item.medicineLookupNew.medicineStocks.length > 0
+                  ? item.medicineLookupNew.medicineStocks[0]
+                  : null);
+              
+              return {
+                campId: this.selectedCampId!,
+                medicine_name: item.medicineLookupNew?.medicationName || 'N/A',
+                medicine_type: item.medicineLookupNew?.medicineType || 'N/A',
+                quantity: item.quantity,
+                batch_no: stockInfo?.batchNumber,
+                exp_date: stockInfo?.expiryDate ? new Date(stockInfo.expiryDate) : undefined
+              };
+            });
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error('Error in camp medicine stock summary subscription:', error);
+            this.loading = false;
+            this.filteredStockItems = [];
+          }
+        });
     } else {
       this.filteredStockItems = [];
     }

@@ -39,6 +39,32 @@ export interface Camp {
 }
 
 /**
+ * Medicine Lookup New interface matching API response
+ */
+export interface MedicineLookupNew {
+  medicationId: number;
+  medicationCode: string;
+  medicationName: string;
+  medicineType: string;
+  isActive: boolean;
+  createdAt: string;
+  createdBy: string;
+  updatedAt: string;
+  updatedBy: string | null;
+  medicineStocks?: MedicineStock[];
+}
+
+/**
+ * Camp Medicine Stock Summary interface matching API response
+ */
+export interface CampMedicineStockSummary {
+  campMedicineStockSummaryId: number;
+  quantity: number;
+  medicineLookupNew: MedicineLookupNew;
+  medicineStocks: MedicineStock[];
+}
+
+/**
  * Service for managing camp-related API operations
  */
 @Injectable({
@@ -71,6 +97,21 @@ export class CampsService {
     return this.http.get<Camp>(url).pipe(
       catchError(error => {
         console.error(`Error fetching camp ${campId}:`, error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get camp medicine stock summary by camp ID
+   * @param campId - Camp ID
+   * @returns Observable of CampMedicineStockSummary array
+   */
+  getCampMedicineStockSummary(campId: number): Observable<CampMedicineStockSummary[]> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_MEDICINE_STOCK_SUMMARY.BY_CAMP(campId));
+    return this.http.get<CampMedicineStockSummary[]>(url).pipe(
+      catchError(error => {
+        console.error(`Error fetching camp medicine stock summary for camp ${campId}:`, error);
         throw error;
       })
     );
