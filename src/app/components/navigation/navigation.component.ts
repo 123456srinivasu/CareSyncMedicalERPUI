@@ -8,16 +8,10 @@ import { DrawerModule } from 'primeng/drawer';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TooltipModule } from 'primeng/tooltip';
 
-interface SubMenuItem {
-  label: string;
-  route: string;
-}
-
 interface MenuItem {
   label: string;
   icon: string;
-  route?: string;
-  items?: SubMenuItem[];
+  route: string;
 }
 
 @Component({
@@ -39,8 +33,6 @@ interface MenuItem {
 export class NavigationComponent implements OnInit {
   opened = true;
   collapsed = false;
-  expandedMenus: { [key: string]: boolean } = {};
-  
   menuItems: MenuItem[] = [
     { label: 'Dashboard', icon: 'pi-home', route: '/dashboard' },
     { label: 'Patients', icon: 'pi-users', route: '/patients' },
@@ -48,15 +40,6 @@ export class NavigationComponent implements OnInit {
     { label: 'Camps', icon: 'pi-building', route: '/camps' },
     { label: 'Camp Runs', icon: 'pi-calendar', route: '/camp-runs' },
     { label: 'Medicines', icon: 'pi-shopping-cart', route: '/medicines' },
-    { 
-      label: 'Stock', 
-      icon: 'pi pi-box', 
-      items: [
-        { label: 'Stock Report', route: '/stock/current' },
-        { label: 'Add Stock', route: '/stock/add' }
-        
-      ]
-    },
     { label: 'Staff', icon: 'pi-id-card', route: '/staff' },
     { label: 'Reports', icon: 'pi-chart-bar', route: '/reports' }
   ];
@@ -86,19 +69,6 @@ export class NavigationComponent implements OnInit {
       return '0px';
     }
     return this.collapsed ? '80px' : '260px';
-  }
-
-  toggleSubMenu(menuLabel: string): void {
-    if (this.collapsed) return;
-    this.expandedMenus[menuLabel] = !this.expandedMenus[menuLabel];
-  }
-
-  isSubMenuExpanded(menuLabel: string): boolean {
-    return this.expandedMenus[menuLabel] || false;
-  }
-
-  hasSubMenu(item: MenuItem): boolean {
-    return !!(item.items && item.items.length > 0);
   }
 }
 

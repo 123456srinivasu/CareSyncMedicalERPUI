@@ -30,9 +30,6 @@ interface Camp {
   update_at?: Date;
   updated_by?: Date;
   planned_date?: Date;
-  ready_for_camp?: boolean;
-  camp_started?: boolean;
-  camp_ended?: boolean;
   medicines?: CampMedicine[];
   organizer_name_1?: string;
   organizer_phone_no_1?: string;
@@ -125,8 +122,6 @@ export class CampsComponent implements OnInit {
   newPlannedDate: Date | null = null;
   selectedDoctors: any[] = [];
   selectedVolunteers: any[] = [];
-  availableDoctors: any[] = [];
-  availableDoctorsFiltered: any[] = [];
   editingOrganizerName: boolean = false;
   editingOrganizerPhone: boolean = false;
   tempOrganizerName1: string = '';
@@ -135,53 +130,24 @@ export class CampsComponent implements OnInit {
   tempOrganizerPhone2: string = '';
   campMedicines: CampMedicine[] = [];
   
-  // Not Ready for Camp Dialog
-  displayNotReadyDialog: boolean = false;
-  selectedCampForNotReady: Camp | null = null;
-  selectedDoctorsNotReady: any[] = [];
-  selectedVolunteersNotReady: any[] = [];
-  selectedDoctorsForDisable: any[] = [];
-  selectedVolunteersForDisable: any[] = [];
-  availableDoctorsNotReady: any[] = [];
-  availableDoctorsNotReadyFiltered: any[] = [];
-  doctorSearchText: string = '';
-  availableVolunteersNotReady: any[] = [];
-  availableVolunteersNotReadyFiltered: any[] = [];
-  volunteerSearchText: string = '';
-  printerAvailable: boolean = false;
-  paperAvailable: boolean = false;
-  campMedicinesNotReady: CampMedicine[] = [];
-  
-  // Start Camp Confirmation Dialog
-  displayStartCampDialog: boolean = false;
-  selectedCampForStart: Camp | null = null;
-  
-  // Stop Camp Confirmation Dialog
-  displayStopCampDialog: boolean = false;
-  selectedCampForStop: Camp | null = null;
-  
-  // Disable Password Dialog
-  displayDisablePasswordDialog: boolean = false;
-  selectedCampForDisablePassword: Camp | null = null;
-  
   doctors: any[] = [
-    { label: 'Dr. John Smith', value: 1, selected: false },
-    { label: 'Dr. Jane Doe', value: 2, selected: false},
-    { label: 'Dr. Robert Johnson', value: 3, selected: false},
-    { label: 'Dr. Emily Williams', value: 4, selected: false},
-    { label: 'Dr. Michael Brown', value: 5, selected: false},
-    { label: 'Dr. Sarah Davis', value: 6, selected: false}
+    { label: 'Dr. John Smith', value: 1 },
+    { label: 'Dr. Jane Doe', value: 2 },
+    { label: 'Dr. Robert Johnson', value: 3 },
+    { label: 'Dr. Emily Williams', value: 4 },
+    { label: 'Dr. Michael Brown', value: 5 },
+    { label: 'Dr. Sarah Davis', value: 6 }
   ];
   
   volunteers: any[] = [
-    { label: 'Alice Johnson', value: 1, selected: false },
-    { label: 'Bob Wilson', value: 2, selected: false },
-    { label: 'Carol Martinez', value: 3, selected: false },
-    { label: 'David Anderson', value: 4, selected: false },
-    { label: 'Emma Taylor', value: 5, selected: false },
-    { label: 'Frank Thomas', value: 6, selected: false },
-    { label: 'Grace Lee', value: 7, selected: false },
-    { label: 'Henry White', value: 8, selected: false }
+    { label: 'Alice Johnson', value: 1 },
+    { label: 'Bob Wilson', value: 2 },
+    { label: 'Carol Martinez', value: 3 },
+    { label: 'David Anderson', value: 4 },
+    { label: 'Emma Taylor', value: 5 },
+    { label: 'Frank Thomas', value: 6 },
+    { label: 'Grace Lee', value: 7 },
+    { label: 'Henry White', value: 8 }
   ];
   searchText: string = '';
   searchState: string = '';
@@ -303,7 +269,6 @@ export class CampsComponent implements OnInit {
     medicine_responsibility_type: '',
     medicine_responsibility_outside: ''
   };
-  isPasswordDisabled: boolean = true;
 
   ngOnInit() {
     // Sample data
@@ -573,269 +538,11 @@ export class CampsComponent implements OnInit {
     };
   }
 
-  markReadyForCamp(camp: Camp) {
-    // Mark camp as ready
-    const index = this.camps.findIndex(c => c.camp_id === camp.camp_id);
-    if (index !== -1) {
-      if (confirm(`Mark "${camp.camp_name}" as ready for camp?`)) {
-        this.camps[index].ready_for_camp = true;
-        this.filteredCamps = [...this.camps];
-        // You can also show a toast notification here
-      }
-    }
-  }
-
-  markNotReadyForCamp(camp: Camp) {
-    this.selectedCampForNotReady = camp;
-    // Initialize selected doctors and volunteers
-    this.selectedDoctorsNotReady = [];
-    this.selectedVolunteersNotReady = [];
-    // Initialize available doctors (all doctors initially)
-    this.availableDoctorsNotReady = [...this.doctors];
-    this.availableDoctorsNotReadyFiltered = [...this.doctors];
-    this.doctorSearchText = '';
-    // Initialize available volunteers (all volunteers initially)
-    this.availableVolunteersNotReady = [...this.volunteers];
-    this.availableVolunteersNotReadyFiltered = [...this.volunteers];
-    this.volunteerSearchText = '';
-    this.printerAvailable = false;
-    this.paperAvailable = false;
-    // Load medicines for the camp
-    this.campMedicinesNotReady = camp.medicines ? [...camp.medicines] : [];
-    this.displayNotReadyDialog = true;
-  }
-
-  // Methods for moving doctors between panels
-  addDoctor(doctor: any) {
-    if (!this.selectedDoctorsNotReady.find(d => d.value === doctor.value)) {
-      this.selectedDoctorsNotReady.push(doctor);
-      this.availableDoctorsNotReady = this.availableDoctorsNotReady.filter(d => d.value !== doctor.value);
-      this.filterAvailableDoctors();
-    }
-  }
-
-  onDoctorCheckboxChange(doctor: any) {
-    if (doctor.selected) {
-      if (!this.selectedDoctorsForDisable.find(d => d.value === doctor.value)) {
-        doctor.selected = true;
-        this.selectedDoctorsForDisable.push(doctor);
-      }
-    } else {
-      doctor.selected = false;
-      this.selectedDoctorsForDisable = this.selectedDoctorsForDisable.filter(d => d.value !== doctor.value);
-    }
-  }
-
-  removeDoctor(doctor: any) {
-    this.selectedDoctorsNotReady = this.selectedDoctorsNotReady.filter(d => d.value !== doctor.value);
-    this.selectedDoctorsForDisable = this.selectedDoctorsForDisable.filter(d => d.value !== doctor.value);
-    if (!this.availableDoctorsNotReady.find(d => d.value === doctor.value)) {
-      this.availableDoctorsNotReady.push(doctor);
-      this.filterAvailableDoctors();
-    }
-  }
-
-  addAllDoctors() {
-    this.availableDoctorsNotReady.forEach(doctor => {
-      if (!this.selectedDoctorsNotReady.find(d => d.value === doctor.value)) {
-        this.selectedDoctorsNotReady.push(doctor);
-      }
-    });
-    this.availableDoctorsNotReady = [];
-    this.availableDoctorsNotReadyFiltered = [];
-  }
-
-  removeAllDoctors() {
-    this.selectedDoctorsNotReady.forEach(doctor => {
-      if (!this.availableDoctorsNotReady.find(d => d.value === doctor.value)) {
-        this.availableDoctorsNotReady.push(doctor);
-      }
-    });
-    this.selectedDoctorsNotReady = [];
-    this.filterAvailableDoctors();
-  }
-
-  filterAvailableDoctors() {
-    if (!this.doctorSearchText || this.doctorSearchText.trim() === '') {
-      this.availableDoctorsNotReadyFiltered = [...this.availableDoctorsNotReady];
-    } else {
-      const searchLower = this.doctorSearchText.toLowerCase();
-      this.availableDoctorsNotReadyFiltered = this.availableDoctorsNotReady.filter(doctor =>
-        doctor.label.toLowerCase().includes(searchLower)
-      );
-    }
-  }
-
-  // Methods for moving volunteers between panels
-  addVolunteer(volunteer: any) {
-    if (!this.selectedVolunteersNotReady.find(v => v.value === volunteer.value)) {
-      this.selectedVolunteersNotReady.push(volunteer);
-      this.availableVolunteersNotReady = this.availableVolunteersNotReady.filter(v => v.value !== volunteer.value);
-      this.filterAvailableVolunteers();
-    }
-  }
-
-  onVolunteerCheckboxChange(volunteer: any) {
-    if (volunteer.selected) {
-      if (!this.selectedVolunteersForDisable.find(v => v.value === volunteer.value)) {
-        volunteer.selected = true;
-        this.selectedVolunteersForDisable.push(volunteer);
-      }
-    } else {
-      volunteer.selected = false;
-      this.selectedVolunteersForDisable = this.selectedVolunteersForDisable.filter(v => v.value !== volunteer.value);
-    }
-  }
-
-  removeVolunteer(volunteer: any) {
-    this.selectedVolunteersNotReady = this.selectedVolunteersNotReady.filter(v => v.value !== volunteer.value);
-    this.selectedVolunteersForDisable = this.selectedVolunteersForDisable.filter(v => v.value !== volunteer.value);
-    if (!this.availableVolunteersNotReady.find(v => v.value === volunteer.value)) {
-      this.availableVolunteersNotReady.push(volunteer);
-      this.filterAvailableVolunteers();
-    }
-  }
-
-  addAllVolunteers() {
-    this.availableVolunteersNotReady.forEach(volunteer => {
-      if (!this.selectedVolunteersNotReady.find(v => v.value === volunteer.value)) {
-        this.selectedVolunteersNotReady.push(volunteer);
-      }
-    });
-    this.availableVolunteersNotReady = [];
-    this.availableVolunteersNotReadyFiltered = [];
-  }
-
-  removeAllVolunteers() {
-    this.selectedVolunteersNotReady.forEach(volunteer => {
-      if (!this.availableVolunteersNotReady.find(v => v.value === volunteer.value)) {
-        this.availableVolunteersNotReady.push(volunteer);
-      }
-    });
-    this.selectedVolunteersNotReady = [];
-    this.filterAvailableVolunteers();
-  }
-
-  filterAvailableVolunteers() {
-    if (!this.volunteerSearchText || this.volunteerSearchText.trim() === '') {
-      this.availableVolunteersNotReadyFiltered = [...this.availableVolunteersNotReady];
-    } else {
-      const searchLower = this.volunteerSearchText.toLowerCase();
-      this.availableVolunteersNotReadyFiltered = this.availableVolunteersNotReady.filter(volunteer =>
-        volunteer.label.toLowerCase().includes(searchLower)
-      );
-    }
-  }
-
-  saveNotReadyCamp() {
-    if (this.selectedCampForNotReady) {
-      // Add your logic here to save the not ready camp data
-      // For example: save doctors, volunteers, printer/paper status
-      const index = this.camps.findIndex(c => c.camp_id === this.selectedCampForNotReady?.camp_id);
-      if (index !== -1) {
-        // Save the data (you can add fields to Camp interface if needed)
-        this.camps[index].update_at = new Date();
-        // Mark camp as ready
-        this.camps[index].ready_for_camp = true;
-        this.filteredCamps = [...this.camps];
-      }
-      // Close dialog
-      this.cancelNotReadyDialog();
-      // You can also show a toast notification here
-    }
-    console.log('Selected Volunteers:', this.selectedVolunteersNotReady);
-    console.log('Selected Providers:', this.selectedDoctorsNotReady);
-  }
-
-  openDisablePasswordDialog(camp: Camp) {
-    this.selectedCampForDisablePassword = camp;
-    // Load selected providers and volunteers for this camp
-    // For now, we'll use the ones from the Not Ready dialog
-    // You may need to load from camp data if stored separately
-    this.displayDisablePasswordDialog = true;
-  }
-
-  disablePassword() {
-    console.log('Selected Providers:', this.selectedDoctorsForDisable);
-    console.log('Selected Volunteers:', this.selectedVolunteersForDisable);
-    console.log('Selected Camp:', this.selectedDoctorsNotReady);
-    console.log('Selected Camp:', this.selectedVolunteersNotReady);
-    // Add your logic here to disable password for selected providers and volunteers
-    this.closeDisablePasswordDialog();
-  }
-
-  closeDisablePasswordDialog() {
-    this.displayDisablePasswordDialog = false;
-    this.selectedCampForDisablePassword = null;
-  }
-
-  cancelNotReadyDialog() {
-    this.displayNotReadyDialog = false;
-    this.selectedCampForNotReady = null;
-   // this.selectedDoctorsNotReady = [];
-   // this.selectedVolunteersNotReady = [];
-    this.selectedDoctorsForDisable = [];
-    this.selectedVolunteersForDisable = [];
-    this.availableDoctorsNotReady = [];
-    this.availableDoctorsNotReadyFiltered = [];
-    this.doctorSearchText = '';
-    this.availableVolunteersNotReady = [];
-    this.availableVolunteersNotReadyFiltered = [];
-    this.volunteerSearchText = '';
-    this.printerAvailable = false;
-    this.paperAvailable = false;
-    this.campMedicinesNotReady = [];
-  }
-
   deleteCamp(camp: Camp) {
     if (confirm(`Are you sure you want to delete ${camp.camp_name}?`)) {
       this.camps = this.camps.filter(c => c.camp_id !== camp.camp_id);
       this.filteredCamps = [...this.camps];
     }
-  }
-
-  // Start Camp Methods
-  openStartCampDialog(camp: Camp) {
-    this.selectedCampForStart = camp;
-    this.displayStartCampDialog = true;
-  }
-
-  startCamp() {
-    if (this.selectedCampForStart) {
-      const index = this.camps.findIndex(c => c.camp_id === this.selectedCampForStart?.camp_id);
-      if (index !== -1) {
-        this.camps[index].camp_started = true;
-        this.filteredCamps = [...this.camps];
-      }
-      this.closeStartCampDialog();
-    }
-  }
-
-  openStopCampDialog(camp: Camp) {
-    this.selectedCampForStop = camp;
-    this.displayStopCampDialog = true;
-  }
-
-  stopCamp() {
-    if (this.selectedCampForStop) {
-      const index = this.camps.findIndex(c => c.camp_id === this.selectedCampForStop?.camp_id);
-      if (index !== -1) {
-        this.camps[index].camp_started = true;
-        this.camps[index].camp_ended = true;
-        this.filteredCamps = [...this.camps];
-      }
-      this.closeStopCampDialog();
-    }
-  }
-
-  closeStopCampDialog() {
-    this.displayStopCampDialog = false;
-    this.selectedCampForStop = null;
-  }
-
-  closeStartCampDialog() {
-    this.displayStartCampDialog = false;
-    this.selectedCampForStart = null;
   }
 
   getSeverity(isActive: boolean) {

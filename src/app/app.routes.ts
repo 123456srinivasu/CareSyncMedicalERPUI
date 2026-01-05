@@ -31,19 +31,6 @@ export const routes: Routes = [
     loadComponent: () => import('./components/medicines/medicines.component').then(m => m.MedicinesComponent)
   },
   {
-    path: 'stock',
-    children: [
-      {
-        path: 'add',
-        loadComponent: () => import('./components/stock/add-stock.component').then(m => m.AddStockComponent)
-      },
-      {
-        path: 'current',
-        loadComponent: () => import('./components/stock/current-stock.component').then(m => m.CurrentStockComponent)
-      }
-    ]
-  },
-  {
     path: 'staff',
     loadComponent: () => import('./components/staff/staff.component').then(m => m.StaffComponent)
   },

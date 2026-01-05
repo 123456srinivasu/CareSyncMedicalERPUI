@@ -113,11 +113,6 @@ nav {
   display: flex;
   flex-direction: column;
 
-  .menu-item-wrapper {
-    display: flex;
-    flex-direction: column;
-  }
-
   .menu-item {
     display: flex;
     align-items: center;
@@ -187,88 +182,6 @@ nav {
       &.collapsed {
         border-left: 3px solid var(--medical-primary);
       }
-    }
-
-    &.menu-item-parent {
-      cursor: pointer;
-      user-select: none;
-
-      .submenu-arrow {
-        margin-left: auto;
-        font-size: 12px;
-        transition: transform 0.3s ease;
-        color: var(--medical-text-light);
-
-        &.rotated {
-          transform: rotate(180deg);
-        }
-      }
-
-      &.expanded {
-        background-color: #f8f9fa;
-        color: var(--medical-primary);
-        border-left-color: var(--medical-primary);
-
-        i:first-child {
-          color: var(--medical-primary);
-        }
-      }
-    }
-  }
-
-  .submenu {
-    display: flex;
-    flex-direction: column;
-    background-color: #f8f9fa;
-    padding-left: 20px;
-    animation: slideDown 0.3s ease;
-    overflow: hidden;
-
-    .submenu-item {
-      padding-left: 40px;
-      font-size: 13px;
-      position: relative;
-      min-height: 40px;
-      display: flex;
-      align-items: center;
-
-      .submenu-icon {
-        font-size: 6px;
-        color: var(--medical-text-light);
-        margin-right: 8px;
-        position: absolute;
-        left: 20px;
-      }
-
-      &:hover {
-        background-color: #e9ecef;
-        color: var(--medical-primary);
-
-        .submenu-icon {
-          color: var(--medical-primary);
-        }
-      }
-
-      &.active {
-        background: linear-gradient(90deg, rgba(44, 90, 160, 0.15) 0%, rgba(44, 90, 160, 0.08) 100%);
-        color: var(--medical-primary);
-        font-weight: 600;
-
-        .submenu-icon {
-          color: var(--medical-primary);
-        }
-      }
-    }
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      max-height: 0;
-    }
-    to {
-      opacity: 1;
-      max-height: 500px;
     }
   }
 }

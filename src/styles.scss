@@ -364,16 +364,6 @@ body {
       box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
     }
   }
-
-  // Fix dropdown panel z-index when inside scrollable containers
-  .p-dropdown-panel {
-    z-index: 1100 !important;
-  }
-
-  // Ensure calendar overlay appears above everything
-  .p-datepicker {
-    z-index: 1100 !important;
-  }
 }
 
 /* Medical Admin Dialog Styling */
@@ -410,3 +400,6 @@ body {
   box-shadow: 0 2px 8px var(--medical-shadow);
 }
 
+.display-none {
+  display: none;
+}
