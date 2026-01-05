@@ -6,7 +6,21 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "format": "prettier --write \"src/**/*.{html,ts,css,scss,json}\"",
+    "format:watch": "onchange \"src/**/*.{html,ts,css,scss,json}\" -- prettier --write {{changed}}",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "src/**/*.{html,css,scss,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "private": true,
   "dependencies": {
