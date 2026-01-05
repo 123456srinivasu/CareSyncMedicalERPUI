@@ -9,17 +9,16 @@
     "test": "ng test",
     "format": "prettier --write \"src/**/*.{html,ts,css,scss,json}\"",
     "format:watch": "onchange \"src/**/*.{html,ts,css,scss,json}\" -- prettier --write {{changed}}",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint \"src/**/*.{ts,js}\" --fix"
   },
   "lint-staged": {
     "src/**/*.{ts,js}": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     "src/**/*.{html,css,scss,json}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "private": true,
