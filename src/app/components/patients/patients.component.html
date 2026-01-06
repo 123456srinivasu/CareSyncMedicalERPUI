@@ -176,18 +176,10 @@
     </div>
   </p-card>
 
-  <p-card
-    class="hidden"
-    *ngIf="filteredPatients.length > 0 && isExistingPatient"
-  >
-    <div
-      class="table-header d-flex align-items-center justify-content-between mb-3"
-    >
+  <p-card class="hidden" *ngIf="filteredPatients.length > 0 && isExistingPatient">
+    <div class="table-header d-flex align-items-center justify-content-between mb-3">
       <div class="d-flex align-items-center gap-2" style="width: 100%">
-        <i
-          class="pi pi-search"
-          style="font-size: 1.2rem; margin-right: 6px"
-        ></i>
+        <i class="pi pi-search" style="font-size: 1.2rem; margin-right: 6px"></i>
         <input
           pInputText
           type="text"
@@ -220,13 +212,13 @@
       <ng-template pTemplate="body" let-patient>
         <tr>
           <td>{{ patient.patient_id }}</td>
-          <td>{{ patient.first_name }} {{ patient.last_name || "" }}</td>
+          <td>{{ patient.first_name }} {{ patient.last_name || '' }}</td>
           <td>{{ calculateAge(patient.dob) }}</td>
-          <td>{{ patient.gender || "N/A" }}</td>
-          <td>{{ patient.phone || "N/A" }}</td>
-          <td>{{ patient.address || "N/A" }}</td>
+          <td>{{ patient.gender || 'N/A' }}</td>
+          <td>{{ patient.phone || 'N/A' }}</td>
+          <td>{{ patient.address || 'N/A' }}</td>
           <td>
-            {{ patient.dob ? (patient.dob | date : "shortDate") : "N/A" }}
+            {{ patient.dob ? (patient.dob | date: 'shortDate') : 'N/A' }}
           </td>
           <td>
             <p-button
@@ -250,12 +242,8 @@
   </p-card>
 
   <div class="soap-container">
-    <div class="soap-header" *ngIf="!isExistingPatient">
-      SOAP Notes – front Office or volunteer
-    </div>
-    <div class="soap-header" *ngIf="isExistingPatient">
-      SOAP Notes – Doctor Consultation
-    </div>
+    <div class="soap-header" *ngIf="!isExistingPatient">SOAP Notes – front Office or volunteer</div>
+    <div class="soap-header" *ngIf="isExistingPatient">SOAP Notes – Doctor Consultation</div>
 
     <div class="box-header with-border p-0 border-bottom-blue">
       <h4 class="font-semibold">Patient Information</h4>
@@ -263,31 +251,15 @@
 
     <div class="row">
       <div class="col-md-6 mb-2">
-        <label class="form-label fw-medium"
-          >Name <span class="text-danger">*</span></label
-        >
-        <input
-          type="text"
-          name="name"
-          class="form-control"
-          placeholder="Full name"
-        />
+        <label class="form-label fw-medium">Name <span class="text-danger">*</span></label>
+        <input type="text" name="name" class="form-control" placeholder="Full name" />
       </div>
       <div class="col-md-3 mb-2">
-        <label class="form-label fw-medium"
-          >Age <span class="text-danger">*</span></label
-        >
-        <input
-          type="number"
-          name="age"
-          class="form-control"
-          placeholder="Age"
-        />
+        <label class="form-label fw-medium">Age <span class="text-danger">*</span></label>
+        <input type="number" name="age" class="form-control" placeholder="Age" />
       </div>
       <div class="col-md-3 mb-2">
-        <label class="form-label fw-medium"
-          >Sex <span class="text-danger">*</span></label
-        >
+        <label class="form-label fw-medium">Sex <span class="text-danger">*</span></label>
         <select name="sex" class="form-select">
           <option value="">Select</option>
           <option>Female</option>
@@ -321,11 +293,7 @@
         </div>
         <div class="col-md-6 mb-2">
           <label class="form-label fw-medium">Family & Social History</label>
-          <textarea
-            name="family_social"
-            rows="2"
-            class="form-control"
-          ></textarea>
+          <textarea name="family_social" rows="2" class="form-control"></textarea>
         </div>
       </div>
       <div class="row">
@@ -345,48 +313,23 @@
             <div class="row">
               <div class="col-6 mb-2">
                 <label class="form-label fw-medium">Blood Pressure</label>
-                <input
-                  type="text"
-                  name="bp"
-                  class="form-control"
-                  placeholder="e.g. 120/80 mmHg"
-                />
+                <input type="text" name="bp" class="form-control" placeholder="e.g. 120/80 mmHg" />
               </div>
               <div class="col-6 mb-2">
                 <label class="form-label fw-medium">Heart Rate</label>
-                <input
-                  type="number"
-                  name="hr"
-                  class="form-control"
-                  placeholder="bpm"
-                />
+                <input type="number" name="testhr" class="form-control" placeholder="bpm" />
               </div>
               <div class="col-6 mb-2">
                 <label class="form-label fw-medium">Respiratory Rate</label>
-                <input
-                  type="number"
-                  name="rr"
-                  class="form-control"
-                  placeholder="breaths/min"
-                />
+                <input type="number" name="rr" class="form-control" placeholder="breaths/min" />
               </div>
               <div class="col-6 mb-2">
                 <label class="form-label fw-medium">Temperature</label>
-                <input
-                  type="text"
-                  name="temp"
-                  class="form-control"
-                  placeholder="°C / °F"
-                />
+                <input type="text" name="temp" class="form-control" placeholder="°C / °F" />
               </div>
               <div class="col-6 mb-2">
                 <label class="form-label fw-medium">Oxygen Saturation</label>
-                <input
-                  type="text"
-                  name="spo2"
-                  class="form-control"
-                  placeholder="%"
-                />
+                <input type="text" name="spo2" class="form-control" placeholder="%" />
               </div>
             </div>
           </div>
@@ -395,11 +338,7 @@
             <h6>Exam</h6>
             <div class="mb-2">
               <label class="form-label fw-medium">General Appearance</label>
-              <input
-                type="text"
-                name="general_appearance"
-                class="form-control"
-              />
+              <input type="text" name="general_appearance" class="form-control" />
             </div>
             <div class="mb-2">
               <label class="form-label fw-medium">HEENT</label>
@@ -425,14 +364,8 @@
         </div>
 
         <div class="mb-2 mt-3">
-          <label class="form-label fw-medium"
-            >Diagnostic Tests & Imaging (if available)</label
-          >
-          <textarea
-            name="diagnostic_tests"
-            rows="2"
-            class="form-control"
-          ></textarea>
+          <label class="form-label fw-medium">Diagnostic Tests & Imaging (if available)</label>
+          <textarea name="diagnostic_tests" rows="2" class="form-control"></textarea>
         </div>
 
         <div class="soap-body">
@@ -461,11 +394,7 @@
         <div class="row">
           <div class="col-md-6 mb-2">
             <label class="form-label fw-medium">Primary Diagnoses</label>
-            <textarea
-              name="primary_dx"
-              rows="2"
-              class="form-control"
-            ></textarea>
+            <textarea name="primary_dx" rows="2" class="form-control"></textarea>
           </div>
           <div class="col-md-6 mb-2">
             <label class="form-label fw-medium">Differential Diagnoses</label>
@@ -475,11 +404,7 @@
         <div class="row">
           <div class="col-md-6 mb-2">
             <label class="form-label fw-medium">Justification</label>
-            <textarea
-              name="justification"
-              rows="2"
-              class="form-control"
-            ></textarea>
+            <textarea name="justification" rows="2" class="form-control"></textarea>
           </div>
         </div>
       </div>
@@ -491,26 +416,16 @@
           <div class="row">
             <div class="col-md-6 mb-2">
               <label class="form-label fw-medium">Medications & Dosages</label>
-              <textarea
-                name="medications"
-                rows="2"
-                class="form-control"
-              ></textarea>
+              <textarea name="medications" rows="2" class="form-control"></textarea>
             </div>
             <div class="col-md-6 mb-2">
-              <label class="form-label fw-medium"
-                >Lifestyle Modifications</label
-              >
-              <textarea
-                name="lifestyle"
-                rows="2"
-                class="form-control"
-              ></textarea>
+              <label class="form-label fw-medium">Lifestyle Modifications</label>
+              <textarea name="lifestyle" rows="2" class="form-control"></textarea>
             </div>
           </div>
           <div class="row">
             <textarea
-              placeholder="Treatment plan, prescribed medicines, dosage, advice, follow-up..."
+              placeholder="Treatment  test plan, prescribed medicines, dosage, advice, follow-up..."
             ></textarea>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -9,13 +9,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-
-interface PharmacySupplier {
-  pharmacy_supplier_id?: number;
-  supplier_code?: string;
-  supplier_name?: string;
-  is_active: boolean;
-}
+import { SuppliersService, PharmacySupplier, Medication, InvoiceRequest } from '../../core/services/suppliers.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
+import { CampsService } from '../../core/services/camps.service';
 
 interface Medicine {
   medicition_id?: number;
@@ -62,11 +60,16 @@ interface StockForm {
   styleUrl: './add-stock.component.scss'
 })
 export class AddStockComponent implements OnInit {
+  private readonly suppliersService = inject(SuppliersService);
+  private readonly router = inject(Router);
+  private readonly campsService = inject(CampsService);
   suppliers: PharmacySupplier[] = [];
   medicines: Medicine[] = [];
   medicineOptions: { label: string, value: number }[] = [];
   paymentModes: { label: string, value: string }[] = [];
-  
+  loading: boolean = false;
+  errorMessage: string = '';
+  selectedCampId: number = 0;//TODO: get the selected camp id from the url params
   stockForm: StockForm = {
     supplier_id: undefined,
     invoice_id: '',
@@ -77,6 +80,7 @@ export class AddStockComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.selectedCampId = 1;
     this.loadSuppliers();
     this.loadMedicines();
     this.loadPaymentModes();
@@ -97,27 +101,63 @@ export class AddStockComponent implements OnInit {
   }
 
   loadSuppliers() {
-    this.suppliers = [
-      { pharmacy_supplier_id: 1, supplier_code: 'SUP001', supplier_name: 'ABC Pharmaceuticals', is_active: true },
-      { pharmacy_supplier_id: 2, supplier_code: 'SUP002', supplier_name: 'XYZ Medical Supplies', is_active: true },
-      { pharmacy_supplier_id: 3, supplier_code: 'SUP003', supplier_name: 'MediCorp Distributors', is_active: true }
-    ];
+    this.loading = true;
+    this.errorMessage = '';
+    
+    this.suppliersService.getActivePharmacySuppliers()
+      .pipe(
+        catchError(error => {
+          console.error('Error loading suppliers:', error);
+          this.errorMessage = 'Failed to load suppliers. Please try again later.';
+          this.loading = false;
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: (suppliers: PharmacySupplier[]) => {
+          this.suppliers = suppliers;
+          this.loading = false;
+          console.log('Suppliers loaded:', this.suppliers);
+        },
+        error: (error) => {
+          console.error('Error in suppliers subscription:', error);
+          this.loading = false;
+        }
+      });
   }
 
   loadMedicines() {
-    this.medicines = [
-      { medicition_id: 1, medicition_code: 'MED001', medicine_type: 'Tablet', drug_name: 'Paracetamol', label: 'MED001 - Paracetamol (Tablet)' },
-      { medicition_id: 2, medicition_code: 'MED002', medicine_type: 'Syrup', drug_name: 'Cough Syrup', label: 'MED002 - Cough Syrup (Syrup)' },
-      { medicition_id: 3, medicition_code: 'MED003', medicine_type: 'Capsule', drug_name: 'Amoxicillin', label: 'MED003 - Amoxicillin (Capsule)' },
-      { medicition_id: 4, medicition_code: 'MED004', medicine_type: 'Tablet', drug_name: 'Ibuprofen', label: 'MED004 - Ibuprofen (Tablet)' }
-    ];
-    
-    this.medicineOptions = this.medicines
-      .filter(m => m.medicition_id !== undefined)
-      .map(m => ({
-        label: m.label || `${m.medicition_code} - ${m.drug_name}`,
-        value: m.medicition_id!
-      }));
+    // Medicines will be loaded based on selected supplier
+    this.medicineOptions = [];
+  }
+
+  onSupplierChange() {
+    this.stockForm.medicines=[];
+    if (this.stockForm.supplier_id) {
+      // Find the selected supplier
+      const selectedSupplier = this.suppliers.find(s => s.pharmacySupplierId === this.stockForm.supplier_id);
+      
+      if (selectedSupplier && selectedSupplier.medications) {
+        // Populate medicine options from the selected supplier's medications
+        this.medicineOptions = selectedSupplier.medications
+          .filter(m => m.isActive)
+          .map(m => ({
+            label: `${m.medicationCode} - ${m.medicationName} (${m.medicineType})`,
+            value: m.medicationId
+          }));
+        
+        // Clear existing medicine selections when supplier changes
+        this.stockForm.medicines.forEach(med => {
+          med.medicine_id = undefined;
+        });
+        
+        console.log('Medicine options updated for supplier:', selectedSupplier.supplierName, this.medicineOptions);
+      } else {
+        this.medicineOptions = [];
+      }
+    } else {
+      this.medicineOptions = [];
+    }
   }
 
   addMedicine() {
@@ -134,21 +174,134 @@ export class AddStockComponent implements OnInit {
     this.stockForm.medicines.splice(index, 1);
   }
 
-  onMedicineChange(index: number, medicineId: number) {
-    const selectedMedicine = this.medicines.find(m => m.medicition_id === medicineId);
-    if (selectedMedicine) {
-      this.stockForm.medicines[index].medicine = selectedMedicine;
+  onMedicineChange(index: number, medicineId: number | null) {
+    if (!medicineId) {
+      // Medicine was cleared, reset the medicine object
+      this.stockForm.medicines[index].medicine = undefined;
+      return;
+    }
+    
+    // Find the selected medicine from the current supplier's medications
+    if (this.stockForm.supplier_id) {
+      const selectedSupplier = this.suppliers.find(s => s.pharmacySupplierId === this.stockForm.supplier_id);
+      if (selectedSupplier && selectedSupplier.medications) {
+        const selectedMedication = selectedSupplier.medications.find(m => m.medicationId === medicineId);
+        if (selectedMedication) {
+          // Map Medication to Medicine format for compatibility
+          this.stockForm.medicines[index].medicine = {
+            medicition_id: selectedMedication.medicationId,
+            medicition_code: selectedMedication.medicationCode,
+            medicine_type: selectedMedication.medicineType,
+            drug_name: selectedMedication.medicationName,
+            label: `${selectedMedication.medicationCode} - ${selectedMedication.medicationName} (${selectedMedication.medicineType})`
+          };
+        }
+      }
     }
   }
 
   getMedicineLabel(medicineId: number): string {
-    const medicine = this.medicines.find(m => m.medicition_id === medicineId);
-    return medicine ? (medicine.label || `${medicine.medicition_code} - ${medicine.drug_name}`) : '';
+    // Find medicine from selected supplier's medications
+    if (this.stockForm.supplier_id) {
+      const selectedSupplier = this.suppliers.find(s => s.pharmacySupplierId === this.stockForm.supplier_id);
+      if (selectedSupplier && selectedSupplier.medications) {
+        const medication = selectedSupplier.medications.find(m => m.medicationId === medicineId);
+        if (medication) {
+          return `${medication.medicationCode} - ${medication.medicationName} (${medication.medicineType})`;
+        }
+      }
+    }
+    return '';
+  }
+
+  /**
+   * Get filtered medicine options for a specific row
+   * Excludes medicines that are already selected in other rows
+   * @param currentRowIndex - The index of the current row
+   * @returns Filtered medicine options array
+   */
+  getMedicineOptionsForRow(currentRowIndex: number): { label: string, value: number }[] {
+    // Get all selected medicine IDs from other rows (excluding current row)
+    const selectedMedicineIds = this.stockForm.medicines
+      .map((med, index) => index !== currentRowIndex && med.medicine_id ? med.medicine_id : null)
+      .filter(id => id !== null) as number[];
+    
+    // Filter out already selected medicines
+    return this.medicineOptions.filter(option => 
+      !selectedMedicineIds.includes(option.value)
+    );
   }
 
   saveStock() {
-    console.log('Stock Form:', this.stockForm);
-    // Implement save logic here
+    // Validate form
+    if (!this.stockForm.supplier_id || !this.stockForm.invoice_id || !this.stockForm.invoice_date || 
+        !this.stockForm.invoice_amount || !this.stockForm.payment_mode || this.stockForm.medicines.length === 0) {
+      this.errorMessage = 'Please fill in all required fields and add at least one medicine.';
+      return;
+    }
+
+    this.loading = true;
+    this.errorMessage = '';
+
+    // Prepare invoice payload
+    const invoicePayload: InvoiceRequest = {
+      invoiceNumber: this.stockForm.invoice_id!,
+      invoiceDate: this.stockForm.invoice_date!.toISOString(),
+      amount: this.stockForm.invoice_amount!.toString(),
+      paymentMode: this.stockForm.payment_mode!,
+      pharmacySupplier: {
+        pharmacySupplierId: this.stockForm.supplier_id!.toString()
+      }
+    };
+
+    console.log('Invoice Payload:', invoicePayload);
+
+    // First, create the invoice
+    this.suppliersService.createInvoice(invoicePayload).subscribe({
+      next: (invoiceResponse: any) => {
+        console.log('Invoice created:', invoiceResponse);
+        
+        // Prepare medicine stock payload
+        const stockPayload = this.stockForm.medicines.map(med => ({
+          batchNumber: med.batch_no,
+          hsnCode: med.hsn_no,
+          manufacturingDate: new Date().toISOString(),
+          expiryDate: med.exp_date ? med.exp_date.toISOString() : new Date().toISOString(),
+          quantity: med.quantity,
+          medication: {
+            medicationId: med.medicine_id
+          },
+          invoice: {
+            invoiceId: invoiceResponse.invoiceId.toString()
+          },
+          camp: {
+            campId: this.selectedCampId.toString()
+          }
+        }));
+   
+
+        console.log('Stock Payload:', stockPayload);
+
+        // Then, create the medicine stock
+        this.campsService.addCampMedicineStock(this.selectedCampId, stockPayload).subscribe({
+          next: (response: any) => {
+            console.log('Stock saved:', response);
+            this.loading = false;
+            this.router.navigate(['/stock/current-stock']);
+          },
+          error: (error: any) => {
+            console.error('Error saving stock:', error);
+            this.loading = false;
+            this.errorMessage = 'Failed to save stock. Please try again later.';
+          }
+        });
+      },
+      error: (error: any) => {
+        console.error('Error creating invoice:', error);
+        this.loading = false;
+        this.errorMessage = 'Failed to create invoice. Please try again later.';
+      }
+    });
   }
 }
 

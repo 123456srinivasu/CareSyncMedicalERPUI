@@ -11,12 +11,16 @@
               id="supplier" 
               [(ngModel)]="stockForm.supplier_id" 
               [options]="suppliers" 
-              optionLabel="supplier_name" 
-              optionValue="pharmacy_supplier_id"
+              optionLabel="supplierName" 
+              optionValue="pharmacySupplierId"
               placeholder="Select Supplier" 
               [required]="true" 
+              [disabled]="loading"
+              (onChange)="onSupplierChange()"
               class="w-full">
             </p-dropdown>
+            <small *ngIf="loading" class="loading-text">Loading suppliers...</small>
+            <small *ngIf="errorMessage" class="error-text">{{ errorMessage }}</small>
           </div>
           
           <div class="field">
@@ -86,7 +90,7 @@
           </p-button>
         </div>
 
-        <div class="medicines-table-container" *ngIf="stockForm.medicines.length > 0">
+        <div class="medicines-table-container testclass" *ngIf="stockForm.medicines.length > 0">
           <p-table [value]="stockForm.medicines" [scrollable]="true" scrollHeight="400px">
             <ng-template pTemplate="header">
               <tr>
@@ -103,7 +107,7 @@
                 <td>
                   <p-dropdown 
                     [(ngModel)]="medicine.medicine_id" 
-                    [options]="medicineOptions" 
+                    [options]="getMedicineOptionsForRow(rowIndex)" 
                     optionLabel="label" 
                     optionValue="value"
                     placeholder="Select Medicine" 
