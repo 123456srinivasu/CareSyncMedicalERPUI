@@ -107,7 +107,7 @@
                 <td>
                   <p-dropdown 
                     [(ngModel)]="medicine.medicine_id" 
-                    [options]="medicineOptions" 
+                    [options]="getMedicineOptionsForRow(rowIndex)" 
                     optionLabel="label" 
                     optionValue="value"
                     placeholder="Select Medicine" 

@@ -42,8 +42,7 @@ export interface Camp {
  * Medicine Lookup New interface matching API response
  */
 export interface MedicineLookupNew {
-  medicationId: number;
-  medicationCode: string;
+  medicationICode: string;
   medicationName: string;
   medicineType: string;
   isActive: boolean;
@@ -116,5 +115,20 @@ export class CampsService {
       })
     );
   }
+  /**
+   * Add camp medicine stock
+   * @param campId - Camp ID (not used in endpoint but kept for compatibility)
+   * @param payload - Payload array of medicine stock items
+   * @returns Observable of any
+   */
+  addCampMedicineStock(campId: number, payload: any): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_MEDICINE_STOCK.ADD(campId));
+    return this.http.post<any>(url, payload).pipe(
+      catchError(error => {
+        console.error('Error adding camp medicine stock:', error);
+        throw error;
+      })
+    );
+  } 
 }
 

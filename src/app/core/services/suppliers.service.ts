@@ -38,6 +38,19 @@ export interface Invoice {
 }
 
 /**
+ * Invoice request payload interface
+ */
+export interface InvoiceRequest {
+  invoiceNumber: string;
+  invoiceDate: string;
+  amount: string;
+  paymentMode: string;
+  pharmacySupplier: {
+    pharmacySupplierId: string;
+  };
+}
+
+/**
  * Pharmacy Supplier interface matching API response
  */
 export interface PharmacySupplier {
@@ -77,6 +90,21 @@ export class SuppliersService {
     return this.http.get<PharmacySupplier[]>(url).pipe(
       catchError(error => {
         console.error('Error fetching active pharmacy suppliers:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Create invoice
+   * @param payload - Invoice request payload
+   * @returns Observable of Invoice
+   */
+  createInvoice(payload: InvoiceRequest): Observable<Invoice> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.INVOICE.CREATE);
+    return this.http.post<Invoice>(url, payload).pipe(
+      catchError(error => {
+        console.error('Error creating invoice:', error);
         throw error;
       })
     );
