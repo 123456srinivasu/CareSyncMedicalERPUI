@@ -5,7 +5,8 @@
 
 export const API_CONFIG = {
   // Base API Configuration
-  BASE_URL: 'http://localhost:8080',
+  BASE_URL: 'http://65.20.80.83:8081',
+  //BASE_URL: 'http://localhost:8081',
   API_PREFIX: '/api',
   
   // API Endpoints

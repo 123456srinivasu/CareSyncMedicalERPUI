@@ -22,18 +22,20 @@
           <small *ngIf="loading" class="loading-text">Loading camps...</small>
           <small *ngIf="errorMessage" class="error-text">{{ errorMessage }}</small>
         </div>
+
+        <div class="add-stock-button-container">
+          <p-button 
+            label="Add Stock" 
+            icon="pi pi-plus" 
+            (onClick)="navigateToAddStock()"
+            [outlined]="true">
+          </p-button>
+        </div>
+        
       </div>
 
       <!-- Stock Table Section -->
       <div class="table-section" *ngIf="selectedCampId && filteredStockItems.length > 0">
-        <div class="table-header">
-          <h3>Stock Report Details</h3>
-          <div class="total-quantity">
-            <span class="label">Total Quantity:</span>
-            <span class="value">{{ getTotalQuantity() }}</span>
-          </div>
-        </div>
-
         <p-table [value]="filteredStockItems" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           [rowsPerPageOptions]="[10, 25, 50]">
@@ -42,8 +44,8 @@
               <th>Medicine Name</th>
               <th>Medicine Type</th>
               <th>Quantity</th>
-              <th>Batch No</th>
-              <th>Expiry Date</th>
+              <!-- <th>Batch No</th>
+              <th>Expiry Date</th> -->
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
@@ -53,8 +55,8 @@
               <td>
                 <span class="quantity-badge">{{ item.quantity }}</span>
               </td>
-              <td>{{ item.batch_no || 'N/A' }}</td>
-              <td>{{ item.exp_date ? (item.exp_date | date:'yyyy-MM-dd') : 'N/A' }}</td>
+              <!-- <td>{{ item.batch_no || 'N/A' }}</td>
+              <td>{{ item.exp_date ? (item.exp_date | date:'yyyy-MM-dd') : 'N/A' }}</td> -->
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">

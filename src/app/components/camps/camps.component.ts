@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -13,6 +13,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { CampsService } from '../../core/services/camps.service';
 
 interface CampMedicine {
   medicine_id?: number;
@@ -22,6 +25,8 @@ interface CampMedicine {
 }
 
 interface Camp {
+  schedule_week?: string;
+  schedule_day?: string;
   camp_id?: number;
   camp_code?: string;
   camp_name: string;
@@ -63,25 +68,7 @@ interface Camp {
   september?: boolean;
   october?: boolean;
   november?: boolean;
-  december?: boolean;
-  january_week?: string;
-  january_day?: string;
-  february_week?: string;
-  february_day?: string;
-  march_week?: string;
-  march_day?: string;
-  april_week?: string;
-  april_day?: string;
-  may_week?: string;
-  may_day?: string;
-  june_week?: string;
-  june_day?: string;
-  july_week?: string;
-  july_day?: string;
-  august_week?: string;
-  august_day?: string;
-  september_week?: string;
-  september_day?: string;
+  december?: boolean;  
   october_week?: string;
   october_day?: string;
   november_week?: string;
@@ -110,12 +97,17 @@ interface Camp {
     DropdownModule,
     RadioButtonModule,
     CalendarModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ToastModule
   ],
+  providers: [MessageService],
   templateUrl: './camps.component.html',
   styleUrl: './camps.component.scss'
 })
 export class CampsComponent implements OnInit {
+  private readonly campsService = inject(CampsService);
+  private readonly messageService = inject(MessageService);
+  
   camps: Camp[] = [];
   filteredCamps: Camp[] = [];
   selectedCamp: Camp | null = null;
@@ -127,6 +119,10 @@ export class CampsComponent implements OnInit {
   selectedVolunteers: any[] = [];
   availableDoctors: any[] = [];
   availableDoctorsFiltered: any[] = [];
+  doctorSearchTextNew: string = '';
+  availableVolunteers: any[] = [];
+  availableVolunteersFiltered: any[] = [];
+  volunteerSearchTextNew: string = '';
   editingOrganizerName: boolean = false;
   editingOrganizerPhone: boolean = false;
   tempOrganizerName1: string = '';
@@ -192,32 +188,118 @@ export class CampsComponent implements OnInit {
   isEditMode: boolean = false;
 
   states: any[] = [
-    { label: 'Maharashtra', value: 'Maharashtra' },
-    { label: 'Gujarat', value: 'Gujarat' },
-    { label: 'Karnataka', value: 'Karnataka' },
-    { label: 'Tamil Nadu', value: 'Tamil Nadu' },
-    { label: 'Delhi', value: 'Delhi' }
-  ];
+    { label: 'Andhra Pradesh', value: '1', 
+      districts:[      
+      { label: "Alluri Sitharama Raju", value: '1', mandles:[] },
+      { label: "Anakapalli", value: '2', mandles:[] },
+      { label: "Ananthapuramu", value: '3', mandles:[] },
+      { label: "Annamayya", value: '4', mandles:[] },
+      { label: "Bapatla", value: '5', mandles:[] },
+      { label: "Chittoor", value: '6', mandles:[] },
+      { label: "Dr. B.R. Ambedkar Konaseema", value: '7', mandles:[] },
+      { label: "East Godavari", value: '8', mandles:[] },
+      { label: "Eluru", value: '9', mandles:[] },
+      { label: "Guntur", value: '10', mandles:[] },
+      { label: "Kakinada", value: '11', mandles:[] },
+      { label: "Krishna", value: '12', mandles:[
+        { label: "A Konduru", value: '1' },
+        { label: "Chandarlapadu", value: '2' },
+        { label: "G Konduru", value: '3' },
+        { label: "Gampalagudem", value: '4' },
+        { label: "Jaggaiahpet (Jaggayyapeta)", value: '5' },
+        { label: "Kanchikacherla", value: '6' },
+        { label: "Mylavaram", value: '7' },
+        { label: "Nandigama", value: '8' },
+        { label: "Penuganchiprolu", value: '9' },
+        { label: "Reddigudem", value: '10' },
+        { label: "Tiruvuru", value: '11' },
+        { label: "Vatsavai", value: '12' },
+        { label: "Veerullapadu", value: '13' },
+        { label: "Vijayawada Central", value: '14' },
+        { label: "Vijayawada East", value: '15' },
+        { label: "Vijayawada North", value: '16' },
+        { label: "Vijayawada Rural", value: '17' },
+        { label: "Vijayawada West", value: '18' },
+        { label: "Vissannapeta", value: '19' }
+      ] },
+      { label: "Kurnool", value: '13', mandles:[] },
+      { label: "Markapuram", value: '14', mandles:[] },
+      { label: "Nandyal", value: '15', mandles:[] },
+      { label: "NTR", value: '16', mandles:[] },
+      { label: "Palnadu", value: '17', mandles:[] },
+      { label: "Parvathipuram Manyam", value: '18', mandles:[] },
+      { label: "Polavaram", value: '19', mandles:[] },
+      { label: "Prakasam", value: '20', mandles:[] },
+      { label: "Sri Potti Sriramulu Nellore", value: '21', mandles:[] },
+      { label: "Sri Sathya Sai", value: '22', mandles:[] },
+      { label: "Srikakulam", value: '23', mandles:[] },
+      { label: "Tirupati", value: '24', mandles:[] },
+      { label: "Visakhapatnam", value: '25', mandles:[] },
+      { label: "Vizianagaram", value: '26', mandles:[] },
+      { label: "West Godavari", value: '27', mandles:[] },
+      { label: "YSR Kadapa", value: '28', mandles:[] }      
+  ]}
+];
+
+
   districts: any[] = [
-    { label: 'Mumbai', value: 'Mumbai' },
-    { label: 'Pune', value: 'Pune' },
-    { label: 'Nagpur', value: 'Nagpur' },
-    { label: 'Nashik', value: 'Nashik' },
-    { label: 'Aurangabad', value: 'Aurangabad' }
+    { label: "Alluri Sitharama Raju", value: '1', mandles:[] },
+    { label: "Anakapalli", value: '2', mandles:[] },
+    { label: "Ananthapuramu", value: '3', mandles:[] },
+    { label: "Annamayya", value: '4', mandles:[] },
+    { label: "Bapatla", value: '5', mandles:[] },
+    { label: "Chittoor", value: '6', mandles:[] },
+    { label: "Dr. B.R. Ambedkar Konaseema", value: '7', mandles:[] },
+    { label: "East Godavari", value: '8', mandles:[] },
+    { label: "Eluru", value: '9', mandles:[] },
+    { label: "Guntur", value: '10', mandles:[] },
+    { label: "Kakinada", value: '11', mandles:[] },
+    { label: "Krishna", value: '12', mandles:[]},
+    { label: "Kurnool", value: '13', mandles:[] },
+    { label: "Markapuram", value: '14', mandles:[] },
+    { label: "Nandyal", value: '15', mandles:[] },
+    { label: "NTR", value: '16', mandles:[] },
+    { label: "Palnadu", value: '17', mandles:[] },
+    { label: "Parvathipuram Manyam", value: '18', mandles:[] },
+    { label: "Polavaram", value: '19', mandles:[] },
+    { label: "Prakasam", value: '20', mandles:[] },
+    { label: "Sri Potti Sriramulu Nellore", value: '21', mandles:[] },
+    { label: "Sri Sathya Sai", value: '22', mandles:[] },
+    { label: "Srikakulam", value: '23', mandles:[] },
+    { label: "Tirupati", value: '24', mandles:[] },
+    { label: "Visakhapatnam", value: '25', mandles:[] },
+    { label: "Vizianagaram", value: '26', mandles:[] },
+    { label: "West Godavari", value: '27', mandles:[] },
+    { label: "YSR Kadapa", value: '28', mandles:[] } 
   ];
   mandles: any[] = [
-    { label: 'Mandle 1', value: 'Mandle 1' },
-    { label: 'Mandle 2', value: 'Mandle 2' },
-    { label: 'Mandle 3', value: 'Mandle 3' },
-    { label: 'Mandle 4', value: 'Mandle 4' },
-    { label: 'Mandle 5', value: 'Mandle 5' }
+    { label: "A Konduru", value: '1' },
+    { label: "Chandarlapadu", value: '2' },
+    { label: "G Konduru", value: '3' },
+    { label: "Gampalagudem", value: '4' },
+    { label: "Jaggaiahpet (Jaggayyapeta)", value: '5' },
+    { label: "Kanchikacherla", value: '6' },
+    { label: "Mylavaram", value: '7' },
+    { label: "Nandigama", value: '8' },
+    { label: "Penuganchiprolu", value: '9' },
+    { label: "Reddigudem", value: '10' },
+    { label: "Tiruvuru", value: '11' },
+    { label: "Vatsavai", value: '12' },
+    { label: "Veerullapadu", value: '13' },
+    { label: "Vijayawada Central", value: '14' },
+    { label: "Vijayawada East", value: '15' },
+    { label: "Vijayawada North", value: '16' },
+    { label: "Vijayawada Rural", value: '17' },
+    { label: "Vijayawada West", value: '18' },
+    { label: "Vissannapeta", value: '19' }
   ];
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   weeks: any[] = [
-    { label: 'Week 1', value: 'Week 1' },
-    { label: 'Week 2', value: 'Week 2' },
-    { label: 'Week 3', value: 'Week 3' },
-    { label: 'Week 4', value: 'Week 4' }
+    { label: 'Week 1', value: '1' },
+    { label: 'Week 2', value: '2' },
+    { label: 'Week 3', value: '3' },
+    { label: 'Week 4', value: '4' },
+    { label: 'Week 5', value: '5' }
   ];
   days: any[] = [
     { label: 'Sunday', value: 'Sunday' },
@@ -275,35 +357,16 @@ export class CampsComponent implements OnInit {
     october: false,
     november: false,
     december: false,
-    january_week: '',
-    january_day: '',
-    february_week: '',
-    february_day: '',
-    march_week: '',
-    march_day: '',
-    april_week: '',
-    april_day: '',
-    may_week: '',
-    may_day: '',
-    june_week: '',
-    june_day: '',
-    july_week: '',
-    july_day: '',
-    august_week: '',
-    august_day: '',
-    september_week: '',
-    september_day: '',
-    october_week: '',
-    october_day: '',
-    november_week: '',
-    november_day: '',
-    december_week: '',
-    december_day: '',
+    schedule_week: '',
+    schedule_day: '',
     medicine_responsibility: '',
     medicine_responsibility_type: '',
     medicine_responsibility_outside: ''
   };
   isPasswordDisabled: boolean = true;
+ 
+  errorMessage: any = '';
+  successMessage: string = '';
 
   ngOnInit() {
     // Sample data
@@ -311,61 +374,73 @@ export class CampsComponent implements OnInit {
   }
 
   loadCamps() {
-    this.camps = [
-      { 
-        camp_id: 1, 
-        camp_code: 'CAMP001',
-        camp_name: 'General Health Camp', 
-        is_active: true, 
-        created_by: 'Admin', 
-        update_at: new Date(),
-        organizer_name_1: 'John Doe',
-        organizer_phone_no_1: '+91 9876543210',
-        location_city: 'Mumbai',
-        location_district: 'Mumbai',
-        location_state: 'Maharashtra',
-        planned_date: new Date('2024-03-15'),
-        medicines: [
-          { medicine_id: 1, medicine_name: 'Paracetamol', medicine_type: 'Tablet', quantity: 500 },
-          { medicine_id: 2, medicine_name: 'Amoxicillin', medicine_type: 'Capsule', quantity: 200 },
-          { medicine_id: 3, medicine_name: 'Ibuprofen', medicine_type: 'Tablet', quantity: 300 }
-        ]
+    this.campsService.getAllCamps().subscribe({
+      next: (apiCamps: any[]) => {
+        // Map API response to component Camp interface
+        this.camps = apiCamps.map((apiCamp: any) => {
+          // Extract location address from campAddresses if available
+          const locationAddress = apiCamp.campAddresses?.find((addr: any) => addr.addressType === 'LOCATION') || apiCamp.campAddresses?.[0];
+          const shippingAddress = apiCamp.campAddresses?.find((addr: any) => addr.addressType === 'SHIPPING') || apiCamp.campAddresses?.[0];
+          
+          // Map schedule from schedules array if available
+          const schedule = apiCamp.schedules?.[0];
+          
+          return {
+            camp_id: apiCamp.campId,
+            camp_code: apiCamp.campCode || '',
+            camp_name: apiCamp.campName || '',
+            is_active: apiCamp.isActive ?? true,
+            created_by: apiCamp.createdBy || '',
+            update_at: apiCamp.updateAt ? new Date(apiCamp.updateAt) : new Date(),
+            updated_by: apiCamp.updatedBy ? new Date(apiCamp.updatedBy) : undefined,
+            organizer_name_1: apiCamp.organizerName || '',
+            organizer_email_1: apiCamp.organizerEmail || '',
+            organizer_phone_no_1: apiCamp.organizerPhone || '',
+            location_address: locationAddress?.addressLine1 || '',
+            location_city: locationAddress?.city || '',
+            location_state: locationAddress?.stateId?.toString() || '',
+            location_district: locationAddress?.districtId?.toString() || '',
+            location_mandle: locationAddress?.mandalId?.toString() || '',
+            location_pin_code: locationAddress?.postalCode || '',
+            shipping_address: shippingAddress?.addressLine1 || '',
+            shipping_city: shippingAddress?.city || '',
+            shipping_state: shippingAddress?.stateId?.toString() || '',
+            shipping_district: shippingAddress?.districtId?.toString() || '',
+            shipping_mandle: shippingAddress?.mandalId?.toString() || '',
+            shipping_pin_code: shippingAddress?.postalCode || '',
+            medicine_responsibility: apiCamp.medicineResponsibility || '',
+            schedule_week: schedule?.weekOfMonth ? `Week ${schedule.weekOfMonth}` : '',
+            schedule_day: schedule?.dayOfWeek || '',
+            january: schedule?.january || false,
+            february: schedule?.february || false,
+            march: schedule?.march || false,
+            april: schedule?.april || false,
+            may: schedule?.may || false,
+            june: schedule?.june || false,
+            july: schedule?.july || false,
+            august: schedule?.august || false,
+            september: schedule?.september || false,
+            october: schedule?.october || false,
+            november: schedule?.november || false,
+            december: schedule?.december || false,
+            medicines: []
+          } as Camp;
+        });
+        this.filteredCamps=this.camps;
+        this.onSearch();
       },
-      { 
-        camp_id: 2, 
-        camp_code: 'CAMP002',
-        camp_name: 'Diabetes Screening Camp', 
-        is_active: true, 
-        created_by: 'Admin', 
-        update_at: new Date(),
-        organizer_name_1: 'Jane Smith',
-        organizer_phone_no_1: '+91 9876543211',
-        location_city: 'Pune',
-        location_district: 'Pune',
-        location_state: 'Maharashtra',
-        planned_date: new Date('2024-03-20'),
-        medicines: [
-          { medicine_id: 1, medicine_name: 'Metformin', medicine_type: 'Tablet', quantity: 1000 },
-          { medicine_id: 2, medicine_name: 'Glipizide', medicine_type: 'Tablet', quantity: 500 }
-        ]
-      },
-      { 
-        camp_id: 3, 
-        camp_code: 'CAMP003',
-        camp_name: 'Eye Care Camp', 
-        is_active: false, 
-        created_by: 'Admin', 
-        update_at: new Date(),
-        organizer_name_1: 'Robert Johnson',
-        organizer_phone_no_1: '+91 9876543212',
-        location_city: 'Nagpur',
-        location_district: 'Nagpur',
-        location_state: 'Maharashtra',
-        planned_date: new Date('2024-03-25'),
-        medicines: []
+      error: (error: any) => {
+        console.error('Error loading camps:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load camps. Please try again later.'
+        });
+        // Fallback to empty array on error
+        this.camps = [];
+        this.onSearch();
       }
-    ];
-    this.onSearch();
+    });
   }
 
   onSearch() {
@@ -454,34 +529,21 @@ export class CampsComponent implements OnInit {
       october: false,
       november: false,
       december: false,
-      january_week: '',
-      january_day: '',
-      february_week: '',
-      february_day: '',
-      march_week: '',
-      march_day: '',
-      april_week: '',
-      april_day: '',
-      may_week: '',
-      may_day: '',
-      june_week: '',
-      june_day: '',
-      july_week: '',
-      july_day: '',
-      august_week: '',
-      august_day: '',
-      september_week: '',
-      september_day: '',
-      october_week: '',
-      october_day: '',
-      november_week: '',
-      november_day: '',
-      december_week: '',
-      december_day: '',
+      schedule_week: '',
+      schedule_day: '',      
       medicine_responsibility: '',
       medicine_responsibility_type: '',
       medicine_responsibility_outside: ''
     };
+    // Initialize doctors and volunteers for New Camp dialog
+    this.selectedDoctors = [];
+    this.selectedVolunteers = [];
+    this.availableDoctors = [...this.doctors];
+    this.availableDoctorsFiltered = [...this.doctors];
+    this.doctorSearchTextNew = '';
+    this.availableVolunteers = [...this.volunteers];
+    this.availableVolunteersFiltered = [...this.volunteers];
+    this.volunteerSearchTextNew = '';
     this.isEditMode = false;
     this.displayDialog = true;
   }
@@ -500,77 +562,120 @@ export class CampsComponent implements OnInit {
         this.camps[index] = { ...this.campForm, camp_id: this.selectedCamp.camp_id, update_at: new Date() };
       }
     } else {
-      const newId = Math.max(...this.camps.map(c => c.camp_id || 0)) + 1;
-      this.camps.push({
-        ...this.campForm,
-        camp_id: newId,
-        created_by: 'Current User',
-        update_at: new Date()
+      const newId = Math.max(...this.camps.map(c => c.camp_id || 0)) + 1;     
+      console.log('campForm---->',newId,this.campForm);
+      const payload = {
+        "campName": this.campForm.camp_name,
+        "description": "",
+        "establishmentYear": new Date().getFullYear(),
+        "campCode": this.campForm.camp_code,
+        "organizerName": this.campForm.organizer_name_1,
+        "organizerEmail": this.campForm.organizer_email_1,
+        "organizerPhone": this.campForm.organizer_phone_no_1,
+        "medicineResponsibility": this.campForm.medicine_responsibility,
+        "locationAddress": {
+          "addressLine1": this.campForm.location_address, 
+          "addressLine2": this.campForm.location_address,
+          "city": this.campForm.location_city,
+          "stateId": this.campForm.location_state,
+          "districtId": this.campForm.location_district,
+          "mandalId": this.campForm.location_mandle,
+          "postalCode": this.campForm.location_pin_code,
+          "createdBy": "admin",
+          "updatedBy": ""
+        },
+        "shippingAddress": {
+          "addressLine1": this.campForm.shipping_address,
+          "addressLine2": this.campForm.shipping_address,
+          "city": this.campForm.shipping_city,
+          "stateId": this.campForm.shipping_state,
+          "districtId": this.campForm.shipping_district,
+          "mandalId": this.campForm.shipping_mandle,
+          "postalCode": this.campForm.shipping_pin_code,
+          "createdBy": "admin",
+          "updatedBy":""
+        },
+        "campScheduleTemplate": {   
+          "dayOfWeek": this.campForm.schedule_day,
+          "weekOfMonth": this.campForm.schedule_week,
+          "january": this.campForm.january,
+          "february": this.campForm.february,
+          "march": this.campForm.march,
+          "april": this.campForm.april,
+          "may": this.campForm.may,
+          "june": this.campForm.june,
+          "july": this.campForm.july,
+          "august": this.campForm.august,
+          "september": this.campForm.september,
+          "october": this.campForm.october,
+          "november": this.campForm.november,
+          "december": this.campForm.december
+        }
+      }
+      console.log('payload---->',payload, this.selectedDoctors, this.selectedVolunteers); 
+       
+      this.campsService.createCamp(payload).subscribe({
+        next: (response: any) => {
+          console.log('Camp created:', response);
+          this.displayDialog = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: response.message || 'Camp created successfully'
+          });
+          this.loadCamps();
+        },
+        error: (error: any) => {
+          console.error('Error creating camp:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error?.message || 'Failed to create camp. Please try again.'
+          });
+        }
       });
     }
-    this.filteredCamps = [...this.camps];
-    this.displayDialog = false;
-    this.campForm = { 
-      camp_name: '', 
-      is_active: true,
-      organizer_name_1: '',
-      organizer_phone_no_1: '',
-      organizer_email_1: '',
-      organizer_name_2: '',
-      organizer_phone_no_2: '',
-      organizer_email_2: '',
-      shipping_state: '',
-      shipping_district: '',
-      shipping_mandle: '',
-      shipping_address: '',
-      shipping_city: '',
-      shipping_pin_code: '',
-      location_state: '',
-      location_district: '',
-      location_mandle: '',
-      location_address: '',
-      location_city: '',
-      location_pin_code: '',
-      january: false,
-      february: false,
-      march: false,
-      april: false,
-      may: false,
-      june: false,
-      july: false,
-      august: false,
-      september: false,
-      october: false,
-      november: false,
-      december: false,
-      january_week: '',
-      january_day: '',
-      february_week: '',
-      february_day: '',
-      march_week: '',
-      march_day: '',
-      april_week: '',
-      april_day: '',
-      may_week: '',
-      may_day: '',
-      june_week: '',
-      june_day: '',
-      july_week: '',
-      july_day: '',
-      august_week: '',
-      august_day: '',
-      september_week: '',
-      september_day: '',
-      october_week: '',
-      october_day: '',
-      november_week: '',
-      november_day: '',
-      december_week: '',
-      december_day: '',
-      medicine_responsibility: '',
-      medicine_responsibility_type: '',
-      medicine_responsibility_outside: ''
-    };
+   // this.filteredCamps = [...this.camps];
+   // this.displayDialog = false;
+    // this.campForm = { 
+    //   camp_name: '', 
+    //   is_active: true,
+    //   organizer_name_1: '',
+    //   organizer_phone_no_1: '',
+    //   organizer_email_1: '',
+    //   organizer_name_2: '',
+    //   organizer_phone_no_2: '',
+    //   organizer_email_2: '',
+    //   shipping_state: '',
+    //   shipping_district: '',
+    //   shipping_mandle: '',
+    //   shipping_address: '',
+    //   shipping_city: '',
+    //   shipping_pin_code: '',
+    //   location_state: '',
+    //   location_district: '',
+    //   location_mandle: '',
+    //   location_address: '',
+    //   location_city: '',
+    //   location_pin_code: '',
+    //   january: false,
+    //   february: false,
+    //   march: false,
+    //   april: false,
+    //   may: false,
+    //   june: false,
+    //   july: false,
+    //   august: false,
+    //   september: false,
+    //   october: false,
+    //   november: false,
+    //   december: false,
+    //   schedule_week: '',
+    //   schedule_day: '',
+    //   medicine_responsibility: '',
+    //   medicine_responsibility_type: '',
+    //   medicine_responsibility_outside: ''
+    // };
   }
 
   markReadyForCamp(camp: Camp) {
@@ -727,22 +832,157 @@ export class CampsComponent implements OnInit {
     }
   }
 
-  saveNotReadyCamp() {
-    if (this.selectedCampForNotReady) {
-      // Add your logic here to save the not ready camp data
-      // For example: save doctors, volunteers, printer/paper status
-      const index = this.camps.findIndex(c => c.camp_id === this.selectedCampForNotReady?.camp_id);
-      if (index !== -1) {
-        // Save the data (you can add fields to Camp interface if needed)
-        this.camps[index].update_at = new Date();
-        // Mark camp as ready
-        this.camps[index].ready_for_camp = true;
-        this.filteredCamps = [...this.camps];
-      }
-      // Close dialog
-      this.cancelNotReadyDialog();
-      // You can also show a toast notification here
+  // Methods for New Camp Dialog - Doctors
+  addDoctorNew(doctor: any) {
+    if (!this.selectedDoctors.find(d => d.value === doctor.value)) {
+      this.selectedDoctors.push(doctor);
+      this.availableDoctors = this.availableDoctors.filter(d => d.value !== doctor.value);
+      this.filterAvailableDoctorsNew();
     }
+  }
+
+  removeDoctorNew(doctor: any) {
+    this.selectedDoctors = this.selectedDoctors.filter(d => d.value !== doctor.value);
+    if (!this.availableDoctors.find(d => d.value === doctor.value)) {
+      this.availableDoctors.push(doctor);
+      this.filterAvailableDoctorsNew();
+    }
+  }
+
+  addAllDoctorsNew() {
+    this.availableDoctors.forEach(doctor => {
+      if (!this.selectedDoctors.find(d => d.value === doctor.value)) {
+        this.selectedDoctors.push(doctor);
+      }
+    });
+    this.availableDoctors = [];
+    this.availableDoctorsFiltered = [];
+  }
+
+  removeAllDoctorsNew() {
+    this.selectedDoctors.forEach(doctor => {
+      if (!this.availableDoctors.find(d => d.value === doctor.value)) {
+        this.availableDoctors.push(doctor);
+      }
+    });
+    this.selectedDoctors = [];
+    this.filterAvailableDoctorsNew();
+  }
+
+  filterAvailableDoctorsNew() {
+    if (!this.doctorSearchTextNew || this.doctorSearchTextNew.trim() === '') {
+      this.availableDoctorsFiltered = [...this.availableDoctors];
+    } else {
+      const searchLower = this.doctorSearchTextNew.toLowerCase();
+      this.availableDoctorsFiltered = this.availableDoctors.filter(doctor =>
+        doctor.label.toLowerCase().includes(searchLower)
+      );
+    }
+  }
+
+  // Methods for New Camp Dialog - Volunteers
+  addVolunteerNew(volunteer: any) {
+    if (!this.selectedVolunteers.find(v => v.value === volunteer.value)) {
+      this.selectedVolunteers.push(volunteer);
+      this.availableVolunteers = this.availableVolunteers.filter(v => v.value !== volunteer.value);
+      this.filterAvailableVolunteersNew();
+    }
+  }
+
+  removeVolunteerNew(volunteer: any) {
+    this.selectedVolunteers = this.selectedVolunteers.filter(v => v.value !== volunteer.value);
+    if (!this.availableVolunteers.find(v => v.value === volunteer.value)) {
+      this.availableVolunteers.push(volunteer);
+      this.filterAvailableVolunteersNew();
+    }
+  }
+
+  addAllVolunteersNew() {
+    this.availableVolunteers.forEach(volunteer => {
+      if (!this.selectedVolunteers.find(v => v.value === volunteer.value)) {
+        this.selectedVolunteers.push(volunteer);
+      }
+    });
+    this.availableVolunteers = [];
+    this.availableVolunteersFiltered = [];
+  }
+
+  removeAllVolunteersNew() {
+    this.selectedVolunteers.forEach(volunteer => {
+      if (!this.availableVolunteers.find(v => v.value === volunteer.value)) {
+        this.availableVolunteers.push(volunteer);
+      }
+    });
+    this.selectedVolunteers = [];
+    this.filterAvailableVolunteersNew();
+  }
+
+  filterAvailableVolunteersNew() {
+    if (!this.volunteerSearchTextNew || this.volunteerSearchTextNew.trim() === '') {
+      this.availableVolunteersFiltered = [...this.availableVolunteers];
+    } else {
+      const searchLower = this.volunteerSearchTextNew.toLowerCase();
+      this.availableVolunteersFiltered = this.availableVolunteers.filter(volunteer =>
+        volunteer.label.toLowerCase().includes(searchLower)
+      );
+    }
+  }
+
+  saveNotReadyCamp() {
+    if (!this.selectedCampForNotReady) {
+      return;
+    }
+
+    const camp = this.selectedCampForNotReady;
+
+    // Helper function to extract week number from "Week 1", "Week 2", etc.
+    const extractWeekNumber = (weekStr: string | undefined): number => {
+      if (!weekStr) return 1;
+      const match = weekStr.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 1;
+    };
+
+    // Helper function to convert day name to uppercase format
+    const formatDayOfWeek = (dayStr: string | undefined): string => {
+      if (!dayStr) return 'MONDAY';
+      return dayStr.toUpperCase();
+    };
+
+    // Use schedule_week and schedule_day from camp
+    const dayOfWeek = formatDayOfWeek(camp.schedule_day);
+    const weekOfMonth = extractWeekNumber(camp.schedule_week);
+
+    // Map medicine responsibility - API expects "GBL" but component has "GBR Warehouse" or "Outside"
+    let medicineResponsibility = 'GBL';
+    if (camp.medicine_responsibility === 'GBR Warehouse') {
+      medicineResponsibility = 'GBL';
+    } else if (camp.medicine_responsibility === 'Outside') {
+      medicineResponsibility = camp.medicine_responsibility_outside || 'GBL';
+    }
+
+  
+
+    //Call the API
+    // this.campsService.createCamp(payload).subscribe({
+    //   next: (response) => {
+    //     console.log('Camp created successfully:', response);
+    //     // Update local camp data
+    //     const index = this.camps.findIndex(c => c.camp_id === camp.camp_id);
+    //     if (index !== -1) {
+    //       this.camps[index].update_at = new Date();
+    //       this.camps[index].ready_for_camp = true;
+    //       this.filteredCamps = [...this.camps];
+    //     }
+    //     // Close dialog
+    //     this.cancelNotReadyDialog();
+    //     // You can also show a toast notification here
+    //   },
+    //   error: (error) => {
+    //     console.error('Error creating camp:', error);
+    //     // Handle error - you can show an error message to the user
+    //   }
+    // });
+
     console.log('Selected Volunteers:', this.selectedVolunteersNotReady);
     console.log('Selected Providers:', this.selectedDoctorsNotReady);
   }
@@ -929,6 +1169,7 @@ export class CampsComponent implements OnInit {
   }
 
   cancelDateDialog() {
+    this.displayDialog = false;
     this.displayDateDialog = false;
     this.selectedCampForDate = null;
     this.newPlannedDate = null;

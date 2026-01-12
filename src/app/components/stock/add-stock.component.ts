@@ -80,7 +80,7 @@ export class AddStockComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.selectedCampId = 1;
+    this.selectedCampId = 2;
     this.loadSuppliers();
     this.loadMedicines();
     this.loadPaymentModes();
@@ -287,7 +287,7 @@ export class AddStockComponent implements OnInit {
           next: (response: any) => {
             console.log('Stock saved:', response);
             this.loading = false;
-            this.router.navigate(['/stock/current-stock']);
+            this.router.navigate(['/stock/current']);
           },
           error: (error: any) => {
             console.error('Error saving stock:', error);

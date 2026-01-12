@@ -6,7 +6,7 @@
         <h3 class="section-title">Invoice Details</h3>
         <div class="form-row">
           <div class="field">
-            <label for="supplier">Supplier *</label>
+            <label for="supplier">Supplier <span class="red-star">*</span></label>
             <p-dropdown 
               id="supplier" 
               [(ngModel)]="stockForm.supplier_id" 
@@ -20,11 +20,10 @@
               class="w-full">
             </p-dropdown>
             <small *ngIf="loading" class="loading-text">Loading suppliers...</small>
-            <small *ngIf="errorMessage" class="error-text">{{ errorMessage }}</small>
           </div>
           
           <div class="field">
-            <label for="invoiceId">Invoice ID *</label>
+            <label for="invoiceId">Invoice ID <span class="red-star">*</span></label>
             <input 
               id="invoiceId" 
               type="text" 
@@ -36,7 +35,7 @@
           </div>
           
           <div class="field">
-            <label for="invoiceDate">Invoice Date *</label>
+            <label for="invoiceDate">Invoice Date <span class="red-star">*</span></label>
             <p-calendar 
               id="invoiceDate" 
               [(ngModel)]="stockForm.invoice_date" 
@@ -49,7 +48,7 @@
           </div>
           
           <div class="field">
-            <label for="invoiceAmount">Invoice Amount *</label>
+            <label for="invoiceAmount">Invoice Amount <span class="red-star">*</span></label>
             <p-inputNumber 
               id="invoiceAmount" 
               [(ngModel)]="stockForm.invoice_amount" 
@@ -76,14 +75,16 @@
             </p-dropdown>
           </div>
         </div>
+        <small *ngIf="errorMessage" class="error-text">{{ errorMessage }}</small>
       </div>
 
       <!-- Medicines Section -->
       <div class="form-section">
         <div class="section-header">
-          <h3 class="section-title">Medicines</h3>
+          <h3 class="section-title">Medicines</h3> {{medicineOptions.length}}
           <p-button 
-            label="+ Add Medicine" 
+            [disabled]="medicineOptions.length <= 0"
+            label="Add Medicine" 
             icon="pi pi-plus" 
             (onClick)="addMedicine()" 
             [outlined]="true">
@@ -94,11 +95,11 @@
           <p-table [value]="stockForm.medicines" [scrollable]="true" scrollHeight="400px">
             <ng-template pTemplate="header">
               <tr>
-                <th style="width: 25%">Medicine *</th>
+                <th style="width: 25%">Medicine <span class="red-star">*</span></th>
                 <th style="width: 15%">HSN No</th>
-                <th style="width: 15%">Batch No *</th>
-                <th style="width: 15%">EXP Date *</th>
-                <th style="width: 15%">Quantity *</th>
+                <th style="width: 15%">Batch No </th>
+                <th style="width: 15%">EXP Date</th>
+                <th style="width: 15%">Quantity <span class="red-star">*</span></th>
                 <th style="width: 15%">Action</th>
               </tr>
             </ng-template>
@@ -131,13 +132,11 @@
                     pInputText 
                     [(ngModel)]="medicine.batch_no" 
                     placeholder="Enter Batch No" 
-                    class="w-full" 
-                    [required]="true" />
+                    class="w-full" />
                 </td>
                 <td>
                   <p-calendar 
                     [(ngModel)]="medicine.exp_date" 
-                    [required]="true" 
                     dateFormat="yy-mm-dd" 
                     [showIcon]="true" 
                     [appendTo]="'body'"
@@ -182,9 +181,13 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="form-actions">
-        <p-button label="Cancel" [text]="true" (onClick)="stockForm = { supplier_id: undefined, invoice_id: '', invoice_date: undefined, invoice_amount: undefined, payment_mode: undefined, medicines: [] }"></p-button>
-        <p-button label="Save Stock" (onClick)="saveStock()"></p-button>
+      <div class="form-actions">{{stockForm.medicines.length}}
+        <p-button
+          label="Cancel"
+          [text]="true"
+          (onClick)="stockForm = { supplier_id: undefined, invoice_id: '', invoice_date: undefined, invoice_amount: undefined, payment_mode: undefined, medicines: [] }">
+        </p-button>
+        <p-button label="Save Stock" [disabled]="stockForm.medicines.length <= 0" (onClick)="saveStock()"></p-button>
       </div>
     </div>
   </p-card>

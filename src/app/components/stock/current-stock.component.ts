@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
@@ -34,6 +35,7 @@ interface StockItem {
 })
 export class CurrentStockComponent implements OnInit {
   private readonly campsService = inject(CampsService);
+  private readonly router = inject(Router);
   
   camps: Camp[] = [];
   campOptions: { label: string, value: number }[] = [];
@@ -77,14 +79,6 @@ export class CurrentStockComponent implements OnInit {
           this.loadSampleStockData();
           } else {
             this.campOptions = [
-              {
-                "label": "HC001 - JANA VIGNANA VEDIKA TIRUVURU",
-                "value": 1
-              },
-              {
-                "label": "BDC002 - JANA VIGNANA VEDIKA BAPATLA",
-                "value": 2
-              }
             ];
 
             // Load sample stock data
@@ -137,48 +131,48 @@ export class CurrentStockComponent implements OnInit {
     // Sample stock data matching the sample camps
     this.stockItems = [
       // Stock for HC001 - JANA VIGNANA VEDIKA TIRUVURU (Camp ID: 1)
-      {
-        campId: 1,
-        medicine_name: 'Medicine (HSN: 300450)',
-        medicine_type: 'Tablet',
-        quantity: 100,
-        batch_no: 'BATCH001',
-        exp_date: new Date('2027-12-01')
-      },
-      {
-        campId: 1,
-        medicine_name: 'Medicine (HSN: 300451)',
-        medicine_type: 'Capsule',
-        quantity: 400,
-        batch_no: 'BATCH002',
-        exp_date: new Date('2027-12-01')
-      },
-      // Stock for BDC002 - JANA VIGNANA VEDIKA BAPATLA (Camp ID: 2)
-      {
-        campId: 2,
-        medicine_name: 'Medicine (HSN: 300452)',
-        medicine_type: 'Syrup',
-        quantity: 250,
-        batch_no: 'BATCH003',
-        exp_date: new Date('2026-06-30')
-      },
-      {
-        campId: 2,
-        medicine_name: 'Medicine (HSN: 300453)',
-        medicine_type: 'Tablet',
-        quantity: 500,
-        batch_no: 'BATCH004',
-        exp_date: new Date('2026-08-15')
-      },
-      {
-        campId: 2,
-        medicine_name: 'Medicine (HSN: 300454)',
-        medicine_type: 'Injection',
-        quantity: 150,
-        batch_no: 'BATCH005',
-        exp_date: new Date('2026-09-20')
-      }
-    ];
+    //   {
+    //     campId: 1,
+    //     medicine_name: 'Medicine (HSN: 300450)',
+    //     medicine_type: 'Tablet',
+    //     quantity: 100,
+    //     batch_no: 'BATCH001',
+    //     exp_date: new Date('2027-12-01')
+    //   },
+    //   {
+    //     campId: 1,
+    //     medicine_name: 'Medicine (HSN: 300451)',
+    //     medicine_type: 'Capsule',
+    //     quantity: 400,
+    //     batch_no: 'BATCH002',
+    //     exp_date: new Date('2027-12-01')
+    //   },
+    //   // Stock for BDC002 - JANA VIGNANA VEDIKA BAPATLA (Camp ID: 2)
+    //   {
+    //     campId: 2,
+    //     medicine_name: 'Medicine (HSN: 300452)',
+    //     medicine_type: 'Syrup',
+    //     quantity: 250,
+    //     batch_no: 'BATCH003',
+    //     exp_date: new Date('2026-06-30')
+    //   },
+    //   {
+    //     campId: 2,
+    //     medicine_name: 'Medicine (HSN: 300453)',
+    //     medicine_type: 'Tablet',
+    //     quantity: 500,
+    //     batch_no: 'BATCH004',
+    //     exp_date: new Date('2026-08-15')
+    //   },
+    //   {
+    //     campId: 2,
+    //     medicine_name: 'Medicine (HSN: 300454)',
+    //     medicine_type: 'Injection',
+    //     quantity: 150,
+    //     batch_no: 'BATCH005',
+    //     exp_date: new Date('2026-09-20')
+    //   }
+     ];
   }
 
   onCampChange() {
@@ -238,6 +232,10 @@ export class CurrentStockComponent implements OnInit {
 
   getTotalQuantity(): number {
     return this.filteredStockItems.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  navigateToAddStock() {
+    this.router.navigate(['/stock/add']);
   }
 }
 

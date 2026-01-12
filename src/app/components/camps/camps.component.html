@@ -1,4 +1,5 @@
 <div class="camps-container">
+  <p-toast></p-toast>
   <div class="header-section">
     <h1>Camps Management</h1>
     <p-button label="New Camp" icon="pi pi-plus" (onClick)="openNew()" styleClass="p-button-raised"></p-button>
@@ -45,8 +46,8 @@
     </div>
   </p-card>
 
-    <p-card>
-      <p-table [value]="filteredCamps" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+    <p-card>{{camps.length}}
+      <p-table [value]="camps" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
         <ng-template pTemplate="header">
           <tr>
             <th>Camp Name</th>
@@ -134,25 +135,25 @@
         <input pInputText id="campName" [(ngModel)]="campForm.camp_name" required class="w-full">
       </div>
 
-      <h3>Organizer 1</h3>
+      <h3>Organizer </h3>
       <div class="organizer-row">
         <div class="field organizer-field">
-          <label for="orgName1">Organizer Name 1</label>
+          <label for="orgName1">Organizer Name </label>
           <input pInputText id="orgName1" [(ngModel)]="campForm.organizer_name_1" class="w-full">
         </div>
 
         <div class="field organizer-field">
-          <label for="orgPhone1">Organizer Phone No 1</label>
+          <label for="orgPhone1">Organizer Phone No </label>
           <input pInputText id="orgPhone1" [(ngModel)]="campForm.organizer_phone_no_1" type="tel" class="w-full">
         </div>
 
         <div class="field organizer-field">
-          <label for="orgEmail1">Organizer Email 1</label>
+          <label for="orgEmail1">Organizer Email </label>
           <input pInputText id="orgEmail1" [(ngModel)]="campForm.organizer_email_1" type="email" class="w-full">
         </div>
       </div>
 
-      <h3>Organizer 2</h3>
+      <!-- <h3>Organizer 2</h3>
       <div class="organizer-row">
         <div class="field organizer-field">
           <label for="orgName2">Organizer Name 2</label>
@@ -168,7 +169,196 @@
           <label for="orgEmail2">Organizer Email 2</label>
           <input pInputText id="orgEmail2" [(ngModel)]="campForm.organizer_email_2" type="email" class="w-full">
         </div>
-      </div>
+      </div> -->
+        <!-- Providers (Doctors) Section with Left-Right Panels -->
+        <div class="field full-width">
+          <label>Providers (Doctors) *</label>
+          <div class="provider-panel-container">
+            <!-- Left Panel: Available Doctors -->
+            <div class="provider-panel left-panel">
+              <div class="panel-header">
+                <span>Available Doctors</span>
+                <span class="count-badge">{{ availableDoctorsFiltered.length }}</span>
+              </div>
+              <div class="panel-search">
+                <input 
+                  type="text" 
+                  pInputText 
+                  [(ngModel)]="doctorSearchTextNew" 
+                  (input)="filterAvailableDoctorsNew()"
+                  placeholder="Search doctors..."
+                  class="w-full">
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let doctor of availableDoctorsFiltered" 
+                  class="panel-item"
+                  (click)="addDoctorNew(doctor)">
+                  <span>{{ doctor.label }}</span>
+                  <i class="pi pi-arrow-right"></i>
+                </div>
+                <div *ngIf="availableDoctorsFiltered.length === 0" class="empty-message">
+                  No doctors available
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Add All" 
+                  icon="pi pi-angle-double-right" 
+                  (onClick)="addAllDoctorsNew()"
+                  [disabled]="availableDoctorsFiltered.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+  
+            <!-- Center: Action Buttons -->
+            <div class="provider-actions">
+              <p-button 
+                icon="pi pi-angle-right" 
+                (onClick)="addAllDoctorsNew()"
+                [disabled]="availableDoctorsFiltered.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Add All'">
+              </p-button>
+              <p-button 
+                icon="pi pi-angle-left" 
+                (onClick)="removeAllDoctorsNew()"
+                [disabled]="selectedDoctors.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Remove All'">
+              </p-button>
+            </div>
+  
+            <!-- Right Panel: Selected Doctors -->
+            <div class="provider-panel right-panel">
+              <div class="panel-header">
+                <span>Selected Doctors</span>
+                <span class="count-badge">{{ selectedDoctors.length }}</span>
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let doctor of selectedDoctors" 
+                  class="panel-item"
+                  (click)="removeDoctorNew(doctor)">
+                  <i class="pi pi-arrow-left"></i>
+                  <span>{{ doctor.label }}</span>
+                </div>
+                <div *ngIf="selectedDoctors.length === 0" class="empty-message">
+                  No doctors selected
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Remove All" 
+                  icon="pi pi-angle-double-left" 
+                  (onClick)="removeAllDoctorsNew()"
+                  [disabled]="selectedDoctors.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Volunteers Section with Left-Right Panels -->
+        <div class="field full-width">
+          <label>Volunteers *</label>
+          <div class="provider-panel-container">
+            <!-- Left Panel: Available Volunteers -->
+            <div class="provider-panel left-panel">
+              <div class="panel-header">
+                <span>Available Volunteers</span>
+                <span class="count-badge">{{ availableVolunteersFiltered.length }}</span>
+              </div>
+              <div class="panel-search">
+                <input 
+                  type="text" 
+                  pInputText 
+                  [(ngModel)]="volunteerSearchTextNew" 
+                  (input)="filterAvailableVolunteersNew()"
+                  placeholder="Search volunteers..."
+                  class="w-full">
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let volunteer of availableVolunteersFiltered" 
+                  class="panel-item"
+                  (click)="addVolunteerNew(volunteer)">
+                  <span>{{ volunteer.label }}</span>
+                  <i class="pi pi-arrow-right"></i>
+                </div>
+                <div *ngIf="availableVolunteersFiltered.length === 0" class="empty-message">
+                  No volunteers available
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Add All" 
+                  icon="pi pi-angle-double-right" 
+                  (onClick)="addAllVolunteersNew()"
+                  [disabled]="availableVolunteersFiltered.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+  
+            <!-- Center: Action Buttons -->
+            <div class="provider-actions">
+              <p-button 
+                icon="pi pi-angle-right" 
+                (onClick)="addAllVolunteersNew()"
+                [disabled]="availableVolunteersFiltered.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Add All'">
+              </p-button>
+              <p-button 
+                icon="pi pi-angle-left" 
+                (onClick)="removeAllVolunteersNew()"
+                [disabled]="selectedVolunteers.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Remove All'">
+              </p-button>
+            </div>
+  
+            <!-- Right Panel: Selected Volunteers -->
+            <div class="provider-panel right-panel">
+              <div class="panel-header">
+                <span>Selected Volunteers</span>
+                <span class="count-badge">{{ selectedVolunteers.length }}</span>
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let volunteer of selectedVolunteers" 
+                  class="panel-item"
+                  (click)="removeVolunteerNew(volunteer)">
+                  <i class="pi pi-arrow-left"></i>
+                  <span>{{ volunteer.label }}</span>
+                </div>
+                <div *ngIf="selectedVolunteers.length === 0" class="empty-message">
+                  No volunteers selected
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Remove All" 
+                  icon="pi pi-angle-double-left" 
+                  (onClick)="removeAllVolunteersNew()"
+                  [disabled]="selectedVolunteers.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+          </div>
+        </div>
 
       <div class="address-section">
         <fieldset class="address-fieldset">
@@ -186,12 +376,12 @@
             <p-dropdown id="shippingMandle" [(ngModel)]="campForm.shipping_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
-            <label for="shippingAddress">Address</label>
-            <textarea pInputTextarea id="shippingAddress" [(ngModel)]="campForm.shipping_address" rows="2" class="w-full"></textarea>
-          </div>
-          <div class="field full-width">
             <label for="shippingCity">City</label>
             <input pInputText id="shippingCity" [(ngModel)]="campForm.shipping_city" class="w-full">
+          </div>
+          <div class="field full-width">
+            <label for="shippingAddress">Address</label>
+            <textarea pInputTextarea id="shippingAddress" [(ngModel)]="campForm.shipping_address" rows="2" class="w-full"></textarea>
           </div>
           <div class="field full-width">
             <label for="shippingPinCode">PIN Code</label>
@@ -214,12 +404,12 @@
             <p-dropdown id="locationMandle" [(ngModel)]="campForm.location_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
-            <label for="locationAddress">Address</label>
-            <textarea pInputTextarea id="locationAddress" [(ngModel)]="campForm.location_address" rows="2" class="w-full"></textarea>
-          </div>
-          <div class="field full-width">
             <label for="locationCity">City</label>
             <input pInputText id="locationCity" [(ngModel)]="campForm.location_city" class="w-full">
+          </div>
+          <div class="field full-width">
+            <label for="locationAddress">Address</label>
+            <textarea pInputTextarea id="locationAddress" [(ngModel)]="campForm.location_address" rows="2" class="w-full"></textarea>
           </div>
           <div class="field full-width">
             <label for="locationPinCode">PIN Code</label>
@@ -285,204 +475,16 @@
         </div>
 
         <div class="schedule-container">
-          <div class="schedule-section" *ngIf="campForm.january">
-            <h4>January</h4>
+          <div class="schedule-section">           
             <div class="schedule-items">
               <div class="schedule-item">
                 <span>Week:</span>
                 <div class="schedule-dropdowns">
                   <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.january_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
+                    <p-dropdown [(ngModel)]="campForm.schedule_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
                   </div>
                   <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.january_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.february">
-            <h4>February</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.february_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.february_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.march">
-            <h4>March</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.march_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.march_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.april">
-            <h4>April</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.april_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.april_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.may">
-            <h4>May</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.may_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.may_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.june">
-            <h4>June</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.june_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.june_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.july">
-            <h4>July</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.july_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.july_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.august">
-            <h4>August</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.august_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.august_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.september">
-            <h4>September</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.september_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.september_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.october">
-            <h4>October</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.october_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.october_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.november">
-            <h4>November</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.november_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.november_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="schedule-section" *ngIf="campForm.december">
-            <h4>December</h4>
-            <div class="schedule-items">
-              <div class="schedule-item">
-                <span>Week:</span>
-                <div class="schedule-dropdowns">
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.december_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
-                  </div>
-                  <div class="schedule-field">
-                    <p-dropdown [(ngModel)]="campForm.december_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
+                    <p-dropdown [(ngModel)]="campForm.schedule_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
                   </div>
                 </div>
               </div>
@@ -507,8 +509,9 @@
         </div>
       </div>
 
-      <div class="field full-width">
-        <p-checkbox [(ngModel)]="campForm.is_active" inputId="isActive" label="Active"></p-checkbox>
+      <div class="field full-width checkbox-field" style="align-items: start;display:inline-block">
+        <p-checkbox [(ngModel)]="campForm.is_active" inputId="isActive" [binary]="true"></p-checkbox>
+        <label for="isActive" style="margin-left: 8px;">Active</label>
       </div>
     </div>
     <ng-template pTemplate="footer">
