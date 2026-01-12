@@ -1,0 +1,442 @@
+<div class="patients-container">
+  <div class="header-section">
+    <h1>Patients Management</h1>
+    <p-button
+      label="Add New Patient"
+      icon="pi pi-user-plus"
+      styleClass="p-button-raised"
+    ></p-button>
+  </div>
+
+  <div class="container-box">
+    <div class="section-title">Patient Registration</div>
+
+    <div class="patient-type">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="NewPatient"
+          name="patientType"
+          [(ngModel)]="isExistingPatient"
+          [value]="false"
+        />
+        <label class="form-check-label">New Patient</label>
+      </div>
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="patientType"
+          id="ExistingPatient"
+          [(ngModel)]="isExistingPatient"
+          [value]="true"
+        />
+        <label class="form-check-label">Existing Patient</label>
+      </div>
+    </div>
+
+    <div class="row g-3 mb-4" *ngIf="isExistingPatient">
+      <div class="col-md-4">
+        <label class="form-label">Search Patient (ID / Mobile)</label>
+        <input class="form-control" placeholder="Enter Patient ID or Mobile" />
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button class="btn btn-outline-primary w-100">Search</button>
+      </div>
+    </div>
+
+    <div class="section-title" *ngIf="!isExistingPatient">Patient Details</div>
+
+    <div class="row g-3" *ngIf="!isExistingPatient">
+      <div class="col-md-4">
+        <label class="form-label"> Name</label>
+        <input class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label"> First Name or Initial </label>
+        <input class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Father Name</label>
+        <input class="form-control" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Age</label>
+        <input type="number" class="form-control" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">weight </label>
+        <input type="number" class="form-control" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Mobile Number</label>
+        <input class="form-control" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Gender</label>
+        <select class="form-select">
+          <option>Select</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Blood Group</label>
+        <select class="form-select">
+          <option>Select</option>
+          <option>A+</option>
+          <option>A-</option>
+          <option>B+</option>
+          <option>B-</option>
+          <option>O+</option>
+          <option>O-</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Patient Type</label>
+        <select class="form-select">
+          <option>OPD</option>
+          <option>IPD</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Marital Status</label>
+        <select class="form-select">
+          <option>Select</option>
+          <option>Marred</option>
+          <option>single</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Take Picture</label>
+        <div class="action-bar">
+          <button class="btn btn-primary px-4">Take Picture</button>
+          <button class="btn btn-outline-secondary px-4">Clear Picture</button>
+        </div>
+      </div>
+      <div class="section-title">Patient Address</div>
+
+      <div class="col-md-4">
+        <label class="form-label">State*</label>
+        <input class="form-control" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">District* </label>
+        <input class="form-control" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Mandal </label>
+        <input class="form-control" />
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Mandal </label>
+        <select class="form-select">
+          <option>Select</option>
+          <option>A+</option>
+          <option>A-</option>
+          <option>B+</option>
+          <option>B-</option>
+          <option>O+</option>
+          <option>O-</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">City /Village </label>
+        <select class="form-select">
+          <option>OPD</option>
+          <option>IPD</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label">Street </label>
+        <input class="form-control" />
+      </div>
+    </div>
+
+    <div class="action-bar" *ngIf="!isExistingPatient">
+      <button class="btn btn-primary px-4">Save Patient</button>
+      <button class="btn btn-outline-secondary px-4">Clear</button>
+    </div>
+  </div>
+
+  <p-card class="search-card display-none">
+    <div class="search-field">
+      <label for="search">Search Patients</label>
+      <input
+        pInputText
+        id="search"
+        [(ngModel)]="searchText"
+        (input)="onSearch()"
+        placeholder="Search by name, ID, or email"
+        class="w-full"
+      />
+    </div>
+  </p-card>
+
+  <p-card class="hidden" *ngIf="filteredPatients.length > 0 && isExistingPatient">
+    <div class="table-header d-flex align-items-center justify-content-between mb-3">
+      <div class="d-flex align-items-center gap-2" style="width: 100%">
+        <i class="pi pi-search" style="font-size: 1.2rem; margin-right: 6px"></i>
+        <input
+          pInputText
+          type="text"
+          placeholder="MR Number / First / Surname / Old EnrollmentId"
+          class="p-inputtext-sm"
+        />
+      </div>
+    </div>
+    <p-table
+      [value]="filteredPatients"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Patient ID</th>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Date of Birth</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-patient>
+        <tr>
+          <td>{{ patient.patient_id }}</td>
+          <td>{{ patient.first_name }} {{ patient.last_name || '' }}</td>
+          <td>{{ calculateAge(patient.dob) }}</td>
+          <td>{{ patient.gender || 'N/A' }}</td>
+          <td>{{ patient.phone || 'N/A' }}</td>
+          <td>{{ patient.address || 'N/A' }}</td>
+          <td>
+            {{ patient.dob ? (patient.dob | date: 'shortDate') : 'N/A' }}
+          </td>
+          <td>
+            <p-button
+              icon="pi pi-eye"
+              [text]="true"
+              severity="info"
+              [rounded]="true"
+              title="View Details"
+            ></p-button>
+            <p-button
+              icon="pi pi-pencil"
+              [text]="true"
+              severity="secondary"
+              [rounded]="true"
+              title="Edit"
+            ></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <div class="soap-container">
+    <div class="soap-header" *ngIf="!isExistingPatient">SOAP Notes – front Office or volunteer</div>
+    <div class="soap-header" *ngIf="isExistingPatient">SOAP Notes – Doctor Consultation</div>
+
+    <div class="box-header with-border p-0 border-bottom-blue">
+      <h4 class="font-semibold">Patient Information</h4>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-2">
+        <label class="form-label fw-medium">Name <span class="text-danger">*</span></label>
+        <input type="text" name="name" class="form-control" placeholder="Full name" />
+      </div>
+      <div class="col-md-3 mb-2">
+        <label class="form-label fw-medium">Age <span class="text-danger">*</span></label>
+        <input type="number" name="age" class="form-control" placeholder="Age" />
+      </div>
+      <div class="col-md-3 mb-2">
+        <label class="form-label fw-medium">Sex <span class="text-danger">*</span></label>
+        <select name="sex" class="form-select">
+          <option value="">Select</option>
+          <option>Female</option>
+          <option>Male</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- SUBJECTIVE -->
+    <div class="soap-section">
+      <div class="soap-title">S – Subjective</div>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <label class="form-label fw-medium"
+            >Chief Complaint <span class="text-danger">*</span></label
+          >
+          <input type="text" name="chief_complaint" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+          <label class="form-label fw-medium">History of Present Illness</label>
+          <textarea name="hpi" rows="3" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <label class="form-label fw-medium"
+            >Past Medical History <span class="text-danger">*</span></label
+          >
+          <textarea name="pmh" rows="2" class="form-control"></textarea>
+        </div>
+        <div class="col-md-6 mb-2">
+          <label class="form-label fw-medium">Family & Social History</label>
+          <textarea name="family_social" rows="2" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="soap-body">
+          <textarea
+            placeholder="Chief complaint, duration, pain, symptoms, patient history, allergies..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- OBJECTIVE -->
+      <div class="soap-section">
+        <div class="soap-title">O – Objective</div>
+        <div class="row">
+          <div class="col-md-6">
+            <h6>Vital Signs</h6>
+            <div class="row">
+              <div class="col-6 mb-2">
+                <label class="form-label fw-medium">Blood Pressure</label>
+                <input type="text" name="bp" class="form-control" placeholder="e.g. 120/80 mmHg" />
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label fw-medium">Heart Rate</label>
+                <input type="number" name="testhr" class="form-control" placeholder="bpm" />
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label fw-medium">Respiratory Rate</label>
+                <input type="number" name="rr" class="form-control" placeholder="breaths/min" />
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label fw-medium">Temperature</label>
+                <input type="text" name="temp" class="form-control" placeholder="°C / °F" />
+              </div>
+              <div class="col-6 mb-2">
+                <label class="form-label fw-medium">Oxygen Saturation</label>
+                <input type="text" name="spo2" class="form-control" placeholder="%" />
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <h6>Exam</h6>
+            <div class="mb-2">
+              <label class="form-label fw-medium">General Appearance</label>
+              <input type="text" name="general_appearance" class="form-control" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label fw-medium">HEENT</label>
+              <input type="text" name="heent" class="form-control" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label fw-medium">Neck</label>
+              <input type="text" name="neck" class="form-control" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label fw-medium">Cardiovascular</label>
+              <input type="text" name="cardio" class="form-control" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label fw-medium">Respiratory</label>
+              <input type="text" name="respiratory" class="form-control" />
+            </div>
+            <div class="mb-2">
+              <label class="form-label fw-medium">Other</label>
+              <input type="text" name="other_exam" class="form-control" />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-2 mt-3">
+          <label class="form-label fw-medium">Diagnostic Tests & Imaging (if available)</label>
+          <textarea name="diagnostic_tests" rows="2" class="form-control"></textarea>
+        </div>
+
+        <div class="soap-body">
+          <div class="grid">
+            <input type="text" placeholder="BP (e.g. 120/80)" />
+            <input type="text" placeholder="Pulse Rate" />
+            <input type="text" placeholder="Temperature" />
+            <input type="text" placeholder="SpO₂" />
+            <input type="text" placeholder="Weight (kg)" />
+            <input type="text" placeholder="Height (cm)" />
+          </div>
+          <textarea
+            placeholder="Clinical findings, lab results, physical examination notes..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- ASSESSMENT -->
+      <div class="soap-section">
+        <div class="soap-title">A – Assessment</div>
+        <div class="soap-body">
+          <textarea
+            placeholder="Diagnosis, differential diagnosis, clinical impression..."
+          ></textarea>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <label class="form-label fw-medium">Primary Diagnoses</label>
+            <textarea name="primary_dx" rows="2" class="form-control"></textarea>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="form-label fw-medium">Differential Diagnoses</label>
+            <textarea name="diff_dx" rows="2" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <label class="form-label fw-medium">Justification</label>
+            <textarea name="justification" rows="2" class="form-control"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAN -->
+      <div class="soap-section">
+        <div class="soap-title">P – Plan</div>
+        <div class="soap-body">
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label class="form-label fw-medium">Medications & Dosages</label>
+              <textarea name="medications" rows="2" class="form-control"></textarea>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label fw-medium">Lifestyle Modifications</label>
+              <textarea name="lifestyle" rows="2" class="form-control"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <textarea
+              placeholder="Treatment  test plan, prescribed medicines, dosage, advice, follow-up..."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="action-bar">
+          <button class="btn btn-secondary">Cancel</button>
+          <button class="btn btn-primary">Save</button>
+          <button class="btn btn-success">Save & Send to Pharmacy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

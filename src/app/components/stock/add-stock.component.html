@@ -1,0 +1,195 @@
+<div class="add-stock-container">
+  <p-card header="Add Stock">
+    <div class="form-container">
+      <!-- Invoice Details Section -->
+      <div class="form-section">
+        <h3 class="section-title">Invoice Details</h3>
+        <div class="form-row">
+          <div class="field">
+            <label for="supplier">Supplier <span class="red-star">*</span></label>
+            <p-dropdown 
+              id="supplier" 
+              [(ngModel)]="stockForm.supplier_id" 
+              [options]="suppliers" 
+              optionLabel="supplierName" 
+              optionValue="pharmacySupplierId"
+              placeholder="Select Supplier" 
+              [required]="true" 
+              [disabled]="loading"
+              (onChange)="onSupplierChange()"
+              class="w-full">
+            </p-dropdown>
+            <small *ngIf="loading" class="loading-text">Loading suppliers...</small>
+          </div>
+          
+          <div class="field">
+            <label for="invoiceId">Invoice ID <span class="red-star">*</span></label>
+            <input 
+              id="invoiceId" 
+              type="text" 
+              pInputText 
+              [(ngModel)]="stockForm.invoice_id" 
+              placeholder="Enter Invoice ID" 
+              class="w-full" 
+              [required]="true" />
+          </div>
+          
+          <div class="field">
+            <label for="invoiceDate">Invoice Date <span class="red-star">*</span></label>
+            <p-calendar 
+              id="invoiceDate" 
+              [(ngModel)]="stockForm.invoice_date" 
+              [required]="true" 
+              dateFormat="yy-mm-dd" 
+              [showIcon]="true" 
+              placeholder="Select Invoice Date"
+              class="w-full">
+            </p-calendar>
+          </div>
+          
+          <div class="field">
+            <label for="invoiceAmount">Invoice Amount <span class="red-star">*</span></label>
+            <p-inputNumber 
+              id="invoiceAmount" 
+              [(ngModel)]="stockForm.invoice_amount" 
+              [required]="true" 
+              mode="decimal" 
+              [min]="0" 
+              placeholder="Enter Amount"
+              class="w-full">
+            </p-inputNumber>
+          </div>
+          
+          <div class="field">
+            <label for="paymentMode">Payment Mode</label>
+            <p-dropdown 
+              id="paymentMode" 
+              [(ngModel)]="stockForm.payment_mode" 
+              [options]="paymentModes" 
+              optionLabel="label" 
+              optionValue="value"
+              placeholder="Select Payment Mode" 
+              [required]="true" 
+              [appendTo]="'body'"
+              class="w-full">
+            </p-dropdown>
+          </div>
+        </div>
+        <small *ngIf="errorMessage" class="error-text">{{ errorMessage }}</small>
+      </div>
+
+      <!-- Medicines Section -->
+      <div class="form-section">
+        <div class="section-header">
+          <h3 class="section-title">Medicines</h3> {{medicineOptions.length}}
+          <p-button 
+            [disabled]="medicineOptions.length <= 0"
+            label="Add Medicine" 
+            icon="pi pi-plus" 
+            (onClick)="addMedicine()" 
+            [outlined]="true">
+          </p-button>
+        </div>
+
+        <div class="medicines-table-container testclass" *ngIf="stockForm.medicines.length > 0">
+          <p-table [value]="stockForm.medicines" [scrollable]="true" scrollHeight="400px">
+            <ng-template pTemplate="header">
+              <tr>
+                <th style="width: 25%">Medicine <span class="red-star">*</span></th>
+                <th style="width: 15%">HSN No</th>
+                <th style="width: 15%">Batch No </th>
+                <th style="width: 15%">EXP Date</th>
+                <th style="width: 15%">Quantity <span class="red-star">*</span></th>
+                <th style="width: 15%">Action</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-medicine let-rowIndex="rowIndex">
+              <tr>
+                <td>
+                  <p-dropdown 
+                    [(ngModel)]="medicine.medicine_id" 
+                    [options]="getMedicineOptionsForRow(rowIndex)" 
+                    optionLabel="label" 
+                    optionValue="value"
+                    placeholder="Select Medicine" 
+                    [required]="true" 
+                    [appendTo]="'body'"
+                    (onChange)="onMedicineChange(rowIndex, medicine.medicine_id!)"
+                    class="w-full">
+                  </p-dropdown>
+                </td>
+                <td>
+                  <input 
+                    type="text" 
+                    pInputText 
+                    [(ngModel)]="medicine.hsn_no" 
+                    placeholder="Enter HSN No" 
+                    class="w-full" />
+                </td>
+                <td>
+                  <input 
+                    type="text" 
+                    pInputText 
+                    [(ngModel)]="medicine.batch_no" 
+                    placeholder="Enter Batch No" 
+                    class="w-full" />
+                </td>
+                <td>
+                  <p-calendar 
+                    [(ngModel)]="medicine.exp_date" 
+                    dateFormat="yy-mm-dd" 
+                    [showIcon]="true" 
+                    [appendTo]="'body'"
+                    placeholder="Select Date"
+                    class="w-full">
+                  </p-calendar>
+                </td>
+                <td>
+                  <p-inputNumber 
+                    [(ngModel)]="medicine.quantity" 
+                    [required]="true" 
+                    mode="decimal" 
+                    [min]="1" 
+                    placeholder="Enter Quantity"
+                    class="w-full">
+                  </p-inputNumber>
+                </td>
+                <td>
+                  <p-button 
+                    icon="pi pi-trash" 
+                    [text]="true" 
+                    [rounded]="true"
+                    severity="danger"
+                    (onClick)="removeMedicine(rowIndex)"
+                    [pTooltip]="'Remove'"
+                    tooltipPosition="top">
+                  </p-button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 20px;">No medicines added. Click "+ Add Medicine" to add.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div class="empty-state" *ngIf="stockForm.medicines.length === 0">
+          <p>No medicines added yet. Click "+ Add Medicine" to start adding medicines.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">{{stockForm.medicines.length}}
+        <p-button
+          label="Cancel"
+          [text]="true"
+          (onClick)="stockForm = { supplier_id: undefined, invoice_id: '', invoice_date: undefined, invoice_amount: undefined, payment_mode: undefined, medicines: [] }">
+        </p-button>
+        <p-button label="Save Stock" [disabled]="stockForm.medicines.length <= 0" (onClick)="saveStock()"></p-button>
+      </div>
+    </div>
+  </p-card>
+</div>
+

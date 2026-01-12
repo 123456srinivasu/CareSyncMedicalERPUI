@@ -1,68 +1,84 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "cli": {
-    "analytics": "1e1de97b-a744-405a-8b5a-0397bb3d01ce"
-  },
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "demo": {
+    "caresync-medical-erp-ui": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
-          "configurations": {
-            "development": {
-              "extractLicenses": false,
-              "namedChunks": true,
-              "optimization": false,
-              "sourceMap": true
-            },
-            "production": {
-              "aot": true,
-              "extractLicenses": true,
-              "namedChunks": false,
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false
-            }
-          },
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "assets": [
-              "src/assets"
-            ],
+            "outputPath": "dist/caresync-medical-erp-ui",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "outputPath": "dist/demo",
-            "polyfills": [
-              "zone.js"
-            ],
-            "scripts": [],
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.app.json",
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "src/global_styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css"
+              "node_modules/primeicons/primeicons.css",
+              "src/styles.scss"
             ],
-            "tsConfig": "tsconfig.app.json"
-          }
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "20kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "development": {
-              "buildTarget": "demo:build:development"
-            },
             "production": {
-              "buildTarget": "demo:build:production"
+              "buildTarget": "caresync-medical-erp-ui:build:production"
+            },
+            "development": {
+              "buildTarget": "caresync-medical-erp-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "tsConfig": "tsconfig.spec.json",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
+            "scripts": []
+          }
         }
-      },
-      "prefix": "app",
-      "projectType": "application",
-      "root": "",
-      "schematics": {},
-      "sourceRoot": "src"
+      }
     }
   },
-  "version": 1
+  "cli": {
+    "analytics": "302fd9ad-73e7-4f28-bccb-2b7e53624a12"
+  }
 }

@@ -1,0 +1,882 @@
+<div class="camps-container">
+  <p-toast></p-toast>
+  <div class="header-section">
+    <h1>Camps Management</h1>
+    <p-button label="New Camp" icon="pi pi-plus" (onClick)="openNew()" styleClass="p-button-raised"></p-button>
+  </div>
+
+  <p-card class="search-card">
+    <div class="search-filters">
+      <div class="filter-row">
+        <div class="field filter-field">
+          <label for="searchState">State</label>
+          <p-dropdown id="searchState" [(ngModel)]="searchState" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+        </div>
+
+        <div class="field filter-field">
+          <label for="searchDistrict">District</label>
+          <p-dropdown id="searchDistrict" [(ngModel)]="searchDistrict" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+        </div>
+
+        <div class="field filter-field">
+          <label for="searchMandal">Mandal</label>
+          <p-dropdown id="searchMandal" [(ngModel)]="searchMandal" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="field filter-field">
+          <label for="searchCity">City</label>
+          <input pInputText id="searchCity" [(ngModel)]="searchCity" (ngModelChange)="onSearch()" placeholder="Search by city" class="w-full">
+        </div>
+        <div class="field filter-field">
+          <label for="search">Camp Name</label>
+          <input pInputText id="search" [(ngModel)]="searchText" (ngModelChange)="onSearch()" placeholder="Search by name" class="w-full">
+        </div>
+
+        <div class="field filter-field">
+          <label for="searchStatus">Status</label>
+          <p-dropdown id="searchStatus" [(ngModel)]="searchStatus" [options]="statusOptions" optionLabel="label" optionValue="value" placeholder="Select Status" (onChange)="onFilterChange()" class="w-full"></p-dropdown>
+        </div>       
+
+        <div class="field filter-field filter-actions">
+          <p-button label="Clear Filters" icon="pi pi-times" (onClick)="clearFilters()" [text]="true" severity="secondary" class="w-full"></p-button>
+        </div>
+      </div>
+    </div>
+  </p-card>
+
+    <p-card>{{camps.length}}
+      <p-table [value]="camps" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Camp Name</th>
+            <th>Camp Code</th>
+            <th>Organizer Name</th>
+            <th>Phone No</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Planned Date</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-camp>
+          <tr>
+            <td>{{ camp.camp_name }}</td>
+            <td>{{ camp.camp_code || 'N/A' }}</td>
+            <td>{{ getOrganizerName(camp) }}</td>
+            <td>{{ getOrganizerPhone(camp) }}</td>
+            <td>{{ getLocation(camp) }}</td>
+            <td>
+              <p-tag [value]="camp.is_active ? 'Active' : 'Inactive'" [severity]="getSeverity(camp.is_active)"></p-tag>
+            </td>
+            <td>{{ camp.planned_date ? (camp.planned_date | date:'shortDate') : 'N/A' }}</td>
+            <td>
+              <p-button 
+                *ngIf="camp.ready_for_camp" 
+                icon="pi pi-check-circle"  
+                (onClick)="markReadyForCamp(camp)" 
+                [text]="true" 
+                severity="success" 
+                [rounded]="true" 
+                title="Ready for Camp" 
+                styleClass="ready-camp-btn">
+              </p-button>
+              <p-button 
+                *ngIf="!camp.ready_for_camp" 
+                icon="pi pi-times-circle"  
+                (onClick)="markNotReadyForCamp(camp)" 
+                [text]="true" 
+                severity="warn" 
+                [rounded]="true" 
+                title="Not Ready for Camp" 
+                styleClass="not-ready-camp-btn">
+              </p-button>
+              <p-button 
+                *ngIf="camp.ready_for_camp && !camp.camp_started && !camp.camp_ended" 
+                icon="pi pi-play"  
+                (onClick)="openStartCampDialog(camp)" 
+                [text]="true" 
+                severity="success" 
+                [rounded]="true" 
+                title="Start Camp">
+              </p-button>
+              <p-button 
+                *ngIf="camp.camp_started && !camp.camp_ended" 
+                icon="pi pi-stop"  
+                (onClick)="openStopCampDialog(camp)" 
+                [text]="true" 
+                severity="danger" 
+                [rounded]="true" 
+                title="Stop Camp">
+              </p-button>
+              <p-button 
+                *ngIf="camp.camp_started && !camp.camp_ended" 
+                icon="pi pi-lock"  
+                [text]="true" 
+                severity="secondary" 
+                [rounded]="true" 
+                (onClick)="openDisablePasswordDialog(camp)"
+                title="Password">
+              </p-button>
+              <p-button icon="pi pi-calendar" (onClick)="openDateDialog(camp)" [text]="true" severity="secondary" [rounded]="true" title="Change Planned Date"></p-button>
+              <p-button icon="pi pi-pencil" (onClick)="editCamp(camp)" [text]="true" severity="info" [rounded]="true" title="Edit"></p-button>
+              <p-button icon="pi pi-trash" (onClick)="deleteCamp(camp)" [text]="true" severity="danger" [rounded]="true" title="Delete"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+  </p-card>
+
+  <p-dialog [(visible)]="displayDialog" [header]="isEditMode ? 'Edit Camp' : 'New Camp'" [modal]="true" [style]="{width: '1200px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="campName">Camp Name *</label>
+        <input pInputText id="campName" [(ngModel)]="campForm.camp_name" required class="w-full">
+      </div>
+
+      <h3>Organizer </h3>
+      <div class="organizer-row">
+        <div class="field organizer-field">
+          <label for="orgName1">Organizer Name </label>
+          <input pInputText id="orgName1" [(ngModel)]="campForm.organizer_name_1" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgPhone1">Organizer Phone No </label>
+          <input pInputText id="orgPhone1" [(ngModel)]="campForm.organizer_phone_no_1" type="tel" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgEmail1">Organizer Email </label>
+          <input pInputText id="orgEmail1" [(ngModel)]="campForm.organizer_email_1" type="email" class="w-full">
+        </div>
+      </div>
+
+      <!-- <h3>Organizer 2</h3>
+      <div class="organizer-row">
+        <div class="field organizer-field">
+          <label for="orgName2">Organizer Name 2</label>
+          <input pInputText id="orgName2" [(ngModel)]="campForm.organizer_name_2" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgPhone2">Organizer Phone No 2</label>
+          <input pInputText id="orgPhone2" [(ngModel)]="campForm.organizer_phone_no_2" type="tel" class="w-full">
+        </div>
+
+        <div class="field organizer-field">
+          <label for="orgEmail2">Organizer Email 2</label>
+          <input pInputText id="orgEmail2" [(ngModel)]="campForm.organizer_email_2" type="email" class="w-full">
+        </div>
+      </div> -->
+        <!-- Providers (Doctors) Section with Left-Right Panels -->
+        <div class="field full-width">
+          <label>Providers (Doctors) *</label>
+          <div class="provider-panel-container">
+            <!-- Left Panel: Available Doctors -->
+            <div class="provider-panel left-panel">
+              <div class="panel-header">
+                <span>Available Doctors</span>
+                <span class="count-badge">{{ availableDoctorsFiltered.length }}</span>
+              </div>
+              <div class="panel-search">
+                <input 
+                  type="text" 
+                  pInputText 
+                  [(ngModel)]="doctorSearchTextNew" 
+                  (input)="filterAvailableDoctorsNew()"
+                  placeholder="Search doctors..."
+                  class="w-full">
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let doctor of availableDoctorsFiltered" 
+                  class="panel-item"
+                  (click)="addDoctorNew(doctor)">
+                  <span>{{ doctor.label }}</span>
+                  <i class="pi pi-arrow-right"></i>
+                </div>
+                <div *ngIf="availableDoctorsFiltered.length === 0" class="empty-message">
+                  No doctors available
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Add All" 
+                  icon="pi pi-angle-double-right" 
+                  (onClick)="addAllDoctorsNew()"
+                  [disabled]="availableDoctorsFiltered.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+  
+            <!-- Center: Action Buttons -->
+            <div class="provider-actions">
+              <p-button 
+                icon="pi pi-angle-right" 
+                (onClick)="addAllDoctorsNew()"
+                [disabled]="availableDoctorsFiltered.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Add All'">
+              </p-button>
+              <p-button 
+                icon="pi pi-angle-left" 
+                (onClick)="removeAllDoctorsNew()"
+                [disabled]="selectedDoctors.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Remove All'">
+              </p-button>
+            </div>
+  
+            <!-- Right Panel: Selected Doctors -->
+            <div class="provider-panel right-panel">
+              <div class="panel-header">
+                <span>Selected Doctors</span>
+                <span class="count-badge">{{ selectedDoctors.length }}</span>
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let doctor of selectedDoctors" 
+                  class="panel-item"
+                  (click)="removeDoctorNew(doctor)">
+                  <i class="pi pi-arrow-left"></i>
+                  <span>{{ doctor.label }}</span>
+                </div>
+                <div *ngIf="selectedDoctors.length === 0" class="empty-message">
+                  No doctors selected
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Remove All" 
+                  icon="pi pi-angle-double-left" 
+                  (onClick)="removeAllDoctorsNew()"
+                  [disabled]="selectedDoctors.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Volunteers Section with Left-Right Panels -->
+        <div class="field full-width">
+          <label>Volunteers *</label>
+          <div class="provider-panel-container">
+            <!-- Left Panel: Available Volunteers -->
+            <div class="provider-panel left-panel">
+              <div class="panel-header">
+                <span>Available Volunteers</span>
+                <span class="count-badge">{{ availableVolunteersFiltered.length }}</span>
+              </div>
+              <div class="panel-search">
+                <input 
+                  type="text" 
+                  pInputText 
+                  [(ngModel)]="volunteerSearchTextNew" 
+                  (input)="filterAvailableVolunteersNew()"
+                  placeholder="Search volunteers..."
+                  class="w-full">
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let volunteer of availableVolunteersFiltered" 
+                  class="panel-item"
+                  (click)="addVolunteerNew(volunteer)">
+                  <span>{{ volunteer.label }}</span>
+                  <i class="pi pi-arrow-right"></i>
+                </div>
+                <div *ngIf="availableVolunteersFiltered.length === 0" class="empty-message">
+                  No volunteers available
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Add All" 
+                  icon="pi pi-angle-double-right" 
+                  (onClick)="addAllVolunteersNew()"
+                  [disabled]="availableVolunteersFiltered.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+  
+            <!-- Center: Action Buttons -->
+            <div class="provider-actions">
+              <p-button 
+                icon="pi pi-angle-right" 
+                (onClick)="addAllVolunteersNew()"
+                [disabled]="availableVolunteersFiltered.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Add All'">
+              </p-button>
+              <p-button 
+                icon="pi pi-angle-left" 
+                (onClick)="removeAllVolunteersNew()"
+                [disabled]="selectedVolunteers.length === 0"
+                [text]="true"
+                [rounded]="true"
+                [title]="'Remove All'">
+              </p-button>
+            </div>
+  
+            <!-- Right Panel: Selected Volunteers -->
+            <div class="provider-panel right-panel">
+              <div class="panel-header">
+                <span>Selected Volunteers</span>
+                <span class="count-badge">{{ selectedVolunteers.length }}</span>
+              </div>
+              <div class="panel-list">
+                <div 
+                  *ngFor="let volunteer of selectedVolunteers" 
+                  class="panel-item"
+                  (click)="removeVolunteerNew(volunteer)">
+                  <i class="pi pi-arrow-left"></i>
+                  <span>{{ volunteer.label }}</span>
+                </div>
+                <div *ngIf="selectedVolunteers.length === 0" class="empty-message">
+                  No volunteers selected
+                </div>
+              </div>
+              <div class="panel-actions">
+                <p-button 
+                  label="Remove All" 
+                  icon="pi pi-angle-double-left" 
+                  (onClick)="removeAllVolunteersNew()"
+                  [disabled]="selectedVolunteers.length === 0"
+                  [text]="true"
+                  size="small">
+                </p-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <div class="address-section">
+        <fieldset class="address-fieldset">
+          <legend>Shipping Address</legend>
+          <div class="field full-width">
+            <label for="shippingState">State</label>
+            <p-dropdown id="shippingState" [(ngModel)]="campForm.shipping_state" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" class="w-full"></p-dropdown>
+          </div>
+          <div class="field full-width">
+            <label for="shippingDistrict">District</label>
+            <p-dropdown id="shippingDistrict" [(ngModel)]="campForm.shipping_district" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" class="w-full"></p-dropdown>
+          </div>
+          <div class="field full-width">
+            <label for="shippingMandle">Mandal</label>
+            <p-dropdown id="shippingMandle" [(ngModel)]="campForm.shipping_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
+          </div>
+          <div class="field full-width">
+            <label for="shippingCity">City</label>
+            <input pInputText id="shippingCity" [(ngModel)]="campForm.shipping_city" class="w-full">
+          </div>
+          <div class="field full-width">
+            <label for="shippingAddress">Address</label>
+            <textarea pInputTextarea id="shippingAddress" [(ngModel)]="campForm.shipping_address" rows="2" class="w-full"></textarea>
+          </div>
+          <div class="field full-width">
+            <label for="shippingPinCode">PIN Code</label>
+            <input pInputText id="shippingPinCode" [(ngModel)]="campForm.shipping_pin_code" type="text" maxlength="6" class="w-full">
+          </div>
+        </fieldset>
+
+        <fieldset class="address-fieldset">
+          <legend>Location Address</legend>
+          <div class="field full-width">
+            <label for="locationState">State</label>
+            <p-dropdown id="locationState" [(ngModel)]="campForm.location_state" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" class="w-full"></p-dropdown>
+          </div>
+          <div class="field full-width">
+            <label for="locationDistrict">District</label>
+            <p-dropdown id="locationDistrict" [(ngModel)]="campForm.location_district" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" class="w-full"></p-dropdown>
+          </div>
+          <div class="field full-width">
+            <label for="locationMandle">Mandal</label>
+            <p-dropdown id="locationMandle" [(ngModel)]="campForm.location_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
+          </div>
+          <div class="field full-width">
+            <label for="locationCity">City</label>
+            <input pInputText id="locationCity" [(ngModel)]="campForm.location_city" class="w-full">
+          </div>
+          <div class="field full-width">
+            <label for="locationAddress">Address</label>
+            <textarea pInputTextarea id="locationAddress" [(ngModel)]="campForm.location_address" rows="2" class="w-full"></textarea>
+          </div>
+          <div class="field full-width">
+            <label for="locationPinCode">PIN Code</label>
+            <input pInputText id="locationPinCode" [(ngModel)]="campForm.location_pin_code" type="text" maxlength="6" class="w-full">
+          </div>
+        </fieldset>
+      </div>
+
+      <fieldset class="schedule-fieldset">
+        <legend>Schedule</legend>
+        <div class="months-section">
+          <span class="months-label">Select Months:</span>
+          <div class="months-checkboxes">
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.january" inputId="january" [binary]="true"></p-checkbox>
+              <label for="january" class="month-label">January</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.february" inputId="february" [binary]="true"></p-checkbox>
+              <label for="february" class="month-label">February</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.march" inputId="march" [binary]="true"></p-checkbox>
+              <label for="march" class="month-label">March</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.april" inputId="april" [binary]="true"></p-checkbox>
+              <label for="april" class="month-label">April</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.may" inputId="may" [binary]="true"></p-checkbox>
+              <label for="may" class="month-label">May</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.june" inputId="june" [binary]="true"></p-checkbox>
+              <label for="june" class="month-label">June</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.july" inputId="july" [binary]="true"></p-checkbox>
+              <label for="july" class="month-label">July</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.august" inputId="august" [binary]="true"></p-checkbox>
+              <label for="august" class="month-label">August</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.september" inputId="september" [binary]="true"></p-checkbox>
+              <label for="september" class="month-label">September</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.october" inputId="october" [binary]="true"></p-checkbox>
+              <label for="october" class="month-label">October</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.november" inputId="november" [binary]="true"></p-checkbox>
+              <label for="november" class="month-label">November</label>
+            </div>
+            <div class="month-checkbox-item">
+              <p-checkbox [(ngModel)]="campForm.december" inputId="december" [binary]="true"></p-checkbox>
+              <label for="december" class="month-label">December</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="schedule-container">
+          <div class="schedule-section">           
+            <div class="schedule-items">
+              <div class="schedule-item">
+                <span>Week:</span>
+                <div class="schedule-dropdowns">
+                  <div class="schedule-field">
+                    <p-dropdown [(ngModel)]="campForm.schedule_week" [options]="weeks" optionLabel="label" optionValue="value" placeholder="Select Week" class="w-full"></p-dropdown>
+                  </div>
+                  <div class="schedule-field">
+                    <p-dropdown [(ngModel)]="campForm.schedule_day" [options]="days" optionLabel="label" optionValue="value" placeholder="Select Day" class="w-full"></p-dropdown>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="medicine-responsibility-row">
+        <div class="field medicine-responsibility-field">
+          <label for="medicineResponsibility">Medicine Responsibility</label>
+          <p-dropdown id="medicineResponsibility" [(ngModel)]="campForm.medicine_responsibility" [options]="medicineResponsibilityTypes" optionLabel="label" optionValue="value" placeholder="Select Type" class="w-full"></p-dropdown>
+        </div>
+        <div class="medicine-responsibility-options" *ngIf="campForm.medicine_responsibility === 'Outside'">
+          <div class="radio-group">
+            <p-radioButton name="medicineResponsibilityType" value="Outside" [(ngModel)]="campForm.medicine_responsibility_type" inputId="outside"></p-radioButton>
+            <label for="outside">Outside</label>
+          </div>
+          <div class="field full-width" *ngIf="campForm.medicine_responsibility_type === 'Outside'">
+            <input pInputText id="outsideDetails" [(ngModel)]="campForm.medicine_responsibility_outside" placeholder="Enter outside details" class="w-full">
+          </div>
+        </div>
+      </div>
+
+      <div class="field full-width checkbox-field" style="align-items: start;display:inline-block">
+        <p-checkbox [(ngModel)]="campForm.is_active" inputId="isActive" [binary]="true"></p-checkbox>
+        <label for="isActive" style="margin-left: 8px;">Active</label>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="cancelDateDialog()" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="saveCamp()" severity="success"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Planned Date Dialog -->
+  <p-dialog [(visible)]="displayDateDialog" [header]="'Change Planned Date - ' + (selectedCampForDate?.camp_name || '')" [modal]="true" [style]="{width: '800px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="plannedDate">Planned Date *</label>
+        <p-calendar 
+          id="plannedDate" 
+          [(ngModel)]="newPlannedDate" 
+          [required]="true" 
+          dateFormat="yy-mm-dd" 
+          [showIcon]="true" 
+          [showButtonBar]="true"
+          [appendTo]="'body'"
+          class="w-full">
+        </p-calendar>
+      </div>
+      <div class="field full-width" *ngIf="selectedCampForDate && selectedCampForDate.planned_date">
+        <small class="text-muted">Current Planned Date: {{ selectedCampForDate.planned_date | date:'shortDate' }}</small>
+      </div>     
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="cancelDateDialog()" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="savePlannedDate()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Not Ready for Camp Dialog -->
+  <p-dialog [(visible)]="displayNotReadyDialog" [header]="'Not Ready for Camp - ' + (selectedCampForNotReady?.camp_name || '')" [modal]="true" [style]="{width: '900px'}">
+    <div class="form-container">
+      <!-- Providers (Doctors) Section with Left-Right Panels -->
+      <div class="field full-width">
+        <label>Providers (Doctors) *</label>
+        <div class="provider-panel-container">
+          <!-- Left Panel: Available Doctors -->
+          <div class="provider-panel left-panel">
+            <div class="panel-header">
+              <span>Available Doctors</span>
+              <span class="count-badge">{{ availableDoctorsNotReadyFiltered.length }}</span>
+            </div>
+            <div class="panel-search">
+              <input 
+                type="text" 
+                pInputText 
+                [(ngModel)]="doctorSearchText" 
+                (input)="filterAvailableDoctors()"
+                placeholder="Search doctors..."
+                class="w-full">
+            </div>
+            <div class="panel-list">
+              <div 
+                *ngFor="let doctor of availableDoctorsNotReadyFiltered" 
+                class="panel-item"
+                (click)="addDoctor(doctor)">
+                <span>{{ doctor.label }}</span>
+                <i class="pi pi-arrow-right"></i>
+              </div>
+              <div *ngIf="availableDoctorsNotReadyFiltered.length === 0" class="empty-message">
+                No doctors available
+              </div>
+            </div>
+            <div class="panel-actions">
+              <p-button 
+                label="Add All" 
+                icon="pi pi-angle-double-right" 
+                (onClick)="addAllDoctors()"
+                [disabled]="availableDoctorsNotReadyFiltered.length === 0"
+                [text]="true"
+                size="small">
+              </p-button>
+            </div>
+          </div>
+
+          <!-- Center: Action Buttons -->
+          <div class="provider-actions">
+            <p-button 
+              icon="pi pi-angle-right" 
+              (onClick)="addAllDoctors()"
+              [disabled]="availableDoctorsNotReadyFiltered.length === 0"
+              [text]="true"
+              [rounded]="true"
+              [title]="'Add All'">
+            </p-button>
+            <p-button 
+              icon="pi pi-angle-left" 
+              (onClick)="removeAllDoctors()"
+              [disabled]="selectedDoctorsNotReady.length === 0"
+              [text]="true"
+              [rounded]="true"
+              [title]="'Remove All'">
+            </p-button>
+          </div>
+
+          <!-- Right Panel: Selected Doctors -->
+          <div class="provider-panel right-panel">
+            <div class="panel-header">
+              <span>Selected Doctors</span>
+              <span class="count-badge">{{ selectedDoctorsNotReady.length }}</span>
+            </div>
+            <div class="panel-list">
+              <div 
+                *ngFor="let doctor of selectedDoctorsNotReady" 
+                class="panel-item"
+                (click)="removeDoctor(doctor)">
+                <i class="pi pi-arrow-left"></i>
+                <span>{{ doctor.label }}</span>
+              </div>
+              <div *ngIf="selectedDoctorsNotReady.length === 0" class="empty-message">
+                No doctors selected
+              </div>
+            </div>
+            <div class="panel-actions">
+              <p-button 
+                label="Remove All" 
+                icon="pi pi-angle-double-left" 
+                (onClick)="removeAllDoctors()"
+                [disabled]="selectedDoctorsNotReady.length === 0"
+                [text]="true"
+                size="small">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Volunteers Section with Left-Right Panels -->
+      <div class="field full-width">
+        <label>Volunteers *</label>
+        <div class="provider-panel-container">
+          <!-- Left Panel: Available Volunteers -->
+          <div class="provider-panel left-panel">
+            <div class="panel-header">
+              <span>Available Volunteers</span>
+              <span class="count-badge">{{ availableVolunteersNotReadyFiltered.length }}</span>
+            </div>
+            <div class="panel-search">
+              <input 
+                type="text" 
+                pInputText 
+                [(ngModel)]="volunteerSearchText" 
+                (input)="filterAvailableVolunteers()"
+                placeholder="Search volunteers..."
+                class="w-full">
+            </div>
+            <div class="panel-list">
+              <div 
+                *ngFor="let volunteer of availableVolunteersNotReadyFiltered" 
+                class="panel-item"
+                (click)="addVolunteer(volunteer)">
+                <span>{{ volunteer.label }}</span>
+                <i class="pi pi-arrow-right"></i>
+              </div>
+              <div *ngIf="availableVolunteersNotReadyFiltered.length === 0" class="empty-message">
+                No volunteers available
+              </div>
+            </div>
+            <div class="panel-actions">
+              <p-button 
+                label="Add All" 
+                icon="pi pi-angle-double-right" 
+                (onClick)="addAllVolunteers()"
+                [disabled]="availableVolunteersNotReadyFiltered.length === 0"
+                [text]="true"
+                size="small">
+              </p-button>
+            </div>
+          </div>
+
+          <!-- Center: Action Buttons -->
+          <div class="provider-actions">
+            <p-button 
+              icon="pi pi-angle-right" 
+              (onClick)="addAllVolunteers()"
+              [disabled]="availableVolunteersNotReadyFiltered.length === 0"
+              [text]="true"
+              [rounded]="true"
+              [title]="'Add All'">
+            </p-button>
+            <p-button 
+              icon="pi pi-angle-left" 
+              (onClick)="removeAllVolunteers()"
+              [disabled]="selectedVolunteersNotReady.length === 0"
+              [text]="true"
+              [rounded]="true"
+              [title]="'Remove All'">
+            </p-button>
+          </div>
+
+          <!-- Right Panel: Selected Volunteers -->
+          <div class="provider-panel right-panel">
+            <div class="panel-header">
+              <span>Selected Volunteers</span>
+              <span class="count-badge">{{ selectedVolunteersNotReady.length }}</span>
+            </div>
+            <div class="panel-list">
+              <div 
+                *ngFor="let volunteer of selectedVolunteersNotReady" 
+                class="panel-item"
+                (click)="removeVolunteer(volunteer)">
+                <i class="pi pi-arrow-left"></i>
+                <span>{{ volunteer.label }}</span>
+              </div>
+              <div *ngIf="selectedVolunteersNotReady.length === 0" class="empty-message">
+                No volunteers selected
+              </div>
+            </div>
+            <div class="panel-actions">
+              <p-button 
+                label="Remove All" 
+                icon="pi pi-angle-double-left" 
+                (onClick)="removeAllVolunteers()"
+                [disabled]="selectedVolunteersNotReady.length === 0"
+                [text]="true"
+                size="small">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Medicines Table Section -->
+      <div class="field full-width">
+        <div class="medicines-section-header">
+          <label>Medicines</label>
+        </div>
+        <div class="medicines-table-container">
+          <p-table [value]="campMedicinesNotReady" [paginator]="false" styleClass="p-datatable-sm">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Medicine Name</th>
+                <th>Medicine Type</th>
+                <th>Quantity</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-medicine>
+              <tr>
+                <td>{{ medicine.medicine_name || 'N/A' }}</td>
+                <td>{{ medicine.medicine_type || 'N/A' }}</td>
+                <td>{{ medicine.quantity || 0 }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="3" style="text-align: center; padding: 20px;">
+                  No medicines available.
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+
+      <!-- Availability Section -->
+      <div class="field full-width">
+        <label>Availability</label>
+        <div class="availability-checkboxes">
+          <div class="checkbox-field">
+            <p-checkbox [(ngModel)]="printerAvailable" inputId="printerAvailable" [binary]="true"></p-checkbox>
+            <label for="printerAvailable" class="checkbox-label">Printer</label>
+          </div>
+          <div class="checkbox-field">
+            <p-checkbox [(ngModel)]="paperAvailable" inputId="paperAvailable" [binary]="true"></p-checkbox>
+            <label for="paperAvailable" class="checkbox-label">Paper</label>
+          </div>
+        </div>
+      </div>     
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="cancelNotReadyDialog()" [text]="true"></p-button>
+      <p-button label="Ready" (onClick)="saveNotReadyCamp()" severity="success"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Start Camp Confirmation Dialog -->
+  <p-dialog 
+    [(visible)]="displayStartCampDialog" 
+    [header]="'Start Camp'" 
+    [modal]="true" 
+    [style]="{width: '500px'}">
+    <div class="form-container">
+      <p>Are you sure you want to start camp <strong>{{ selectedCampForStart?.camp_name }}</strong>?</p>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="closeStartCampDialog()" [text]="true"></p-button>
+      <p-button label="Start" (onClick)="startCamp()" severity="success"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Stop Camp Confirmation Dialog -->
+  <p-dialog 
+    [(visible)]="displayStopCampDialog" 
+    [header]="'Stop Camp'" 
+    [modal]="true" 
+    [style]="{width: '500px'}">
+    <div class="form-container">
+      <p>Are you sure you want to stop <strong>"{{ selectedCampForStop?.camp_name }}"</strong>?</p>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="closeStopCampDialog()" [text]="true"></p-button>
+      <p-button label="Stop" (onClick)="stopCamp()" severity="danger"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Disable Password Dialog -->
+  <p-dialog 
+    [(visible)]="displayDisablePasswordDialog" 
+    [header]="'Disable Password - ' + (selectedCampForDisablePassword?.camp_name || '')" 
+    [modal]="true" 
+    [style]="{width: '700px'}">
+    <div class="form-container">
+      <!-- Selected Providers Section -->
+      <div class="field full-width" *ngIf="selectedDoctorsNotReady.length > 0">
+        <label>Selected Providers (Doctors)</label>
+        <div class="disable-password-list">
+            <div 
+              *ngFor="let doctor of selectedDoctorsNotReady" 
+              class="disable-password-item">
+              <p-checkbox 
+                [(ngModel)]="doctor.selected"
+                [binary]="true"
+                [inputId]="'disable-doctor-' + doctor.value"
+                (onChange)="onDoctorCheckboxChange(doctor)">
+              </p-checkbox>
+              <label [for]="'disable-doctor-' + doctor.value" class="checkbox-label">{{ doctor.label }}</label>
+            </div>
+        </div>
+      </div>
+
+      <!-- Selected Volunteers Section -->
+      <div class="field full-width" *ngIf="selectedVolunteersNotReady.length > 0">
+        <label>Selected Volunteers</label>
+        <div class="disable-password-list">
+            <div 
+              *ngFor="let volunteer of selectedVolunteersNotReady" 
+              class="disable-password-item">
+              <p-checkbox 
+                [(ngModel)]="volunteer.selected"
+                [binary]="true"
+                [inputId]="'disable-volunteer-' + volunteer.value"
+                (onChange)="onVolunteerCheckboxChange(volunteer)">
+              </p-checkbox>
+              <label [for]="'disable-volunteer-' + volunteer.value" class="checkbox-label">{{ volunteer.label }}</label>
+            </div>
+        </div>
+      </div>
+
+      <div class="field full-width" *ngIf="selectedDoctorsNotReady.length === 0 && selectedVolunteersNotReady.length === 0">
+        <p class="text-muted">No providers or volunteers selected for this camp.</p>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="closeDisablePasswordDialog()" [text]="true"></p-button>
+      <p-button 
+        label="Disable Password" 
+        (onClick)="disablePassword()" 
+        [disabled]="!isPasswordDisabled"
+        severity="success">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>

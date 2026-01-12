@@ -1,0 +1,120 @@
+<div class="visits-container">
+  <div class="header-section">
+    <h1>Patient Visits & Consultations</h1>
+    <p-button label="New Visit" icon="pi pi-plus" (onClick)="openNewVisit()" styleClass="p-button-raised"></p-button>
+  </div>
+
+  <p-card class="search-card">
+    <div class="search-field">
+      <label for="search">Search Visits</label>
+      <input pInputText id="search" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Search by patient or doctor" class="w-full">
+    </div>
+  </p-card>
+
+  <p-card>
+      <p-table [value]="filteredVisits" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>ID</th>
+            <th>Patient</th>
+            <th>Visit Type</th>
+            <th>Doctor</th>
+            <th>Camp</th>
+            <th>Visit Date</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-visit>
+          <tr>
+            <td>{{ visit.visit_id }}</td>
+            <td>{{ visit.patient_name }}</td>
+            <td>
+              <p-tag [value]="visit.visit_type" [severity]="getVisitTypeSeverity(visit.visit_type)"></p-tag>
+            </td>
+            <td>{{ visit.doctor_name }}</td>
+            <td>{{ visit.camp_name || 'Emergency' }}</td>
+            <td>{{ visit.visit_date | date:'shortDate' }}</td>
+            <td>
+              <p-button icon="pi pi-plus-circle" (onClick)="openConsultation(visit)" [text]="true" severity="info" [rounded]="true" title="Add/View Consultation"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+  </p-card>
+
+  <!-- Visit Dialog -->
+  <p-dialog [(visible)]="displayVisitDialog" [header]="isEditMode ? 'Edit Visit' : 'New Visit'" [modal]="true" [style]="{width: '600px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="patient">Patient *</label>
+        <p-dropdown id="patient" [(ngModel)]="visitForm.patient_id" [options]="patients" optionLabel="label" optionValue="patient_id" placeholder="Select Patient" [required]="true" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width">
+        <label for="visitType">Visit Type *</label>
+        <p-dropdown id="visitType" [(ngModel)]="visitForm.visit_type" [options]="visitTypes" optionLabel="label" optionValue="value" placeholder="Select Visit Type" [required]="true" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width" *ngIf="visitForm.visit_type === 'CAMP'">
+        <label for="campRun">Camp Run</label>
+        <p-dropdown id="campRun" [(ngModel)]="visitForm.camp_run_id" [options]="campRuns" optionLabel="camp_name" optionValue="camp_run_id" placeholder="Select Camp Run" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width">
+        <label for="doctor">Doctor *</label>
+        <p-dropdown id="doctor" [(ngModel)]="visitForm.doctor_id" [options]="doctors" optionLabel="user_name" optionValue="user_id" placeholder="Select Doctor" [required]="true" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width">
+        <label for="visitDate">Visit Date *</label>
+        <p-calendar id="visitDate" [(ngModel)]="visitForm.visit_date" [required]="true" dateFormat="yy-mm-dd" [showIcon]="true" class="w-full"></p-calendar>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="displayVisitDialog = false" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="saveVisit()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Consultation Dialog -->
+  <p-dialog [(visible)]="displayConsultationDialog" header="Consultation" [modal]="true" [style]="{width: '700px'}">
+    <div class="form-container">
+      <div class="vitals-row">
+        <div class="field">
+          <label for="height">Height (cm)</label>
+          <input pInputText id="height" type="number" [(ngModel)]="consultationForm.height" class="w-full">
+        </div>
+
+        <div class="field">
+          <label for="weight">Weight (kg)</label>
+          <input pInputText id="weight" [(ngModel)]="consultationForm.weight" class="w-full">
+        </div>
+
+        <div class="field">
+          <label for="bp">BP (Systolic)</label>
+          <input pInputText id="bp" [(ngModel)]="consultationForm.systolic_bp" class="w-full">
+        </div>
+
+        <div class="field">
+          <label for="pulse">Pulse Rate</label>
+          <input pInputText id="pulse" [(ngModel)]="consultationForm.pulse_rate" class="w-full">
+        </div>
+
+        <div class="field">
+          <label for="bmi">BMI</label>
+          <input pInputText id="bmi" [(ngModel)]="consultationForm.bmi" class="w-full">
+        </div>
+      </div>
+
+      <div class="field full-width">
+        <label for="diagnosis">Diagnosis Notes</label>
+        <textarea pInputTextarea id="diagnosis" [(ngModel)]="consultationForm.diagnosis_notes" rows="5" class="w-full"></textarea>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="displayConsultationDialog = false" [text]="true"></p-button>
+      <p-button label="Save Consultation" (onClick)="saveConsultation()"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+

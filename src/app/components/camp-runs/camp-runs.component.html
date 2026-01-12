@@ -1,0 +1,78 @@
+<div class="camp-runs-container">
+  <div class="header-section">
+    <h1>Camp Runs</h1>
+    <p-button label="New Camp Run" icon="pi pi-plus" (onClick)="openNew()" styleClass="p-button-raised"></p-button>
+  </div>
+
+  <p-card class="search-card">
+    <div class="search-field">
+      <label for="search">Search Camp Runs</label>
+      <input pInputText id="search" [(ngModel)]="searchText" (input)="onSearch()" placeholder="Search by camp or location" class="w-full">
+    </div>
+  </p-card>
+
+  <p-card>
+      <p-table [value]="filteredCampRuns" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>ID</th>
+            <th>Camp</th>
+            <th>Location</th>
+            <th>Planned Date</th>
+            <th>Actual Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-run>
+          <tr>
+            <td>{{ run.camp_run_id }}</td>
+            <td>{{ run.camp_name }}</td>
+            <td>{{ run.location_name }}</td>
+            <td>{{ run.planned_date | date:'shortDate' }}</td>
+            <td>{{ run.actual_date ? (run.actual_date | date:'shortDate') : 'N/A' }}</td>
+            <td>
+              <p-tag [value]="run.status" [severity]="getStatusSeverity(run.status)"></p-tag>
+            </td>
+            <td>
+              <p-button icon="pi pi-pencil" (onClick)="editRun(run)" [text]="true" severity="info" [rounded]="true" title="Edit"></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+  </p-card>
+
+  <p-dialog [(visible)]="displayDialog" [header]="isEditMode ? 'Edit Camp Run' : 'New Camp Run'" [modal]="true" [style]="{width: '600px'}">
+    <div class="form-container">
+      <div class="field full-width">
+        <label for="camp">Camp *</label>
+        <p-dropdown id="camp" [(ngModel)]="campRunForm.camp_id" [options]="camps" optionLabel="camp_name" optionValue="camp_id" placeholder="Select Camp" [required]="true" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width">
+        <label for="location">Location *</label>
+        <p-dropdown id="location" [(ngModel)]="campRunForm.location_version_id" [options]="locations" optionLabel="location_name" optionValue="location_version_id" placeholder="Select Location" [required]="true" class="w-full"></p-dropdown>
+      </div>
+
+      <div class="field full-width">
+        <label for="plannedDate">Planned Date *</label>
+        <p-calendar id="plannedDate" [(ngModel)]="campRunForm.planned_date" [required]="true" dateFormat="yy-mm-dd" [showIcon]="true" class="w-full"></p-calendar>
+      </div>
+
+      <div class="field full-width">
+        <label for="actualDate">Actual Date</label>
+        <p-calendar id="actualDate" [(ngModel)]="campRunForm.actual_date" dateFormat="yy-mm-dd" [showIcon]="true" class="w-full"></p-calendar>
+      </div>
+
+      <div class="field full-width">
+        <label for="status">Status *</label>
+        <p-dropdown id="status" [(ngModel)]="campRunForm.status" [options]="statuses" placeholder="Select Status" [required]="true" class="w-full" [showClear]="false"></p-dropdown>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <p-button label="Cancel" (onClick)="displayDialog = false" [text]="true"></p-button>
+      <p-button label="Save" (onClick)="saveRun()"></p-button>
+    </ng-template>
+  </p-dialog>
+</div>
+

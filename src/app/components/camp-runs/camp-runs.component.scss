@@ -1,0 +1,86 @@
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+
+  h1 {
+    color: var(--medical-text);
+    margin: 0;
+    font-weight: 600;
+  }
+
+  button {
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+}
+
+.search-card {
+  margin-bottom: 20px;
+
+  mat-card-content {
+    padding: 20px !important;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      font-weight: 500;
+      color: var(--p-text-color);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    &.full-width {
+      width: 100%;
+    }
+
+    // PrimeNG Input styling
+    ::ng-deep {
+      .p-inputtext,
+      .p-dropdown,
+      .p-calendar {
+        width: 100%;
+      }
+
+      .p-dropdown,
+      .p-calendar {
+        .p-inputtext {
+          width: 100%;
+        }
+      }
+
+      // Required field indicator
+      input[required] + label::after,
+      .p-dropdown[required] + label::after,
+      .p-calendar[required] + label::after {
+        content: ' *';
+        color: var(--p-danger-color);
+      }
+    }
+  }
+}
+
