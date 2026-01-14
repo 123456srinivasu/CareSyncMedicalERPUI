@@ -72,8 +72,6 @@ export class PatientsComponent implements OnInit {
   onSubmit(form: any) {
     if (form.valid) {
       const payload = {
-        tblPatientId: 0,
-        mrNumber: '', // Backend usually generates this or expects empty string on creation
         firstName: this.newPatient.firstName,
         lastName: this.newPatient.lastName,
         fatherName: this.newPatient.fatherName,
@@ -86,26 +84,13 @@ export class PatientsComponent implements OnInit {
         patientImage: [], // Empty for now as per instructions
         patientAddressesList: [
           {
-            addressId: 0,
             addressLine: this.newPatient.address.street,
             city: this.newPatient.address.city,
-            stateId: 0,
-            districtId: 0,
-            mandalId: 0,
-            postalCode: '', // Not in form
+            stateId: this.newPatient.address.state,
+            districtId: this.newPatient.address.district,
+            mandalId: this.newPatient.address.mandal,
+            postalCode: this.newPatient.address.postalCode,
             villageName: this.newPatient.address.city, // Assuming village is city for now
-            state: {
-              id: 0,
-              name: this.newPatient.address.state,
-            },
-            district: {
-              id: 0,
-              name: this.newPatient.address.district,
-            },
-            mandal: {
-              id: 0,
-              name: this.newPatient.address.mandal,
-            },
           },
         ],
       };
@@ -290,7 +275,7 @@ export class PatientsComponent implements OnInit {
     const selectedStateName = this.newPatient.address.state;
     if (!selectedStateName) return;
 
-    const selectedState = this.states.find((s) => s.stateName === selectedStateName);
+    const selectedState = this.states.find((s) => s.stateLookupId == selectedStateName);
     if (selectedState) {
       // Assuming 'stateId' based on 'stateName' pattern, falling back to 'id'
       const stateId = selectedState.stateLookupId || selectedState.id;
@@ -318,7 +303,7 @@ export class PatientsComponent implements OnInit {
     const selectedDistrictName = this.newPatient.address.district;
     if (!selectedDistrictName) return;
 
-    const selectedDistrict = this.districts.find((d) => d.districtName === selectedDistrictName);
+    const selectedDistrict = this.districts.find((d) => d.districtLookupId == selectedDistrictName);
     if (selectedDistrict) {
       // Assuming 'districtId' based on pattern, falling back to 'id'
       const districtId = selectedDistrict.districtLookupId || selectedDistrict.id;
