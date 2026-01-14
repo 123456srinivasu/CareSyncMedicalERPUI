@@ -1,11 +1,7 @@
 <div class="patients-container">
   <div class="header-section">
     <h1>Patients Management</h1>
-    <p-button
-      label="Add New Patient"
-      icon="pi pi-user-plus"
-      styleClass="p-button-raised"
-    ></p-button>
+    <p-button label="Add New Patient" icon="pi pi-user-plus" styleClass="p-button-raised"></p-button>
   </div>
 
   <div class="container-box">
@@ -13,25 +9,13 @@
 
     <div class="patient-type">
       <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          id="NewPatient"
-          name="patientType"
-          [(ngModel)]="isExistingPatient"
-          [value]="false"
-        />
+        <input class="form-check-input" type="radio" id="NewPatient" name="patientType" [(ngModel)]="isExistingPatient"
+          [value]="false" />
         <label class="form-check-label">New Patient</label>
       </div>
       <div class="form-check">
-        <input
-          class="form-check-input"
-          type="radio"
-          name="patientType"
-          id="ExistingPatient"
-          [(ngModel)]="isExistingPatient"
-          [value]="true"
-        />
+        <input class="form-check-input" type="radio" name="patientType" id="ExistingPatient"
+          [(ngModel)]="isExistingPatient" [value]="true" />
         <label class="form-check-label">Existing Patient</label>
       </div>
     </div>
@@ -41,37 +25,18 @@
       <div class="row g-3" *ngIf="!isExistingPatient">
         <div class="col-md-2">
           <label class="form-label">Surname <span class="text-danger">*</span></label>
-          <input
-            class="form-control"
-            [(ngModel)]="newPatient.lastName"
-            name="lastName"
-            placeholder="Surname"
-            required
-            #lastName="ngModel"
-            [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)"
-          />
-          <div
-            *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
-            class="invalid-feedback"
-          >
+          <input class="form-control" [(ngModel)]="newPatient.lastName" name="lastName" placeholder="Surname" required
+            #lastName="ngModel" [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)" />
+          <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="invalid-feedback">
             Surname is required.
           </div>
         </div>
         <div class="col-md-4">
           <label class="form-label">First Name <span class="text-danger">*</span></label>
-          <input
-            class="form-control"
-            [(ngModel)]="newPatient.firstName"
-            name="firstName"
-            placeholder="First Name"
-            required
-            #firstName="ngModel"
-            [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)"
-          />
-          <div
-            *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
-            class="invalid-feedback"
-          >
+          <input class="form-control" [(ngModel)]="newPatient.firstName" name="firstName" placeholder="First Name"
+            required #firstName="ngModel"
+            [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)" />
+          <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="invalid-feedback">
             First Name is required.
           </div>
         </div>
@@ -81,15 +46,8 @@
         </div>
         <div class="col-md-2">
           <label class="form-label">Age <span class="text-danger">*</span></label>
-          <input
-            type="number"
-            class="form-control"
-            [(ngModel)]="newPatient.age"
-            name="age"
-            required
-            #age="ngModel"
-            [class.is-invalid]="age.invalid && (age.dirty || age.touched)"
-          />
+          <input type="number" class="form-control" [(ngModel)]="newPatient.age" name="age" required #age="ngModel"
+            [class.is-invalid]="age.invalid && (age.dirty || age.touched)" />
           <div *ngIf="age.invalid && (age.dirty || age.touched)" class="invalid-feedback">
             Age is required.
           </div>
@@ -100,33 +58,18 @@
         </div>
         <div class="col-md-4">
           <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
-          <input
-            class="form-control"
-            [(ngModel)]="newPatient.phoneNumber"
-            name="phoneNumber"
-            required
-            pattern="^[0-9]{10}$"
-            #phoneNumber="ngModel"
-            [class.is-invalid]="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
-          />
-          <div
-            *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
-            class="invalid-feedback"
-          >
+          <input class="form-control" [(ngModel)]="newPatient.phoneNumber" name="phoneNumber" required
+            pattern="^[0-9]{10}$" #phoneNumber="ngModel"
+            [class.is-invalid]="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" />
+          <div *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)" class="invalid-feedback">
             <div *ngIf="phoneNumber.errors?.['required']">Mobile Number is required.</div>
             <div *ngIf="phoneNumber.errors?.['pattern']">Must be 10 digits.</div>
           </div>
         </div>
         <div class="col-md-2">
           <label class="form-label">Gender <span class="text-danger">*</span></label>
-          <select
-            class="form-select"
-            [(ngModel)]="newPatient.gender"
-            name="gender"
-            required
-            #gender="ngModel"
-            [class.is-invalid]="gender.invalid && (gender.dirty || gender.touched)"
-          >
+          <select class="form-select" [(ngModel)]="newPatient.gender" name="gender" required #gender="ngModel"
+            [class.is-invalid]="gender.invalid && (gender.dirty || gender.touched)">
             <option value="">Select</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
@@ -168,38 +111,42 @@
 
         <div class="col-md-4">
           <label class="form-label">State <span class="text-danger">*</span></label>
-          <input
-            class="form-control"
-            [(ngModel)]="newPatient.address.state"
-            name="state"
-            required
-            #state="ngModel"
-            [class.is-invalid]="state.invalid && (state.dirty || state.touched)"
-          />
+
+          <select class="form-select" [ngModel]="newPatient.address.state"
+            (ngModelChange)="newPatient.address.state = $event; onStateChange()" name="state" #state="ngModel"
+            [class.is-invalid]="state.invalid && (state.dirty || state.touched)">
+            <option value="">Select state</option>
+            <option *ngFor="let state of states" [value]="state.stateName">
+              {{ state.stateName }}
+            </option>
+          </select>
           <div *ngIf="state.invalid && (state.dirty || state.touched)" class="invalid-feedback">
             State is required.
           </div>
         </div>
         <div class="col-md-2">
           <label class="form-label">District <span class="text-danger">*</span></label>
-          <input
-            class="form-control"
-            [(ngModel)]="newPatient.address.district"
-            name="district"
-            required
-            #district="ngModel"
-            [class.is-invalid]="district.invalid && (district.dirty || district.touched)"
-          />
-          <div
-            *ngIf="district.invalid && (district.dirty || district.touched)"
-            class="invalid-feedback"
-          >
+          <select class="form-select" [ngModel]="newPatient.address.district"
+            (ngModelChange)="newPatient.address.district=$event; onDistrictChange()" name="district" #district="ngModel"
+            [class.is-invalid]="district.invalid && (district.dirty || district.touched)">
+            <option value="">Select district</option>
+            <option *ngFor="let district of districts" [value]="district.districtName">
+              {{ district.districtName }}
+            </option>
+          </select>
+          <div *ngIf="district.invalid && (district.dirty || district.touched)" class="invalid-feedback">
             District is required.
           </div>
         </div>
         <div class="col-md-2">
           <label class="form-label">Mandal </label>
-          <input class="form-control" [(ngModel)]="newPatient.address.mandal" name="mandal" />
+          <select class="form-select" [(ngModel)]="newPatient.address.mandal" name="mandal" #mandal="ngModel"
+            [class.is-invalid]="mandal.invalid && (mandal.dirty || mandal.touched)">
+            <option value="">Select mandal</option>
+            <option *ngFor="let mandal of mandals" [value]="mandal.mandalName">
+              {{ mandal.mandalName }}
+            </option>
+          </select>
         </div>
         <!-- Removed duplicate Mandal select -->
         <div class="col-md-2">
@@ -216,11 +163,7 @@
         <button type="submit" class="btn btn-primary px-4" [disabled]="newUserForm.invalid">
           Save Patient
         </button>
-        <button
-          type="button"
-          class="btn btn-outline-secondary px-4"
-          (click)="onClearForm(); newUserForm.resetForm()"
-        >
+        <button type="button" class="btn btn-outline-secondary px-4" (click)="onClearForm(); newUserForm.resetForm()">
           Clear
         </button>
       </div>
@@ -230,37 +173,18 @@
   <p-card class="hidden" *ngIf="filteredPatients.length > 0 && isExistingPatient">
     <div class="table-header d-flex align-items-center justify-content-between mb-3">
       <div class="d-flex align-items-center gap-2 w-100">
-        <input
-          pInputText
-          type="text"
-          class="p-inputtext-sm flex-grow-1"
-          placeholder="MR Number / First / Surname / Old EnrollmentId"
-          [(ngModel)]="searchText"
-          (keyup.enter)="onSearch()"
-          style="margin-bottom: 0"
-        />
+        <input pInputText type="text" class="p-inputtext-sm flex-grow-1"
+          placeholder="MR Number / First / Surname / Old EnrollmentId" [(ngModel)]="searchText"
+          (keyup.enter)="onSearch()" style="margin-bottom: 0" />
 
-        <button
-          pButton
-          type="button"
-          label="Search"
-          icon="pi pi-search"
-          class="p-button-sm p-button-primary"
-          (click)="onSearch()"
-        ></button>
+        <button pButton type="button" label="Search" icon="pi pi-search" class="p-button-sm p-button-primary"
+          (click)="onSearch()"></button>
       </div>
     </div>
     <div style="display: none">
-      <p-table
-        [value]="filteredPatients"
-        [paginator]="true"
-        [rows]="10"
-        [showCurrentPageReport]="true"
+      <p-table [value]="filteredPatients" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        styleClass="p-datatable-striped hidden"
-        [tableStyle]="{ display: 'none' }"
-      >
+        [rowsPerPageOptions]="[10, 25, 50]" styleClass="p-datatable-striped hidden" [tableStyle]="{ display: 'none' }">
         <ng-template pTemplate="header">
           <tr>
             <th>Patient ID</th>
@@ -285,20 +209,8 @@
               {{ patient.dob ? (patient.dob | date: 'shortDate') : 'N/A' }}
             </td>
             <td>
-              <p-button
-                icon="pi pi-eye"
-                [text]="true"
-                severity="info"
-                [rounded]="true"
-                title="View Details"
-              ></p-button>
-              <p-button
-                icon="pi pi-pencil"
-                [text]="true"
-                severity="secondary"
-                [rounded]="true"
-                title="Edit"
-              ></p-button>
+              <p-button icon="pi pi-eye" [text]="true" severity="info" [rounded]="true" title="View Details"></p-button>
+              <p-button icon="pi pi-pencil" [text]="true" severity="secondary" [rounded]="true" title="Edit"></p-button>
             </td>
           </tr>
         </ng-template>
@@ -339,9 +251,7 @@
       <div class="soap-title">S – Subjective</div>
       <div class="row">
         <div class="col-md-6 mb-2">
-          <label class="form-label fw-medium"
-            >Chief Complaint <span class="text-danger">*</span></label
-          >
+          <label class="form-label fw-medium">Chief Complaint <span class="text-danger">*</span></label>
           <input type="text" name="chief_complaint" class="form-control" />
         </div>
         <div class="col-md-6 mb-2">
@@ -351,9 +261,7 @@
       </div>
       <div class="row">
         <div class="col-md-6 mb-2">
-          <label class="form-label fw-medium"
-            >Past Medical History <span class="text-danger">*</span></label
-          >
+          <label class="form-label fw-medium">Past Medical History <span class="text-danger">*</span></label>
           <textarea name="pmh" rows="2" class="form-control"></textarea>
         </div>
         <div class="col-md-6 mb-2">
@@ -363,9 +271,7 @@
       </div>
       <div class="row">
         <div class="soap-body">
-          <textarea
-            placeholder="Chief complaint, duration, pain, symptoms, patient history, allergies..."
-          ></textarea>
+          <textarea placeholder="Chief complaint, duration, pain, symptoms, patient history, allergies..."></textarea>
         </div>
       </div>
 
@@ -442,9 +348,7 @@
             <input type="text" placeholder="Weight (kg)" />
             <input type="text" placeholder="Height (cm)" />
           </div>
-          <textarea
-            placeholder="Clinical findings, lab results, physical examination notes..."
-          ></textarea>
+          <textarea placeholder="Clinical findings, lab results, physical examination notes..."></textarea>
         </div>
       </div>
 
@@ -452,9 +356,7 @@
       <div class="soap-section">
         <div class="soap-title">A – Assessment</div>
         <div class="soap-body">
-          <textarea
-            placeholder="Diagnosis, differential diagnosis, clinical impression..."
-          ></textarea>
+          <textarea placeholder="Diagnosis, differential diagnosis, clinical impression..."></textarea>
         </div>
         <div class="row">
           <div class="col-md-6 mb-2">
@@ -489,9 +391,7 @@
             </div>
           </div>
           <div class="row">
-            <textarea
-              placeholder="Treatment  test plan, prescribed medicines, dosage, advice, follow-up..."
-            ></textarea>
+            <textarea placeholder="Treatment  test plan, prescribed medicines, dosage, advice, follow-up..."></textarea>
           </div>
         </div>
 

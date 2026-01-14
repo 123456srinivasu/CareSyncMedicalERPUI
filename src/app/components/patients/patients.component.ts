@@ -9,6 +9,7 @@ import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { PatientService } from '../../core/services/patient.service';
 import { MessageService } from 'primeng/api';
+import { LocationsService } from '../../core/services/locations.service';
 
 interface Patient {
   patient_id?: number;
@@ -55,6 +56,7 @@ export class PatientsComponent implements OnInit {
   isExistingPatient: boolean = false;
   globalFilter: string = '';
   private readonly patientService = inject(PatientService);
+  private readonly locationsService = inject(LocationsService);
   // private readonly messageService = inject(MessageService); // Unused for now
 
   // Table-specific data for the new PrimeNG table
@@ -63,6 +65,11 @@ export class PatientsComponent implements OnInit {
 
   defaultAvatar: string =
     'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect fill="%23e6e6e6" width="100%" height="100%"/><circle cx="32" cy="22" r="14" fill="%23999"/><rect x="10" y="40" width="44" height="12" rx="6" fill="%23999"/></svg>';
+
+  // Location Data
+  states: any[] = [];
+  districts: any[] = [];
+  mandals: any[] = [];
 
   ngOnInit() {
     this.patients = [
@@ -183,6 +190,70 @@ export class PatientsComponent implements OnInit {
       },
     ];
     this.loadPatients();
+    this.loadStates();
+  }
+
+  loadStates() {
+    this.locationsService.getStates().subscribe({
+      next: (data) => {
+        this.states = data;
+      },
+      error: (err) => {
+        console.error('Error loading states', err);
+      },
+    });
+  }
+
+  onStateChange() {
+    this.districts = [];
+    const selectedStateName = this.newPatient.address.state;
+    if (!selectedStateName) return;
+
+    const selectedState = this.states.find((s) => s.stateName === selectedStateName);
+    if (selectedState) {
+      // Assuming 'stateId' based on 'stateName' pattern, falling back to 'id'
+      const stateId = selectedState.stateLookupId || selectedState.id;
+      if (stateId) {
+        this.loadDistricts(stateId);
+      }
+    }
+  }
+
+  loadDistricts(stateId: number) {
+    this.locationsService.getDistrictsByState(stateId).subscribe({
+      next: (data) => {
+        this.districts = data;
+      },
+      error: (err) => {
+        console.error('Error loading districts', err);
+      },
+    });
+  }
+
+  onDistrictChange() {
+    this.mandals = [];
+    const selectedDistrictName = this.newPatient.address.district;
+    if (!selectedDistrictName) return;
+
+    const selectedDistrict = this.districts.find((d) => d.districtName === selectedDistrictName);
+    if (selectedDistrict) {
+      // Assuming 'districtId' based on pattern, falling back to 'id'
+      const districtId = selectedDistrict.districtLookupId || selectedDistrict.id;
+      if (districtId) {
+        this.loadMandals(districtId);
+      }
+    }
+  }
+
+  loadMandals(districtId: number) {
+    this.locationsService.getMandalsByDistrict(districtId).subscribe({
+      next: (data) => {
+        this.mandals = data;
+      },
+      error: (err) => {
+        console.error('Error loading mandals', err);
+      },
+    });
   }
 
   loadPatients() {
@@ -300,18 +371,18 @@ export class PatientsComponent implements OnInit {
             villageName: this.newPatient.address.city, // Assuming village is city for now
             state: {
               id: 0,
-              name: this.newPatient.address.state
+              name: this.newPatient.address.state,
             },
             district: {
               id: 0,
-              name: this.newPatient.address.district
+              name: this.newPatient.address.district,
             },
             mandal: {
               id: 0,
-              name: this.newPatient.address.mandal
-            }
-          }
-        ]
+              name: this.newPatient.address.mandal,
+            },
+          },
+        ],
       };
 
       this.loading = true;

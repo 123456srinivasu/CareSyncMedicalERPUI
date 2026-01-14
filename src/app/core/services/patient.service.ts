@@ -97,16 +97,41 @@ export class PatientService {
         );
     }
 
-    /**
-     * Search patients by name
-     * @param name - Name to search
-     * @returns Observable of Patient array
-     */
     searchPatients(name: string): Observable<any[]> {
         const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH(name));
         return this.http.get<any[]>(url).pipe(
             catchError(error => {
                 console.error(`Error searching patients with name ${name}:`, error);
+                throw error;
+            })
+        );
+    }
+
+    getStates(): Observable<any[]> {
+        const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
+        return this.http.get<any[]>(url).pipe(
+            catchError(error => {
+                console.error('Error fetching states:', error);
+                throw error;
+            })
+        );
+    }
+
+    getDistricts(stateId: number): Observable<any[]> {
+        const url = getApiUrl(API_CONFIG.ENDPOINTS.DISTRICTS.BY_STATE(stateId));
+        return this.http.get<any[]>(url).pipe(
+            catchError(error => {
+                console.error(`Error fetching districts for state ${stateId}:`, error);
+                throw error;
+            })
+        );
+    }
+
+    getMandals(districtId: number): Observable<any[]> {
+        const url = getApiUrl(API_CONFIG.ENDPOINTS.MANDALS.BY_DISTRICT(districtId));
+        return this.http.get<any[]>(url).pipe(
+            catchError(error => {
+                console.error(`Error fetching mandals for district ${districtId}:`, error);
                 throw error;
             })
         );

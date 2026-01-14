@@ -55,6 +55,18 @@ export const API_CONFIG = {
       DELETE: (id: number) => `/patient-registration/${id}`,
       SEARCH: (name: string) => `/patient-registration/search?name=${name}`,
     },
+    STATES: {
+      BASE: '/states',
+      BY_ID: (id: number) => `/states/${id}`,
+    },
+    DISTRICTS: {
+      BASE: '/districts',
+      BY_STATE: (stateId: number) => `/districts/by-state/${stateId}`,
+    },
+    MANDALS: {
+      BASE: '/mandals',
+      BY_DISTRICT: (districtId: number) => `/mandals/by-district/${districtId}`,
+    },
   },
 } as const;
 
