@@ -167,7 +167,7 @@
         </div>
         <div class="section-title">Patient Address</div>
 
-        <div class="col-md-4">
+        <div class="col-md-2">
           <label class="form-label">State <span class="text-danger">*</span></label>
 
           <select
@@ -238,6 +238,15 @@
         <div class="col-md-2">
           <label class="form-label">Street </label>
           <input class="form-control" [(ngModel)]="newPatient.address.street" name="street" />
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">postalCode </label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.address.postalCode"
+            name="postalCode"
+          />
         </div>
       </div>
 

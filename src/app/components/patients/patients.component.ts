@@ -89,7 +89,7 @@ export class PatientsComponent implements OnInit {
             stateId: this.newPatient.address.state,
             districtId: this.newPatient.address.district,
             mandalId: this.newPatient.address.mandal,
-            postalCode: '', // Not in form
+            postalCode: this.newPatient.address.postalCode,
             villageName: this.newPatient.address.city, // Assuming village is city for now
           },
         ],
