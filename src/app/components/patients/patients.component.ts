@@ -11,6 +11,8 @@ import { PatientService } from '../../core/services/patient.service';
 import { MessageService } from 'primeng/api';
 import { LocationsService } from '../../core/services/locations.service';
 
+import { ToastModule } from 'primeng/toast';
+
 interface Patient {
   patient_id?: number;
   first_name: string;
@@ -45,9 +47,11 @@ interface PatientRecord {
     TagModule,
     CardModule,
     DialogModule,
+    ToastModule,
   ],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.scss',
+  providers: [MessageService],
 })
 export class PatientsComponent implements OnInit {
   patients: Patient[] = [];
@@ -57,11 +61,88 @@ export class PatientsComponent implements OnInit {
   globalFilter: string = '';
   private readonly patientService = inject(PatientService);
   private readonly locationsService = inject(LocationsService);
-  // private readonly messageService = inject(MessageService); // Unused for now
+  private readonly messageService = inject(MessageService);
 
   // Table-specific data for the new PrimeNG table
   patientTableData: PatientRecord[] = [];
   loading: boolean = false;
+
+  // ... (rest of the file until onSubmit)
+
+  onSubmit(form: any) {
+    if (form.valid) {
+      const payload = {
+        tblPatientId: 0,
+        mrNumber: '', // Backend usually generates this or expects empty string on creation
+        firstName: this.newPatient.firstName,
+        lastName: this.newPatient.lastName,
+        fatherName: this.newPatient.fatherName,
+        age: this.newPatient.age,
+        weight: this.newPatient.weight,
+        mobileNumber: this.newPatient.phoneNumber,
+        gender: this.newPatient.gender,
+        bloodGroup: this.newPatient.bloodGroup,
+        maritalStatus: this.newPatient.maritalStatus,
+        patientImage: [], // Empty for now as per instructions
+        patientAddressesList: [
+          {
+            addressId: 0,
+            addressLine: this.newPatient.address.street,
+            city: this.newPatient.address.city,
+            stateId: 0,
+            districtId: 0,
+            mandalId: 0,
+            postalCode: '', // Not in form
+            villageName: this.newPatient.address.city, // Assuming village is city for now
+            state: {
+              id: 0,
+              name: this.newPatient.address.state,
+            },
+            district: {
+              id: 0,
+              name: this.newPatient.address.district,
+            },
+            mandal: {
+              id: 0,
+              name: this.newPatient.address.mandal,
+            },
+          },
+        ],
+      };
+
+      this.loading = true;
+      this.patientService.createPatient(payload).subscribe({
+        next: (res) => {
+          console.log('Patient created', res);
+          this.loading = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Patient created successfully!',
+          });
+          this.onClearForm();
+          // Reset the form state (pristine/untouched)
+          form.resetForm();
+          this.isExistingPatient = true;
+          this.loadPatients();
+        },
+        error: (err) => {
+          console.error('Error creating patient', err);
+          this.loading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to create patient. Please try again.',
+          });
+        },
+      });
+    } else {
+      // Mark all controls as touched to trigger validation messages
+      Object.keys(form.controls).forEach((key) => {
+        form.controls[key].markAsTouched();
+      });
+    }
+  }
 
   defaultAvatar: string =
     'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect fill="%23e6e6e6" width="100%" height="100%"/><circle cx="32" cy="22" r="14" fill="%23999"/><rect x="10" y="40" width="44" height="12" rx="6" fill="%23999"/></svg>';
@@ -214,6 +295,8 @@ export class PatientsComponent implements OnInit {
       // Assuming 'stateId' based on 'stateName' pattern, falling back to 'id'
       const stateId = selectedState.stateLookupId || selectedState.id;
       if (stateId) {
+        this.newPatient.address.district = '';
+        this.newPatient.address.mandal = '';
         this.loadDistricts(stateId);
       }
     }
@@ -240,6 +323,7 @@ export class PatientsComponent implements OnInit {
       // Assuming 'districtId' based on pattern, falling back to 'id'
       const districtId = selectedDistrict.districtLookupId || selectedDistrict.id;
       if (districtId) {
+        this.newPatient.address.mandal = '';
         this.loadMandals(districtId);
       }
     }
@@ -344,7 +428,7 @@ export class PatientsComponent implements OnInit {
     // SOAP notes related fields can be added here if needed for creation
   };
 
-  onSubmit(form: any) {
+  /* onSubmit(form: any) {
     if (form.valid) {
       const payload = {
         tblPatientId: 0,
@@ -409,7 +493,7 @@ export class PatientsComponent implements OnInit {
         form.controls[key].markAsTouched();
       });
     }
-  }
+  } */
 
   onClearForm() {
     this.newPatient = {
