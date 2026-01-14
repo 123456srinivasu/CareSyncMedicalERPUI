@@ -204,6 +204,81 @@ export class CampsService {
         throw error;
       })
     );
-  } 
+  }
+
+  /**
+   * Get all states
+   * @returns Observable of State array
+   */
+  getStates(): Observable<any[]> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
+    return this.http.get<any[]>(url).pipe(
+      catchError(error => {
+        console.error('Error fetching states:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get districts by state ID
+   * @param stateLookupId - State lookup ID
+   * @returns Observable of District array
+   */
+  getDistrictsByState(stateLookupId: number): Observable<any[]> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.DISTRICTS.BY_STATE(stateLookupId));
+    return this.http.get<any[]>(url).pipe(
+      catchError(error => {
+        console.error('Error fetching districts:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get mandals by district ID
+   * @param districtLookupId - District lookup ID
+   * @returns Observable of Mandal array
+   */
+  getMandalsByDistrict(districtLookupId: number): Observable<any[]> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.MANDALS.BY_DISTRICT(districtLookupId));
+    return this.http.get<any[]>(url).pipe(
+      catchError(error => {
+        console.error('Error fetching mandals:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get users by role
+   * @param role - User role (e.g., 'doctor')
+   * @param params - Optional query parameters (e.g., { isActive: true })
+   * @returns Observable of User array
+   */
+  getUsersByRole(role: string, params?: any): Observable<any[]> {
+    let url = getApiUrl(API_CONFIG.ENDPOINTS.USERS.BY_ROLE(role));
+    
+    // Add query parameters if provided
+    if (params) {
+      const queryParams = new URLSearchParams();
+      Object.keys(params).forEach(key => {
+        if (params[key] !== null && params[key] !== undefined) {
+          queryParams.append(key, params[key].toString());
+        }
+      });
+      const queryString = queryParams.toString();
+      if (queryString) {
+        url += `?${queryString}`;
+      }
+    }
+    
+    return this.http.get<any[]>(url).pipe(
+      catchError(error => {
+        console.error(`Error fetching users by role ${role}:`, error);
+        throw error;
+      })
+    );
+  }
 }
 

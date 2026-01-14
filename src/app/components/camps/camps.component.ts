@@ -161,23 +161,23 @@ export class CampsComponent implements OnInit {
   selectedCampForDisablePassword: Camp | null = null;
   
   doctors: any[] = [
-    { label: 'Dr. John Smith', value: 1, selected: false },
-    { label: 'Dr. Jane Doe', value: 2, selected: false},
-    { label: 'Dr. Robert Johnson', value: 3, selected: false},
-    { label: 'Dr. Emily Williams', value: 4, selected: false},
-    { label: 'Dr. Michael Brown', value: 5, selected: false},
-    { label: 'Dr. Sarah Davis', value: 6, selected: false}
+    // { label: 'Dr. John Smith', value: 1, selected: false },
+    // { label: 'Dr. Jane Doe', value: 2, selected: false},
+    // { label: 'Dr. Robert Johnson', value: 3, selected: false},
+    // { label: 'Dr. Emily Williams', value: 4, selected: false},
+    // { label: 'Dr. Michael Brown', value: 5, selected: false},
+    // { label: 'Dr. Sarah Davis', value: 6, selected: false}
   ];
   
   volunteers: any[] = [
-    { label: 'Alice Johnson', value: 1, selected: false },
-    { label: 'Bob Wilson', value: 2, selected: false },
-    { label: 'Carol Martinez', value: 3, selected: false },
-    { label: 'David Anderson', value: 4, selected: false },
-    { label: 'Emma Taylor', value: 5, selected: false },
-    { label: 'Frank Thomas', value: 6, selected: false },
-    { label: 'Grace Lee', value: 7, selected: false },
-    { label: 'Henry White', value: 8, selected: false }
+    // { label: 'Alice Johnson', value: 1, selected: false },
+    // { label: 'Bob Wilson', value: 2, selected: false },
+    // { label: 'Carol Martinez', value: 3, selected: false },
+    // { label: 'David Anderson', value: 4, selected: false },
+    // { label: 'Emma Taylor', value: 5, selected: false },
+    // { label: 'Frank Thomas', value: 6, selected: false },
+    // { label: 'Grace Lee', value: 7, selected: false },
+    // { label: 'Henry White', value: 8, selected: false }
   ];
   searchText: string = '';
   searchState: string = '';
@@ -187,112 +187,15 @@ export class CampsComponent implements OnInit {
   searchStatus: string = 'All';
   isEditMode: boolean = false;
 
-  states: any[] = [
-    { label: 'Andhra Pradesh', value: '1', 
-      districts:[      
-      { label: "Alluri Sitharama Raju", value: '1', mandles:[] },
-      { label: "Anakapalli", value: '2', mandles:[] },
-      { label: "Ananthapuramu", value: '3', mandles:[] },
-      { label: "Annamayya", value: '4', mandles:[] },
-      { label: "Bapatla", value: '5', mandles:[] },
-      { label: "Chittoor", value: '6', mandles:[] },
-      { label: "Dr. B.R. Ambedkar Konaseema", value: '7', mandles:[] },
-      { label: "East Godavari", value: '8', mandles:[] },
-      { label: "Eluru", value: '9', mandles:[] },
-      { label: "Guntur", value: '10', mandles:[] },
-      { label: "Kakinada", value: '11', mandles:[] },
-      { label: "Krishna", value: '12', mandles:[
-        { label: "A Konduru", value: '1' },
-        { label: "Chandarlapadu", value: '2' },
-        { label: "G Konduru", value: '3' },
-        { label: "Gampalagudem", value: '4' },
-        { label: "Jaggaiahpet (Jaggayyapeta)", value: '5' },
-        { label: "Kanchikacherla", value: '6' },
-        { label: "Mylavaram", value: '7' },
-        { label: "Nandigama", value: '8' },
-        { label: "Penuganchiprolu", value: '9' },
-        { label: "Reddigudem", value: '10' },
-        { label: "Tiruvuru", value: '11' },
-        { label: "Vatsavai", value: '12' },
-        { label: "Veerullapadu", value: '13' },
-        { label: "Vijayawada Central", value: '14' },
-        { label: "Vijayawada East", value: '15' },
-        { label: "Vijayawada North", value: '16' },
-        { label: "Vijayawada Rural", value: '17' },
-        { label: "Vijayawada West", value: '18' },
-        { label: "Vissannapeta", value: '19' }
-      ] },
-      { label: "Kurnool", value: '13', mandles:[] },
-      { label: "Markapuram", value: '14', mandles:[] },
-      { label: "Nandyal", value: '15', mandles:[] },
-      { label: "NTR", value: '16', mandles:[] },
-      { label: "Palnadu", value: '17', mandles:[] },
-      { label: "Parvathipuram Manyam", value: '18', mandles:[] },
-      { label: "Polavaram", value: '19', mandles:[] },
-      { label: "Prakasam", value: '20', mandles:[] },
-      { label: "Sri Potti Sriramulu Nellore", value: '21', mandles:[] },
-      { label: "Sri Sathya Sai", value: '22', mandles:[] },
-      { label: "Srikakulam", value: '23', mandles:[] },
-      { label: "Tirupati", value: '24', mandles:[] },
-      { label: "Visakhapatnam", value: '25', mandles:[] },
-      { label: "Vizianagaram", value: '26', mandles:[] },
-      { label: "West Godavari", value: '27', mandles:[] },
-      { label: "YSR Kadapa", value: '28', mandles:[] }      
-  ]}
-];
-
-
-  districts: any[] = [
-    { label: "Alluri Sitharama Raju", value: '1', mandles:[] },
-    { label: "Anakapalli", value: '2', mandles:[] },
-    { label: "Ananthapuramu", value: '3', mandles:[] },
-    { label: "Annamayya", value: '4', mandles:[] },
-    { label: "Bapatla", value: '5', mandles:[] },
-    { label: "Chittoor", value: '6', mandles:[] },
-    { label: "Dr. B.R. Ambedkar Konaseema", value: '7', mandles:[] },
-    { label: "East Godavari", value: '8', mandles:[] },
-    { label: "Eluru", value: '9', mandles:[] },
-    { label: "Guntur", value: '10', mandles:[] },
-    { label: "Kakinada", value: '11', mandles:[] },
-    { label: "Krishna", value: '12', mandles:[]},
-    { label: "Kurnool", value: '13', mandles:[] },
-    { label: "Markapuram", value: '14', mandles:[] },
-    { label: "Nandyal", value: '15', mandles:[] },
-    { label: "NTR", value: '16', mandles:[] },
-    { label: "Palnadu", value: '17', mandles:[] },
-    { label: "Parvathipuram Manyam", value: '18', mandles:[] },
-    { label: "Polavaram", value: '19', mandles:[] },
-    { label: "Prakasam", value: '20', mandles:[] },
-    { label: "Sri Potti Sriramulu Nellore", value: '21', mandles:[] },
-    { label: "Sri Sathya Sai", value: '22', mandles:[] },
-    { label: "Srikakulam", value: '23', mandles:[] },
-    { label: "Tirupati", value: '24', mandles:[] },
-    { label: "Visakhapatnam", value: '25', mandles:[] },
-    { label: "Vizianagaram", value: '26', mandles:[] },
-    { label: "West Godavari", value: '27', mandles:[] },
-    { label: "YSR Kadapa", value: '28', mandles:[] } 
-  ];
-  mandles: any[] = [
-    { label: "A Konduru", value: '1' },
-    { label: "Chandarlapadu", value: '2' },
-    { label: "G Konduru", value: '3' },
-    { label: "Gampalagudem", value: '4' },
-    { label: "Jaggaiahpet (Jaggayyapeta)", value: '5' },
-    { label: "Kanchikacherla", value: '6' },
-    { label: "Mylavaram", value: '7' },
-    { label: "Nandigama", value: '8' },
-    { label: "Penuganchiprolu", value: '9' },
-    { label: "Reddigudem", value: '10' },
-    { label: "Tiruvuru", value: '11' },
-    { label: "Vatsavai", value: '12' },
-    { label: "Veerullapadu", value: '13' },
-    { label: "Vijayawada Central", value: '14' },
-    { label: "Vijayawada East", value: '15' },
-    { label: "Vijayawada North", value: '16' },
-    { label: "Vijayawada Rural", value: '17' },
-    { label: "Vijayawada West", value: '18' },
-    { label: "Vissannapeta", value: '19' }
-  ];
+  states: any[] = [];
+  districts: any[] = [];
+  mandles: any[] = [];
+  states_for_shipping: any[] = [];
+  districts_for_shipping: any[] = [];
+  mandles_for_shipping: any[] = [];
+  states_for_location: any[] = [];
+  districts_for_location: any[] = [];
+  mandles_for_location: any[] = [];
   months: string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   weeks: any[] = [
     { label: 'Week 1', value: '1' },
@@ -371,11 +274,161 @@ export class CampsComponent implements OnInit {
   ngOnInit() {
     // Sample data
     this.loadCamps();
+    this.loadStates();
+    this.loadDoctors();
+    this.loadVolunteers();
+  }
+
+  loadStates() {
+    this.campsService.getStates().subscribe({
+      next: (apiStates: any[]) => {
+        // Map API response to dropdown format
+        // API returns: { stateLookupId, stateName, stateCd }
+        // Dropdown needs: { label, value, districts }
+        this.states = apiStates.map((apiState: any) => {
+          // Find existing state data to preserve districts and mandals
+          const existingState = this.states.find(s => s.value === apiState.stateLookupId.toString());
+          
+          return {
+            label: apiState.stateName,
+            value: apiState.stateLookupId.toString(),
+            districts: existingState?.districts || []
+          };
+        });
+        this.states_for_shipping = this.states;
+        this.states_for_location = this.states;
+      },
+      error: (error: any) => {
+        console.error('Error loading states:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load states. Using default data.'
+        });
+        // Keep existing hardcoded states as fallback
+      }
+    });
+  }
+
+  loadDoctors() {
+    this.campsService.getUsersByRole('doctor', { isActive: true }).subscribe({
+      next: (response: any) => {
+        // Handle different response formats
+        let doctorsData: any[] = [];
+        
+        if (Array.isArray(response)) {
+          doctorsData = response;
+        } else if (response && Array.isArray((response as any).data)) {
+          doctorsData = (response as any).data;
+        } else if (response && typeof response === 'object') {
+          doctorsData = [response];
+        } else {
+          doctorsData = [];
+        }
+        
+        // Map API response to dropdown format
+        // API returns: { userId, firstName, lastName, userName, email, phone, ... }
+        // Dropdown needs: { label, value, selected }
+        this.doctors = doctorsData.map((apiDoctor: any) => {
+          // Build label from firstName and lastName, fallback to userName
+          const fullName = apiDoctor.firstName && apiDoctor.lastName
+            ? `${apiDoctor.firstName} ${apiDoctor.lastName}`
+            : apiDoctor.userName || `Doctor ${apiDoctor.userId}`;
+          
+          return {
+            label: fullName,
+            value: apiDoctor.userId,
+            selected: false
+          };
+        });
+        
+        console.log('doctors---->', this.doctors, doctorsData);
+      },
+      error: (error: any) => {
+        console.error('Error loading doctors:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load doctors. Please try again later.'
+        });
+        this.doctors = [];
+      }
+    });
+  }
+
+  loadVolunteers() {
+    this.campsService.getUsersByRole('volunteer', { isActive: true }).subscribe({
+      next: (response: any) => {
+        // Handle different response formats
+        let volunteersData: any[] = [];
+        
+        if (Array.isArray(response)) {
+          volunteersData = response;
+        } else if (response && Array.isArray((response as any).data)) {
+          volunteersData = (response as any).data;
+        } else if (response && typeof response === 'object') {
+          volunteersData = [response];
+        } else {
+          volunteersData = [];
+        }
+        
+        // Map API response to dropdown format
+        // API returns: { userId, firstName, lastName, userName, email, phone, ... }
+        // Dropdown needs: { label, value, selected }
+        this.volunteers = volunteersData.map((apiVolunteer: any) => {
+          // Build label from firstName and lastName, fallback to userName
+          const fullName = apiVolunteer.firstName && apiVolunteer.lastName
+            ? `${apiVolunteer.firstName} ${apiVolunteer.lastName}`
+            : apiVolunteer.userName || `Volunteer ${apiVolunteer.userId}`;
+          
+          return {
+            label: fullName,
+            value: apiVolunteer.userId,
+            selected: false
+          };
+        });
+        
+        console.log('volunteers---->', this.volunteers, volunteersData);
+      },
+      error: (error: any) => {
+        console.error('Error loading volunteers:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load volunteers. Please try again later.'
+        });
+        this.volunteers = [];
+      }
+    });
   }
 
   loadCamps() {
     this.campsService.getAllCamps().subscribe({
-      next: (apiCamps: any[]) => {
+      next: (response: any) => {
+        // Handle different response formats
+        let apiCamps: any[] = [];
+        
+        // Check if response is an array
+        if (Array.isArray(response.content)) {
+          apiCamps = response.content;
+        } 
+        // Check if response is an object with a data property
+        else if (response.content && Array.isArray(response.content)) {
+          apiCamps = response.content;
+        }
+        // Check if response is an object with a camps property
+        else if (response.content && Array.isArray(response.content)) {
+          apiCamps = response.content;  
+        }
+        // If it's a single object, wrap it in an array
+        else if (response.content && typeof response.content === 'object') {
+          apiCamps = [response];
+        }
+        // If response is null or undefined, use empty array
+        else {
+          apiCamps = [];
+        }
+        
         // Map API response to component Camp interface
         this.camps = apiCamps.map((apiCamp: any) => {
           // Extract location address from campAddresses if available
@@ -423,6 +476,7 @@ export class CampsComponent implements OnInit {
             october: schedule?.october || false,
             november: schedule?.november || false,
             december: schedule?.december || false,
+            plannedDate: schedule?.plannedDate || '',
             medicines: []
           } as Camp;
         });
@@ -481,6 +535,277 @@ export class CampsComponent implements OnInit {
     });
   }
 
+  onStateChange() {
+    // Clear district and mandal selections when state changes
+    this.searchDistrict = '';
+    this.searchMandal = '';
+    this.districts = [];
+    this.mandles = [];   
+    
+    // Load districts for the selected state
+    if (this.searchState) {
+      const stateLookupId = parseInt(this.searchState, 10);
+      if (!isNaN(stateLookupId)) {
+        this.loadDistricts(stateLookupId);
+      }
+    }
+    
+    // Apply filters
+    this.onSearch();
+  }
+
+  loadDistricts(stateLookupId: number) {
+    this.campsService.getDistrictsByState(stateLookupId).subscribe({
+      next: (response: any) => {
+        // Handle different response formats
+        let apiDistricts: any[] = [];
+        
+        // Check if response is an array
+        if (Array.isArray(response)) {
+          apiDistricts = response;
+        } 
+        // Check if response is an object with a data property
+        else if (response && Array.isArray(response.data)) {
+          apiDistricts = response.data;
+        }
+        // Check if response is an object with a districts property
+        else if (response && Array.isArray(response.districts)) {
+          apiDistricts = response.districts;
+        }
+        // If it's a single object, wrap it in an array
+        else if (response && typeof response === 'object') {
+          apiDistricts = [response];
+        }
+        // If response is null or undefined, use empty array
+        else {
+          apiDistricts = [];
+        }
+        
+        // Map API response to dropdown format
+        // Assuming API returns: { districtLookupId, districtName, ... }
+        this.districts = apiDistricts.map((apiDistrict: any) => {
+          // Find existing district data to preserve mandals
+          const existingDistrict = this.districts.find(d => d.value === apiDistrict.districtLookupId?.toString());
+          
+          return {
+            label: apiDistrict.districtName || apiDistrict.districtLookupName || 'Unknown',
+            value: apiDistrict.districtLookupId?.toString() || apiDistrict.districtId?.toString() || '',
+            mandles: existingDistrict?.mandles || []
+          };
+        });
+        console.log('districts---->',this.districts, apiDistricts, response);
+      },
+      error: (error: any) => {
+        console.error('Error loading districts:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load districts. Please try again.'
+        });
+        this.districts = [];
+      }
+    });
+  }
+
+  onDistrictChange() {
+    // Clear mandal selection when district changes
+    this.searchMandal = '';
+    this.mandles = [];
+    
+    // Load mandals for the selected district
+    if (this.searchDistrict) {
+      const districtLookupId = parseInt(this.searchDistrict, 10);
+      if (!isNaN(districtLookupId)) {
+        this.loadMandals(districtLookupId);
+      }
+    }
+    
+    // Apply filters
+    this.onSearch();
+  }
+
+  loadMandals(districtLookupId: number) {
+    this.campsService.getMandalsByDistrict(districtLookupId).subscribe({
+      next: (response: any) => {
+        // Handle different response formats
+        let apiMandals: any[] = [];
+        
+        // Check if response is an array
+        if (Array.isArray(response)) {
+          apiMandals = response;
+        } 
+        // Check if response is an object with a data property
+        else if (response && Array.isArray(response.data)) {
+          apiMandals = response.data;
+        }
+        // Check if response is an object with a mandals property
+        else if (response && Array.isArray(response.mandals)) {
+          apiMandals = response.mandals;
+        }
+        // If it's a single object, wrap it in an array
+        else if (response && typeof response === 'object') {
+          apiMandals = [response];
+        }
+        // If response is null or undefined, use empty array
+        else {
+          apiMandals = [];
+        }
+        
+        // Map API response to dropdown format
+        // API returns: { mandalLookupId, mandalName, ... }
+        this.mandles = apiMandals.map((apiMandal: any) => {
+          return {
+            label: apiMandal.mandalName || apiMandal.mandalLookupName || 'Unknown',
+            value: apiMandal.mandalLookupId?.toString() || apiMandal.mandalId?.toString() || ''
+          };
+        });
+        console.log('mandals---->', this.mandles, apiMandals);
+      },
+      error: (error: any) => {
+        console.error('Error loading mandals:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load mandals. Please try again.'
+        });
+        this.mandles = [];
+      }
+    });
+  }
+  onShippingStateChange(event: any) {
+    // Clear district and mandal selections when state changes
+    this.campForm.shipping_district = '';
+    this.campForm.shipping_mandle = '';
+    this.districts_for_shipping = [];
+    this.mandles_for_shipping = [];
+    
+    // Load districts for the selected state
+    const stateLookupId = event.value ? parseInt(event.value, 10) : null;
+    if (stateLookupId && !isNaN(stateLookupId)) {
+      this.campsService.getDistrictsByState(stateLookupId).subscribe({
+        next: (response: any) => {
+          // Handle different response formats
+          let apiDistricts: any[] = [];
+          
+          if (Array.isArray(response)) {
+            apiDistricts = response;
+          } else if (response && Array.isArray(response.data)) {
+            apiDistricts = response.data;
+          } else if (response && Array.isArray(response.districts)) {
+            apiDistricts = response.districts;
+          } else if (response && typeof response === 'object') {
+            apiDistricts = [response];
+          } else {
+            apiDistricts = [];
+          }
+          
+          // Map API response to dropdown format
+          this.districts_for_shipping = apiDistricts.map((apiDistrict: any) => {
+            return {
+              label: apiDistrict.districtName || apiDistrict.districtLookupName || 'Unknown',
+              value: apiDistrict.districtLookupId?.toString() || apiDistrict.districtId?.toString() || ''
+            };
+          });
+          console.log('districts_for_shipping---->', this.districts_for_shipping, apiDistricts);
+        },
+        error: (error: any) => {
+          console.error('Error loading districts for shipping:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load districts. Please try again.'
+          });
+          this.districts_for_shipping = [];
+        }
+      });
+    }
+  }
+  onShippingDistrictChange(event: any) {    
+    this.mandles_for_shipping = [];
+    this.campForm.shipping_mandle = '';
+    this.campsService.getMandalsByDistrict(event.value).subscribe({
+      next: (response: any) => {
+        this.mandles_for_shipping = response.map((mandle: any) => {
+          return {
+            label: mandle.mandalName,
+            value: mandle.mandalLookupId.toString()
+          };
+        });
+      }
+    });
+  }
+  onLocationStateChange(event: any) {
+    this.districts_for_location = [];
+    this.mandles_for_location = [];
+    this.campForm.location_district = '';
+    this.campForm.location_mandle = '';
+    if (event.value && !isNaN(event.value)) {
+      this.campsService.getDistrictsByState(event.value).subscribe({
+        next: (response: any) => {
+          this.districts_for_location = response.map((district: any) => {
+            return {
+              label: district.districtName,
+              value: district.districtLookupId.toString()
+            };
+          })
+        },
+        error: (error: any) => {
+          console.error('Error loading districts for location:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load districts. Please try again.'
+          });
+          this.districts_for_location = [];
+        }
+      });
+    }
+  }
+  onLocationDistrictChange(event: any) {
+    this.campForm.location_mandle = '';
+    this.mandles_for_location = [];
+    if (event.value && !isNaN(event.value)) {
+      this.campsService.getMandalsByDistrict(event.value).subscribe({
+        next: (response: any) => {
+          this.mandles_for_location = response.map((mandle: any) => {
+            return {
+              label: mandle.mandalName,
+              value: mandle.mandalLookupId.toString()
+            };
+          });
+        },
+        error: (error: any) => {
+          console.error('Error loading mandals for location:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to load mandals. Please try again.'
+          });
+          this.mandles_for_location = [];
+        }
+      });
+    }
+  }   
+  
+  // onShippingMandleChange(event: any) {
+  //   this.mandles_for_shipping = this.mandles.filter(mandle => mandle.value === event.value);
+  // }
+  // onLocationMandleChange(event: any) {
+  //   this.mandles_for_location = this.mandles.filter(mandle => mandle.value === event.value);
+  // }
+  onFormDistrictChange(event: any) {
+    // Clear mandal selection when district changes
+    this.campForm.shipping_mandle = '';
+    this.campForm.location_mandle = '';
+    this.mandles = [];
+    
+    // Load mandals for the selected district
+    const districtLookupId = event.value ? parseInt(event.value, 10) : null;
+    if (districtLookupId && !isNaN(districtLookupId)) {
+      this.loadMandals(districtLookupId);
+    }
+  }
+
   onFilterChange() {
     this.onSearch();
   }
@@ -492,6 +817,8 @@ export class CampsComponent implements OnInit {
     this.searchMandal = '';
     this.searchCity = '';
     this.searchStatus = 'All';
+    this.districts = [];
+    this.mandles = [];
     this.onSearch();
   }
 
@@ -610,7 +937,9 @@ export class CampsComponent implements OnInit {
           "october": this.campForm.october,
           "november": this.campForm.november,
           "december": this.campForm.december
-        }
+        },
+        "isActive": this.campForm.is_active,
+        
       }
       console.log('payload---->',payload, this.selectedDoctors, this.selectedVolunteers); 
        

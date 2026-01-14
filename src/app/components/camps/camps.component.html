@@ -10,12 +10,12 @@
       <div class="filter-row">
         <div class="field filter-field">
           <label for="searchState">State</label>
-          <p-dropdown id="searchState" [(ngModel)]="searchState" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+          <p-dropdown id="searchState" [(ngModel)]="searchState" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" (onChange)="onStateChange()" [showClear]="true" class="w-full"></p-dropdown>
         </div>
 
         <div class="field filter-field">
           <label for="searchDistrict">District</label>
-          <p-dropdown id="searchDistrict" [(ngModel)]="searchDistrict" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" (onChange)="onFilterChange()" [showClear]="true" class="w-full"></p-dropdown>
+          <p-dropdown id="searchDistrict" [(ngModel)]="searchDistrict" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" (onChange)="onDistrictChange()" [showClear]="true" class="w-full"></p-dropdown>
         </div>
 
         <div class="field filter-field">
@@ -70,7 +70,7 @@
             <td>
               <p-tag [value]="camp.is_active ? 'Active' : 'Inactive'" [severity]="getSeverity(camp.is_active)"></p-tag>
             </td>
-            <td>{{ camp.planned_date ? (camp.planned_date | date:'shortDate') : 'N/A' }}</td>
+            <td>{{ camp.plannedDate ? (camp.plannedDate | date:'shortDate') : 'N/A' }}</td>
             <td>
               <p-button 
                 *ngIf="camp.ready_for_camp" 
@@ -365,15 +365,15 @@
           <legend>Shipping Address</legend>
           <div class="field full-width">
             <label for="shippingState">State</label>
-            <p-dropdown id="shippingState" [(ngModel)]="campForm.shipping_state" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" class="w-full"></p-dropdown>
+            <p-dropdown id="shippingState" [(ngModel)]="campForm.shipping_state" [options]="states_for_shipping" optionLabel="label" optionValue="value" placeholder="Select State" (onChange)="onShippingStateChange($event)" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
             <label for="shippingDistrict">District</label>
-            <p-dropdown id="shippingDistrict" [(ngModel)]="campForm.shipping_district" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" class="w-full"></p-dropdown>
+            <p-dropdown id="shippingDistrict" [(ngModel)]="campForm.shipping_district" [options]="districts_for_shipping" optionLabel="label" optionValue="value" placeholder="Select District" (onChange)="onShippingDistrictChange($event)" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
             <label for="shippingMandle">Mandal</label>
-            <p-dropdown id="shippingMandle" [(ngModel)]="campForm.shipping_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
+            <p-dropdown id="shippingMandle" [(ngModel)]="campForm.shipping_mandle" [options]="mandles_for_shipping" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
             <label for="shippingCity">City</label>
@@ -393,15 +393,15 @@
           <legend>Location Address</legend>
           <div class="field full-width">
             <label for="locationState">State</label>
-            <p-dropdown id="locationState" [(ngModel)]="campForm.location_state" [options]="states" optionLabel="label" optionValue="value" placeholder="Select State" class="w-full"></p-dropdown>
+            <p-dropdown id="locationState" [(ngModel)]="campForm.location_state" [options]="states_for_location" optionLabel="label" optionValue="value" placeholder="Select State" (onChange)="onLocationStateChange($event)" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
             <label for="locationDistrict">District</label>
-            <p-dropdown id="locationDistrict" [(ngModel)]="campForm.location_district" [options]="districts" optionLabel="label" optionValue="value" placeholder="Select District" class="w-full"></p-dropdown>
+            <p-dropdown id="locationDistrict" [(ngModel)]="campForm.location_district" [options]="districts_for_location" optionLabel="label" optionValue="value" placeholder="Select District" (onChange)="onLocationDistrictChange($event)" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
             <label for="locationMandle">Mandal</label>
-            <p-dropdown id="locationMandle" [(ngModel)]="campForm.location_mandle" [options]="mandles" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
+            <p-dropdown id="locationMandle" [(ngModel)]="campForm.location_mandle" [options]="mandles_for_location" optionLabel="label" optionValue="value" placeholder="Select Mandal" class="w-full"></p-dropdown>
           </div>
           <div class="field full-width">
             <label for="locationCity">City</label>
@@ -516,7 +516,7 @@
     </div>
     <ng-template pTemplate="footer">
       <p-button label="Cancel" (onClick)="cancelDateDialog()" [text]="true"></p-button>
-      <p-button label="Save" (onClick)="saveCamp()" severity="success"></p-button>
+      <p-button label="Save" [disabled]="!campForm.camp_name || selectedDoctors.length === 0 || selectedVolunteers.length === 0" (onClick)="saveCamp()" severity="success"></p-button>
     </ng-template>
   </p-dialog>
 
