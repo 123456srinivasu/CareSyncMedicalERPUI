@@ -180,7 +180,7 @@
             [class.is-invalid]="state.invalid && (state.dirty || state.touched)"
           >
             <option value="">Select state</option>
-            <option *ngFor="let state of states" [value]="state.stateName">
+            <option *ngFor="let state of states" [value]="state.stateLookupId">
               {{ state.stateName }}
             </option>
           </select>
@@ -200,7 +200,7 @@
             [class.is-invalid]="district.invalid && (district.dirty || district.touched)"
           >
             <option value="">Select district</option>
-            <option *ngFor="let district of districts" [value]="district.districtName">
+            <option *ngFor="let district of districts" [value]="district.districtLookupId">
               {{ district.districtName }}
             </option>
           </select>
@@ -222,7 +222,7 @@
             [class.is-invalid]="mandal.invalid && (mandal.dirty || mandal.touched)"
           >
             <option value="">Select mandal</option>
-            <option *ngFor="let mandal of mandals" [value]="mandal.mandalName">
+            <option *ngFor="let mandal of mandals" [value]="mandal.mandalLookupId">
               {{ mandal.mandalName }}
             </option>
           </select>
