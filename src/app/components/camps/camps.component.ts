@@ -107,7 +107,7 @@ interface Camp {
 export class CampsComponent implements OnInit {
   private readonly campsService = inject(CampsService);
   private readonly messageService = inject(MessageService);
-  
+  user: any = {userName: 'admin'};
   camps: Camp[] = [];
   filteredCamps: Camp[] = [];
   selectedCamp: Camp | null = null;
@@ -270,6 +270,11 @@ export class CampsComponent implements OnInit {
  
   errorMessage: any = '';
   successMessage: string = '';
+  pageSize: number = 3;
+  pageNumber: number = 0;
+  totalRecords: number = 0;
+  pageSort: string = 'desc';
+  shortDate='MM/dd/yyyy';
 
   ngOnInit() {
     // Sample data
@@ -403,7 +408,12 @@ export class CampsComponent implements OnInit {
   }
 
   loadCamps() {
-    this.campsService.getAllCamps().subscribe({
+    this.campsService.getAllCamps({
+      status: 'All',
+      page: this.pageNumber,
+      size: this.pageSize,
+      sort: this.pageSort
+    }).subscribe({
       next: (response: any) => {
         // Handle different response formats
         let apiCamps: any[] = [];
@@ -431,6 +441,158 @@ export class CampsComponent implements OnInit {
         
         // Map API response to component Camp interface
         this.camps = apiCamps.map((apiCamp: any) => {
+          // Extract location address from campAddresses if available
+          const locationAddress = apiCamp.campAddresses?.find((addr: any) => addr.addressType === 'LOCATION') || apiCamp.campAddresses?.[0];
+          const shippingAddress = apiCamp.campAddresses?.find((addr: any) => addr.addressType === 'SHIPPING') || apiCamp.campAddresses?.[0];
+          
+          // Map schedule from schedules array if available
+          const schedule = apiCamp.schedules?.[0];
+          this.filteredCamps=this.camps;
+          this.totalRecords = response.totalElements;
+          
+          return {
+            camp_id: apiCamp.campId,
+            camp_code: apiCamp.campCode || '',
+            camp_name: apiCamp.campName || '',
+            is_active: apiCamp.isActive ?? true,
+            created_by: apiCamp.createdBy || '',
+            update_at: apiCamp.updateAt ? new Date(apiCamp.updateAt) : new Date(),
+            updated_by: apiCamp.updatedBy ? new Date(apiCamp.updatedBy) : undefined,
+            organizer_name_1: apiCamp.organizerName || '',
+            organizer_email_1: apiCamp.organizerEmail || '',
+            organizer_phone_no_1: apiCamp.organizerPhone || '',
+            location_address: locationAddress?.addressLine1 || '',
+            location_city: locationAddress?.city || '',
+            location_state: locationAddress?.stateId?.toString() || '',
+            location_district: locationAddress?.districtId?.toString() || '',
+            location_mandle: locationAddress?.mandalId?.toString() || '',
+            location_pin_code: locationAddress?.postalCode || '',
+            shipping_address: shippingAddress?.addressLine1 || '',
+            shipping_city: shippingAddress?.city || '',
+            shipping_state: shippingAddress?.stateId?.toString() || '',
+            shipping_district: shippingAddress?.districtId?.toString() || '',
+            shipping_mandle: shippingAddress?.mandalId?.toString() || '',
+            shipping_pin_code: shippingAddress?.postalCode || '',
+            medicine_responsibility: apiCamp.medicineResponsibility || '',
+            schedule_week: schedule?.weekOfMonth ? `Week ${schedule.weekOfMonth}` : '',
+            schedule_day: schedule?.dayOfWeek || '',
+            january: schedule?.january || false,
+            february: schedule?.february || false,
+            march: schedule?.march || false,
+            april: schedule?.april || false,
+            may: schedule?.may || false,
+            june: schedule?.june || false,
+            july: schedule?.july || false,
+            august: schedule?.august || false,
+            september: schedule?.september || false,
+            october: schedule?.october || false,
+            november: schedule?.november || false,
+            december: schedule?.december || false,
+            plannedDate: apiCamp?.plannedDate || '',
+            medicines: []
+          } as Camp;
+        });        
+        this.onSearch();
+      },
+      error: (error: any) => {
+        console.error('Error loading camps:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load camps. Please try again later.'
+        });
+        // Fallback to empty array on error
+        this.totalRecords = 0;
+        this.pageNumber = 0;
+        this.camps = [];
+        this.onSearch();
+      }
+    });
+  }
+  onPage(event: any) {
+    // PrimeNG onPage event provides:
+    // event.page: 0-based page number (0, 1, 2, ...)
+    // event.rows: Number of rows per page
+    // event.first: Index of the first record in the current page
+    
+    // Calculate page number from event
+    // Option 1: Use event.page directly (0-based)
+    //this.pageNumber = event.page;
+    this.pageNumber = Math.floor(event.first / event.rows);
+    
+    // Option 2: Calculate from event.first (if event.page is not available)
+    // this.pageNumber = Math.floor(event.first / event.rows);
+    
+    // Update page size if changed
+    this.pageSize = event.rows;
+    
+    // Trigger search with new page number
+    this.onSearch();
+  }
+
+  onSearch() {
+    // Build query parameters with filters
+    const queryParams: any = {
+      status: this.searchStatus === 'All' ? 'All' : this.searchStatus === 'Active' ? 'ACTIVE' : 'INACTIVE',
+      page: this.pageNumber,
+      size: this.pageSize,
+      sort: this.pageSort
+    };
+
+    // Add filter parameters if they have values
+    if (this.searchText) {
+      queryParams.campName = this.searchText;
+    }
+    if (this.searchState) {
+      queryParams.stateId = this.searchState;
+    }
+    if (this.searchDistrict) {
+      queryParams.districtId = this.searchDistrict;
+    }
+    if (this.searchMandal) {
+      queryParams.mandalId = this.searchMandal;
+    }
+    if (this.searchCity) {
+      queryParams.city = this.searchCity;
+    }
+
+    // Call API with filters
+    this.campsService.getAllCamps(queryParams).subscribe({
+      next: (response: any) => {
+        // Handle different response formats
+        let apiCamps: any[] = [];
+        
+        // Check if response is an array
+        if (Array.isArray(response.content)) {
+          apiCamps = response.content;
+        } 
+        // Check if response is an object with a content property
+        else if (response && Array.isArray(response.content)) {
+          apiCamps = response.content;
+        }
+        // Check if response is an object with a camps property
+        else if (response && Array.isArray(response.camps)) {
+          apiCamps = response.camps;
+        }
+        // Check if response is an object with a data property
+        else if (response && Array.isArray(response.data)) {
+          apiCamps = response.data;
+        }
+        // If it's a direct array
+        else if (Array.isArray(response)) {
+          apiCamps = response;
+        }
+        // If it's a single object, wrap it in an array
+        else if (response && typeof response === 'object') {
+          apiCamps = [response];
+        }
+        // If response is null or undefined, use empty array
+        else {
+          apiCamps = [];
+        }
+        
+        // Map API response to component Camp interface
+        this.filteredCamps = apiCamps.map((apiCamp: any) => {
           // Extract location address from campAddresses if available
           const locationAddress = apiCamp.campAddresses?.find((addr: any) => addr.addressType === 'LOCATION') || apiCamp.campAddresses?.[0];
           const shippingAddress = apiCamp.campAddresses?.find((addr: any) => addr.addressType === 'SHIPPING') || apiCamp.campAddresses?.[0];
@@ -476,62 +638,25 @@ export class CampsComponent implements OnInit {
             october: schedule?.october || false,
             november: schedule?.november || false,
             december: schedule?.december || false,
-            plannedDate: schedule?.plannedDate || '',
-            medicines: []
-          } as Camp;
+            plannedDate: apiCamp?.plannedDate || '',
+            description: apiCamp.description || ''
+          };
         });
-        this.filteredCamps=this.camps;
-        this.onSearch();
+        
+        // Set totalRecords from response (handle different response formats)
+        this.totalRecords = response.totalElements || response.total || response.totalRecords || apiCamps.length;
       },
       error: (error: any) => {
-        console.error('Error loading camps:', error);
+        console.error('Error loading filtered camps:', error);       
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'Failed to load camps. Please try again later.'
         });
-        // Fallback to empty array on error
-        this.camps = [];
-        this.onSearch();
+        this.filteredCamps = [];
+        this.totalRecords = 0;
+        this.pageNumber = 0;
       }
-    });
-  }
-
-  onSearch() {
-    this.filteredCamps = this.camps.filter(camp => {
-      // Search by camp name
-      const matchesName = !this.searchText || 
-        camp.camp_name.toLowerCase().includes(this.searchText.toLowerCase());
-
-      // Search by state (check both shipping and location state)
-      const matchesState = !this.searchState || 
-        camp.shipping_state === this.searchState || 
-        camp.location_state === this.searchState;
-
-      // Search by district (check both shipping and location district)
-      const matchesDistrict = !this.searchDistrict || 
-        camp.shipping_district === this.searchDistrict || 
-        camp.location_district === this.searchDistrict;
-
-      // Search by mandal (check both shipping and location mandal)
-      const matchesMandal = !this.searchMandal || 
-        camp.shipping_mandle === this.searchMandal || 
-        camp.location_mandle === this.searchMandal;
-
-      // Search by city (check both shipping and location city)
-      const matchesCity = !this.searchCity || 
-        (camp.shipping_city && camp.shipping_city.toLowerCase().includes(this.searchCity.toLowerCase())) ||
-        (camp.location_city && camp.location_city.toLowerCase().includes(this.searchCity.toLowerCase()));
-
-      // Search by status
-      let matchesStatus = true;
-      if (this.searchStatus === 'Active') {
-        matchesStatus = camp.is_active === true;
-      } else if (this.searchStatus === 'Inactive') {
-        matchesStatus = camp.is_active === false;
-      }
-
-      return matchesName && matchesState && matchesDistrict && matchesMandal && matchesCity && matchesStatus;
     });
   }
 
@@ -882,6 +1007,24 @@ export class CampsComponent implements OnInit {
     this.displayDialog = true;
   }
 
+  generateCampCode(campName: string): string {
+    // Get first 5 letters (uppercase) from camp name, remove spaces and special characters
+    const namePart = campName
+      .replace(/[^a-zA-Z0-9]/g, '') // Remove special characters and spaces
+      .substring(0, 4)
+      .toUpperCase()
+      .padEnd(4, 'X'); // Pad with 'X' if less than 5 characters
+    
+    // Get current date in ddmmyyyy format
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = String(today.getFullYear());
+    //const year = String(today.getFullYear()).slice(-2); // Get last 2 digits of year
+    const datePart = `${day}${month}${year}`;
+    return `${namePart}${datePart}`;
+  }
+
   saveCamp() {
     if (this.isEditMode && this.selectedCamp?.camp_id) {
       const index = this.camps.findIndex(c => c.camp_id === this.selectedCamp?.camp_id);
@@ -891,11 +1034,13 @@ export class CampsComponent implements OnInit {
     } else {
       const newId = Math.max(...this.camps.map(c => c.camp_id || 0)) + 1;     
       console.log('campForm---->',newId,this.campForm);
+      let doctorIds = this.selectedDoctors.map(doctor => doctor.value);
+      let volunteerIds = this.selectedVolunteers.map(volunteer => volunteer.value);
       const payload = {
         "campName": this.campForm.camp_name,
         "description": "",
         "establishmentYear": new Date().getFullYear(),
-        "campCode": this.campForm.camp_code,
+        "campCode": this.generateCampCode(this.campForm.camp_name),
         "organizerName": this.campForm.organizer_name_1,
         "organizerEmail": this.campForm.organizer_email_1,
         "organizerPhone": this.campForm.organizer_phone_no_1,
@@ -939,6 +1084,9 @@ export class CampsComponent implements OnInit {
           "december": this.campForm.december
         },
         "isActive": this.campForm.is_active,
+        "campUserIds": [...doctorIds, ...volunteerIds],        
+        "createdBy": this.user.userName,
+        "updatedBy": ""
         
       }
       console.log('payload---->',payload, this.selectedDoctors, this.selectedVolunteers); 

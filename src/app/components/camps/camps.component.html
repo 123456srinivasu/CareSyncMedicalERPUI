@@ -46,8 +46,8 @@
     </div>
   </p-card>
 
-    <p-card>{{camps.length}}
-      <p-table [value]="camps" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+    <p-card>
+      <p-table [value]="filteredCamps" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords" [lazy]="true" (onPage)="onPage($event)" styleClass="p-datatable-striped">
         <ng-template pTemplate="header">
           <tr>
             <th>Camp Name</th>
@@ -70,7 +70,8 @@
             <td>
               <p-tag [value]="camp.is_active ? 'Active' : 'Inactive'" [severity]="getSeverity(camp.is_active)"></p-tag>
             </td>
-            <td>{{ camp.plannedDate ? (camp.plannedDate | date:'shortDate') : 'N/A' }}</td>
+            <td>{{ camp.plannedDate ? (camp.plannedDate | date:'MM/dd/yyyy') : 'N/A' }}</td>
+            
             <td>
               <p-button 
                 *ngIf="camp.ready_for_camp" 

@@ -74,10 +74,26 @@ export class CampsService {
 
   /**
    * Get all camps
+   * @param params - Optional query parameters (e.g., { status: 'All', page: 0, size: 1, sort: 'string' })
    * @returns Observable of Camp array
    */
-  getAllCamps(): Observable<any[]> {
-    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.BASE);
+  getAllCamps(params?: any): Observable<any[]> {
+    let url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.BASE);
+    
+    // Add query parameters if provided
+    if (params) {
+      const queryParams = new URLSearchParams();
+      Object.keys(params).forEach(key => {
+        if (params[key] !== null && params[key] !== undefined) {
+          queryParams.append(key, params[key].toString());
+        }
+      });
+      const queryString = queryParams.toString();
+      if (queryString) {
+        url += `?${queryString}`;
+      }
+    }
+    
     // Use responseType: 'text' to handle responses with circular references
     return this.http.get(url, { responseType: 'text' }).pipe(
       map((responseText: string) => {
