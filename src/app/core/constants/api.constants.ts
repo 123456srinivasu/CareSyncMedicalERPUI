@@ -8,7 +8,7 @@ export const API_CONFIG = {
   BASE_URL: 'http://65.20.80.83:8081',
   //BASE_URL: 'http://localhost:8081',
   API_PREFIX: '/api',
-  
+
   // API Endpoints
   ENDPOINTS: {
     CAMPS: {
@@ -17,37 +17,45 @@ export const API_CONFIG = {
       BY_ID: (id: number) => `/camps/${id}`,
       CREATE: '/camps',
       UPDATE: (id: number) => `/camps/${id}`,
-      DELETE: (id: number) => `/camps/${id}`
+      DELETE: (id: number) => `/camps/${id}`,
     },
     STOCK: {
       BASE: '/stock',
       CURRENT: '/stock/current',
       ADD: '/stock',
-      BY_CAMP: (campId: number) => `/stock/camp/${campId}`
+      BY_CAMP: (campId: number) => `/stock/camp/${campId}`,
     },
     CAMP_MEDICINE_STOCK_SUMMARY: {
-      BY_CAMP: (campId: number) => `/camp-medicine-stock-summary/camp/${campId}`
+      BY_CAMP: (campId: number) => `/camp-medicine-stock-summary/camp/${campId}`,
     },
     CAMP_MEDICINE_STOCK: {
-      ADD: (campId: number) => `/medicine-stock/batch`
+      ADD: (campId: number) => `/medicine-stock/batch`,
     },
     MEDICINES: {
       BASE: '/medicines',
-      ACTIVE: '/medicines/active'
+      ACTIVE: '/medicines/active',
     },
     SUPPLIERS: {
       BASE: '/suppliers',
-      ACTIVE: '/suppliers/active'
+      ACTIVE: '/suppliers/active',
     },
     PHARMACY_SUPPLIER: {
       BASE: '/pharmacy-supplier',
-      ACTIVE: '/pharmacy-supplier/active'
+      ACTIVE: '/pharmacy-supplier/active',
     },
     INVOICE: {
       BASE: '/invoice',
-      CREATE: '/invoice'
-    }
-  }
+      CREATE: '/invoice',
+    },
+    PATIENTS: {
+      BASE: '/patient-registration',
+      CREATE: '/patient-registration',
+      BY_ID: (id: number) => `/patient-registration/${id}`,
+      UPDATE: (id: number) => `/patient-registration/${id}`,
+      DELETE: (id: number) => `/patient-registration/${id}`,
+      SEARCH: (name: string) => `/patient-registration/search?name=${name}`,
+    },
+  },
 } as const;
 
 /**
@@ -58,5 +66,3 @@ export const API_CONFIG = {
 export function getApiUrl(endpoint: string): string {
   return `${API_CONFIG.BASE_URL}${API_CONFIG.API_PREFIX}${endpoint}`;
 }
-
-

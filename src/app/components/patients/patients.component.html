@@ -36,214 +36,279 @@
       </div>
     </div>
 
-    <div class="row g-3 mb-4" *ngIf="isExistingPatient">
-      <div class="col-md-4">
-        <label class="form-label">Search Patient (ID / Mobile)</label>
-        <input class="form-control" placeholder="Enter Patient ID or Mobile" />
-      </div>
-      <div class="col-md-2 d-flex align-items-end">
-        <button class="btn btn-outline-primary w-100">Search</button>
-      </div>
-    </div>
-
     <div class="section-title" *ngIf="!isExistingPatient">Patient Details</div>
+    <form #newUserForm="ngForm" (ngSubmit)="onSubmit(newUserForm)" (ngReset)="onReset(newUserForm)">
+      <div class="row g-3" *ngIf="!isExistingPatient">
+        <div class="col-md-2">
+          <label class="form-label">Surname <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.lastName"
+            name="lastName"
+            placeholder="Surname"
+            required
+            #lastName="ngModel"
+            [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)"
+          />
+          <div
+            *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+            class="invalid-feedback"
+          >
+            Surname is required.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">First Name <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.firstName"
+            name="firstName"
+            placeholder="First Name"
+            required
+            #firstName="ngModel"
+            [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)"
+          />
+          <div
+            *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+            class="invalid-feedback"
+          >
+            First Name is required.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Father Name</label>
+          <input class="form-control" [(ngModel)]="newPatient.fatherName" name="fatherName" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Age <span class="text-danger">*</span></label>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="newPatient.age"
+            name="age"
+            required
+            #age="ngModel"
+            [class.is-invalid]="age.invalid && (age.dirty || age.touched)"
+          />
+          <div *ngIf="age.invalid && (age.dirty || age.touched)" class="invalid-feedback">
+            Age is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Weight</label>
+          <input type="number" class="form-control" [(ngModel)]="newPatient.weight" name="weight" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.phoneNumber"
+            name="phoneNumber"
+            required
+            pattern="^[0-9]{10}$"
+            #phoneNumber="ngModel"
+            [class.is-invalid]="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
+          />
+          <div
+            *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="phoneNumber.errors?.['required']">Mobile Number is required.</div>
+            <div *ngIf="phoneNumber.errors?.['pattern']">Must be 10 digits.</div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Gender <span class="text-danger">*</span></label>
+          <select
+            class="form-select"
+            [(ngModel)]="newPatient.gender"
+            name="gender"
+            required
+            #gender="ngModel"
+            [class.is-invalid]="gender.invalid && (gender.dirty || gender.touched)"
+          >
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <div *ngIf="gender.invalid && (gender.dirty || gender.touched)" class="invalid-feedback">
+            Gender is required.
+          </div>
+        </div>
 
-    <div class="row g-3" *ngIf="!isExistingPatient">
-      <div class="col-md-4">
-        <label class="form-label"> Name</label>
-        <input class="form-control" />
-      </div>
-      <div class="col-md-4">
-        <label class="form-label"> First Name or Initial </label>
-        <input class="form-control" />
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">Father Name</label>
-        <input class="form-control" />
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Age</label>
-        <input type="number" class="form-control" />
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">weight </label>
-        <input type="number" class="form-control" />
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">Mobile Number</label>
-        <input class="form-control" />
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Gender</label>
-        <select class="form-select">
-          <option>Select</option>
-          <option>Male</option>
-          <option>Female</option>
-          <option>Other</option>
-        </select>
-      </div>
+        <div class="col-md-2">
+          <label class="form-label">Blood Group</label>
+          <select class="form-select" [(ngModel)]="newPatient.bloodGroup" name="bloodGroup">
+            <option value="">Select</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Marital Status</label>
+          <select class="form-select" [(ngModel)]="newPatient.maritalStatus" name="maritalStatus">
+            <option value="">Select</option>
+            <option value="Married">Married</option>
+            <option value="Single">Single</option>
+          </select>
+        </div>
+        <div class="col-md-4" style="display: none">
+          <label class="form-label">Take Picture</label>
+          <div class="action-bar">
+            <button type="button" class="btn btn-primary px-4">Take Picture</button>
+            <button type="button" class="btn btn-outline-secondary px-4">Clear Picture</button>
+          </div>
+        </div>
+        <div class="section-title">Patient Address</div>
 
-      <div class="col-md-2">
-        <label class="form-label">Blood Group</label>
-        <select class="form-select">
-          <option>Select</option>
-          <option>A+</option>
-          <option>A-</option>
-          <option>B+</option>
-          <option>B-</option>
-          <option>O+</option>
-          <option>O-</option>
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Patient Type</label>
-        <select class="form-select">
-          <option>OPD</option>
-          <option>IPD</option>
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Marital Status</label>
-        <select class="form-select">
-          <option>Select</option>
-          <option>Marred</option>
-          <option>single</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <label class="form-label">Take Picture</label>
-        <div class="action-bar">
-          <button class="btn btn-primary px-4">Take Picture</button>
-          <button class="btn btn-outline-secondary px-4">Clear Picture</button>
+        <div class="col-md-4">
+          <label class="form-label">State <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.address.state"
+            name="state"
+            required
+            #state="ngModel"
+            [class.is-invalid]="state.invalid && (state.dirty || state.touched)"
+          />
+          <div *ngIf="state.invalid && (state.dirty || state.touched)" class="invalid-feedback">
+            State is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">District <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.address.district"
+            name="district"
+            required
+            #district="ngModel"
+            [class.is-invalid]="district.invalid && (district.dirty || district.touched)"
+          />
+          <div
+            *ngIf="district.invalid && (district.dirty || district.touched)"
+            class="invalid-feedback"
+          >
+            District is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Mandal </label>
+          <input class="form-control" [(ngModel)]="newPatient.address.mandal" name="mandal" />
+        </div>
+        <!-- Removed duplicate Mandal select -->
+        <div class="col-md-2">
+          <label class="form-label">City /Village </label>
+          <input class="form-control" [(ngModel)]="newPatient.address.city" name="city" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Street </label>
+          <input class="form-control" [(ngModel)]="newPatient.address.street" name="street" />
         </div>
       </div>
-      <div class="section-title">Patient Address</div>
 
-      <div class="col-md-4">
-        <label class="form-label">State*</label>
-        <input class="form-control" />
+      <div class="action-bar" *ngIf="!isExistingPatient">
+        <button type="submit" class="btn btn-primary px-4" [disabled]="newUserForm.invalid">
+          Save Patient
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-secondary px-4"
+          (click)="onClearForm(); newUserForm.resetForm()"
+        >
+          Clear
+        </button>
       </div>
-      <div class="col-md-2">
-        <label class="form-label">District* </label>
-        <input class="form-control" />
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Mandal </label>
-        <input class="form-control" />
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Mandal </label>
-        <select class="form-select">
-          <option>Select</option>
-          <option>A+</option>
-          <option>A-</option>
-          <option>B+</option>
-          <option>B-</option>
-          <option>O+</option>
-          <option>O-</option>
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">City /Village </label>
-        <select class="form-select">
-          <option>OPD</option>
-          <option>IPD</option>
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label class="form-label">Street </label>
-        <input class="form-control" />
-      </div>
-    </div>
-
-    <div class="action-bar" *ngIf="!isExistingPatient">
-      <button class="btn btn-primary px-4">Save Patient</button>
-      <button class="btn btn-outline-secondary px-4">Clear</button>
-    </div>
+    </form>
   </div>
-
-  <p-card class="search-card display-none">
-    <div class="search-field">
-      <label for="search">Search Patients</label>
-      <input
-        pInputText
-        id="search"
-        [(ngModel)]="searchText"
-        (input)="onSearch()"
-        placeholder="Search by name, ID, or email"
-        class="w-full"
-      />
-    </div>
-  </p-card>
 
   <p-card class="hidden" *ngIf="filteredPatients.length > 0 && isExistingPatient">
     <div class="table-header d-flex align-items-center justify-content-between mb-3">
-      <div class="d-flex align-items-center gap-2" style="width: 100%">
-        <i class="pi pi-search" style="font-size: 1.2rem; margin-right: 6px"></i>
+      <div class="d-flex align-items-center gap-2 w-100">
         <input
           pInputText
           type="text"
+          class="p-inputtext-sm flex-grow-1"
           placeholder="MR Number / First / Surname / Old EnrollmentId"
-          class="p-inputtext-sm"
+          [(ngModel)]="searchText"
+          (keyup.enter)="onSearch()"
+          style="margin-bottom: 0"
         />
+
+        <button
+          pButton
+          type="button"
+          label="Search"
+          icon="pi pi-search"
+          class="p-button-sm p-button-primary"
+          (click)="onSearch()"
+        ></button>
       </div>
     </div>
-    <p-table
-      [value]="filteredPatients"
-      [paginator]="true"
-      [rows]="10"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      styleClass="p-datatable-striped"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Patient ID</th>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>Phone</th>
-          <th>Address</th>
-          <th>Date of Birth</th>
-          <th>Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-patient>
-        <tr>
-          <td>{{ patient.patient_id }}</td>
-          <td>{{ patient.first_name }} {{ patient.last_name || '' }}</td>
-          <td>{{ calculateAge(patient.dob) }}</td>
-          <td>{{ patient.gender || 'N/A' }}</td>
-          <td>{{ patient.phone || 'N/A' }}</td>
-          <td>{{ patient.address || 'N/A' }}</td>
-          <td>
-            {{ patient.dob ? (patient.dob | date: 'shortDate') : 'N/A' }}
-          </td>
-          <td>
-            <p-button
-              icon="pi pi-eye"
-              [text]="true"
-              severity="info"
-              [rounded]="true"
-              title="View Details"
-            ></p-button>
-            <p-button
-              icon="pi pi-pencil"
-              [text]="true"
-              severity="secondary"
-              [rounded]="true"
-              title="Edit"
-            ></p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+    <div style="display: none">
+      <p-table
+        [value]="filteredPatients"
+        [paginator]="true"
+        [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        styleClass="p-datatable-striped hidden"
+        [tableStyle]="{ display: 'none' }"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Patient ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Date of Birth</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-patient>
+          <tr>
+            <td>{{ patient.patient_id }}</td>
+            <td>{{ patient.first_name }} {{ patient.last_name || '' }}</td>
+            <td>{{ calculateAge(patient.dob) }}</td>
+            <td>{{ patient.gender || 'N/A' }}</td>
+            <td>{{ patient.phone || 'N/A' }}</td>
+            <td>{{ patient.address || 'N/A' }}</td>
+            <td>
+              {{ patient.dob ? (patient.dob | date: 'shortDate') : 'N/A' }}
+            </td>
+            <td>
+              <p-button
+                icon="pi pi-eye"
+                [text]="true"
+                severity="info"
+                [rounded]="true"
+                title="View Details"
+              ></p-button>
+              <p-button
+                icon="pi pi-pencil"
+                [text]="true"
+                severity="secondary"
+                [rounded]="true"
+                title="Edit"
+              ></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   </p-card>
 
-  <div class="soap-container">
-    <div class="soap-header" *ngIf="!isExistingPatient">SOAP Notes – front Office or volunteer</div>
-    <div class="soap-header" *ngIf="isExistingPatient">SOAP Notes – Doctor Consultation</div>
+  <div class="soap-container" style="display: none">
+    <div class="soap-header" *ngIf="!isExistingPatient">SOAP Notes - front Office or volunteer</div>
+    <div class="soap-header" *ngIf="isExistingPatient">SOAP Notes - Doctor Consultation</div>
 
     <div class="box-header with-border p-0 border-bottom-blue">
       <h4 class="font-semibold">Patient Information</h4>

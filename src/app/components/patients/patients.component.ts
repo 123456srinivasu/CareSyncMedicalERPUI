@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -7,6 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
+import { PatientService } from '../../core/services/patient.service';
+import { MessageService } from 'primeng/api';
 
 interface Patient {
   patient_id?: number;
@@ -51,14 +53,18 @@ export class PatientsComponent implements OnInit {
   filteredPatients: Patient[] = [];
   searchText: string = '';
   isExistingPatient: boolean = false;
+  globalFilter: string = '';
+  private readonly patientService = inject(PatientService);
+  // private readonly messageService = inject(MessageService); // Unused for now
+
   // Table-specific data for the new PrimeNG table
   patientTableData: PatientRecord[] = [];
+  loading: boolean = false;
+
   defaultAvatar: string =
     'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect fill="%23e6e6e6" width="100%" height="100%"/><circle cx="32" cy="22" r="14" fill="%23999"/><rect x="10" y="40" width="44" height="12" rx="6" fill="%23999"/></svg>';
-  globalFilter: string = '';
 
   ngOnInit() {
-    // Sample data matching database schema
     this.patients = [
       {
         patient_id: 1,
@@ -176,6 +182,58 @@ export class PatientsComponent implements OnInit {
         phone: '+92-300-1234567',
       },
     ];
+    this.loadPatients();
+  }
+
+  loadPatients() {
+    this.loading = true;
+    this.patientService.getPatients().subscribe({
+      next: (data) => {
+        this.patientTableData = this.mapToPatientRecords(data);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading patients', error);
+        this.loading = false;
+        // fallback to empty or show error
+        this.patientTableData = [];
+      },
+    });
+  }
+
+  onSearch() {
+    if (!this.searchText) {
+      this.loadPatients();
+      return;
+    }
+
+    this.loading = true;
+    this.patientService.searchPatients(this.searchText).subscribe({
+      next: (data) => {
+        this.patientTableData = this.mapToPatientRecords(data);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error searching patients', error);
+        this.loading = false;
+        this.patientTableData = [];
+      },
+    });
+  }
+
+  private mapToPatientRecords(data: any[]): PatientRecord[] {
+    if (!Array.isArray(data)) return [];
+
+    return data.map((p) => ({
+      photo: '', // No photo in API yet
+      first_name: p.firstName + (p.lastName ? ' ' + p.lastName : ''), // Combine names for display
+      father_name: '', // Not in basic API response yet
+      mr_number: p.patientId ? `MR-${p.patientId}` : '', // Generate/Map MR number
+      city: p.address || '',
+      age: this.calculateAge(p.dob),
+      gender: p.gender || '',
+      phone: p.phoneNumber || '',
+    }));
   }
 
   onView(record: PatientRecord) {
@@ -188,39 +246,135 @@ export class PatientsComponent implements OnInit {
 
   onDelete(record: PatientRecord) {
     console.log('Delete', record);
-    // Implement delete behavior as needed
-  }
-
-  onSearch() {
-    if (!this.searchText) {
-      this.filteredPatients = [...this.patients];
-      return;
+    if (record.mr_number) {
+      // Extract ID from MR Number or store real ID in record hidden field
+      // For now, just log
     }
-
-    this.filteredPatients = this.patients.filter(
-      (patient) =>
-        patient.first_name
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        patient.last_name
-          ?.toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        patient.phone?.toLowerCase().includes(this.searchText.toLowerCase())
-    );
   }
 
-  calculateAge(dob?: Date): number {
+  // Create Patient Form Data
+  newPatient: any = {
+    firstName: '',
+    lastName: '',
+    fatherName: '',
+    age: null,
+    weight: null,
+    phoneNumber: '',
+    gender: '',
+    bloodGroup: '',
+    maritalStatus: '',
+    address: {
+      street: '',
+      city: '',
+      mandal: '',
+      district: '',
+      state: '',
+    },
+    // SOAP notes related fields can be added here if needed for creation
+  };
+
+  onSubmit(form: any) {
+    if (form.valid) {
+      const payload = {
+        tblPatientId: 0,
+        mrNumber: '', // Backend usually generates this or expects empty string on creation
+        firstName: this.newPatient.firstName,
+        lastName: this.newPatient.lastName,
+        fatherName: this.newPatient.fatherName,
+        age: this.newPatient.age,
+        weight: this.newPatient.weight,
+        mobileNumber: this.newPatient.phoneNumber,
+        gender: this.newPatient.gender,
+        bloodGroup: this.newPatient.bloodGroup,
+        maritalStatus: this.newPatient.maritalStatus,
+        patientImage: [], // Empty for now as per instructions
+        patientAddressesList: [
+          {
+            addressId: 0,
+            addressLine: this.newPatient.address.street,
+            city: this.newPatient.address.city,
+            stateId: 0,
+            districtId: 0,
+            mandalId: 0,
+            postalCode: '', // Not in form
+            villageName: this.newPatient.address.city, // Assuming village is city for now
+            state: {
+              id: 0,
+              name: this.newPatient.address.state
+            },
+            district: {
+              id: 0,
+              name: this.newPatient.address.district
+            },
+            mandal: {
+              id: 0,
+              name: this.newPatient.address.mandal
+            }
+          }
+        ]
+      };
+
+      this.loading = true;
+      this.patientService.createPatient(payload).subscribe({
+        next: (res) => {
+          console.log('Patient created', res);
+          this.loading = false;
+          alert('Patient created successfully!');
+          this.onClearForm();
+          // Reset the form state (pristine/untouched)
+          form.resetForm();
+          this.isExistingPatient = true;
+          this.loadPatients();
+        },
+        error: (err) => {
+          console.error('Error creating patient', err);
+          this.loading = false;
+          alert('Failed to create patient. Please try again.');
+        },
+      });
+    } else {
+      // Mark all controls as touched to trigger validation messages
+      Object.keys(form.controls).forEach((key) => {
+        form.controls[key].markAsTouched();
+      });
+    }
+  }
+
+  onClearForm() {
+    this.newPatient = {
+      firstName: '',
+      lastName: '',
+      fatherName: '',
+      age: null,
+      weight: null,
+      phoneNumber: '',
+      gender: '',
+      bloodGroup: '',
+      maritalStatus: '',
+      address: {
+        street: '',
+        city: '',
+        mandal: '',
+        district: '',
+        state: '',
+      },
+    };
+  }
+
+  calculateAge(dob?: string | Date): number {
     if (!dob) return 0;
     const today = new Date();
     const birthDate = new Date(dob);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
     return age;
+  }
+
+  onReset(form: any) {
+    form.resetForm();
+    this.onClearForm();
   }
 }
