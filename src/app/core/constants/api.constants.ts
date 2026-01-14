@@ -47,25 +47,28 @@ export const API_CONFIG = {
       BASE: '/invoice',
       CREATE: '/invoice',
     },
+    STATES: {
+      BASE: '/states',
+      BY_ID: (id: number) => `/states/${id}`
+    },
+    DISTRICTS: {
+      BASE: '/districts',
+      BY_STATE: (stateLookupId: number) => `/districts/by-state/${stateLookupId}`
+    },
+    MANDALS: {
+      BASE: '/mandals',
+      BY_DISTRICT: (districtLookupId: number) => `/mandals/by-district/${districtLookupId}`
+    },
+    USERS: {
+      BY_ROLE: (role: string) => `/users/role/${role}`
+    },
     PATIENTS: {
       BASE: '/patient-registration',
       CREATE: '/patient-registration',
       BY_ID: (id: number) => `/patient-registration/${id}`,
       UPDATE: (id: number) => `/patient-registration/${id}`,
       DELETE: (id: number) => `/patient-registration/${id}`,
-      SEARCH: (name: string) => `/patient-registration/search?name=${name}`,
-    },
-    STATES: {
-      BASE: '/states',
-      BY_ID: (id: number) => `/states/${id}`,
-    },
-    DISTRICTS: {
-      BASE: '/districts',
-      BY_STATE: (stateId: number) => `/districts/by-state/${stateId}`,
-    },
-    MANDALS: {
-      BASE: '/mandals',
-      BY_DISTRICT: (districtId: number) => `/mandals/by-district/${districtId}`,
+      SEARCH: (name: string) => `/patient-registration/search?name=${name}`
     },
   },
 } as const;
