@@ -8,7 +8,8 @@ import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { PatientService } from '../../core/services/patient.service';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { LocationsService } from '../../core/services/locations.service';
 
 import { ToastModule } from 'primeng/toast';
@@ -22,6 +23,17 @@ interface Patient {
   phone?: string;
   address?: string;
   created_at?: Date;
+  tblPatientId?: number;
+  photo?: string;
+  fullName?: string;
+  father_name?: string;
+  mr_number: string;
+  city?: string;
+  age?: number;
+  weight?: number;
+  blood_group?: string;
+  marital_status?: string;
+  Address?: any[];
 }
 
 interface PatientRecord {
@@ -54,11 +66,13 @@ interface PatientRecord {
     TagModule,
     CardModule,
     DialogModule,
+    DialogModule,
     ToastModule,
+    ConfirmDialogModule,
   ],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.scss',
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
 })
 export class PatientsComponent implements OnInit {
   patients: Patient[] = [];
@@ -69,6 +83,7 @@ export class PatientsComponent implements OnInit {
   private readonly patientService = inject(PatientService);
   private readonly locationsService = inject(LocationsService);
   private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
 
   // Table-specific data for the new PrimeNG table
   patientTableData: PatientRecord[] = [];
@@ -153,7 +168,7 @@ export class PatientsComponent implements OnInit {
   mandals: any[] = [];
 
   ngOnInit() {
-    this.patients = [
+    /* this.patients = [
       {
         patient_id: 1,
         first_name: 'John',
@@ -204,11 +219,10 @@ export class PatientsComponent implements OnInit {
         address: '654 Maple Dr',
         created_at: new Date('2024-01-05'),
       },
-    ];
-    this.filteredPatients = [...this.patients];
+    ]; */
 
     // Sample mock data for the PrimeNG table
-    this.patientTableData = [
+    /* this.patientTableData = [
       {
         photo: '',
         first_name: 'John Doe',
@@ -269,7 +283,7 @@ export class PatientsComponent implements OnInit {
         gender: 'Female',
         phone: '+92-300-1234567',
       },
-    ];
+    ]; */
     //this.loadPatients();
     this.loadStates();
   }
@@ -378,12 +392,14 @@ export class PatientsComponent implements OnInit {
       error: (error) => {
         console.error('Error loading patients', error);
         this.loading = false;
-        // fallback to empty or show error
         this.patientTableData = [];
       },
     });
   }
-
+  showPatientDetails(patient: any) {
+    this.soapPatientData = this.mapToPatientRecords([patient])[0];
+    this.filteredPatients = [patient];
+  }
   editPatientData(patient: any) {
     this.isExistingPatient = true;
     this.PatientEditMode = true;
@@ -430,6 +446,55 @@ export class PatientsComponent implements OnInit {
     this.displayPatientDialog = true;
   }
 
+  deletePatient(patient: any) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete ${patient.fullName || patient.firstName}?`,
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.loading = true;
+        // Use tblPatientId if available, otherwise patient_id (fallback)
+        const idToDelete = patient.tblPatientId || patient.patient_id;
+        if (!idToDelete) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Patient ID not found.',
+          });
+          this.loading = false;
+          return;
+        }
+
+        this.patientService.deletePatient(idToDelete).subscribe({
+          next: () => {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Confirmed',
+              detail: 'Patient deleted successfully',
+            });
+            // Refresh list
+            this.loadPatients();
+            // Clear current selection if needed
+            if (this.soapPatientData === patient) {
+              this.soapPatientData = {};
+              this.filteredPatients = [];
+            }
+          },
+          error: (err) => {
+            this.loading = false;
+            console.error('Delete error', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Failed to delete patient.',
+            });
+          },
+        });
+      },
+    });
+  }
+
   onSearch() {
     if (!this.searchText) {
       this.loadPatients();
@@ -441,8 +506,8 @@ export class PatientsComponent implements OnInit {
       next: (data) => {
         this.patientTableData = this.mapToPatientRecords(data);
         if (this.patientTableData.length > 0) {
-          const firstPatient = this.patientTableData[0];
           this.soapPatientData = this.patientTableData[0];
+          this.filteredPatients = data;
         }
         this.loading = false;
       },

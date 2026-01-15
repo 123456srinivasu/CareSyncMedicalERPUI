@@ -32,64 +32,10 @@
         ></button>
       </div>
     </div>
-    <div style="display: none">
-      <p-table
-        [value]="filteredPatients"
-        [paginator]="true"
-        [rows]="10"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        styleClass="p-datatable-striped hidden"
-        [tableStyle]="{ display: 'none' }"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Patient ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Gender</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Date of Birth</th>
-            <th>Actions</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-patient>
-          <tr>
-            <td>{{ patient.patient_id }}</td>
-            <td>{{ patient.first_name }} {{ patient.last_name || '' }}</td>
-            <td>{{ calculateAge(patient.dob) }}</td>
-            <td>{{ patient.gender || 'N/A' }}</td>
-            <td>{{ patient.phone || 'N/A' }}</td>
-            <td>{{ patient.address || 'N/A' }}</td>
-            <td>
-              {{ patient.dob ? (patient.dob | date: 'shortDate') : 'N/A' }}
-            </td>
-            <td>
-              <p-button
-                icon="pi pi-eye"
-                [text]="true"
-                severity="info"
-                [rounded]="true"
-                title="View Details"
-              ></p-button>
-              <p-button
-                icon="pi pi-pencil"
-                [text]="true"
-                severity="secondary"
-                [rounded]="true"
-                title="Edit"
-              ></p-button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
   </p-card>
 
-  <div class="container mt-4">
-    <div class="patient-card">
+  <div class="container mt-4" *ngIf="soapPatientData.mr_number">
+    <div class="patient-card" *ngIf="filteredPatients && filteredPatients.length === 1">
       <!-- Top Row -->
       <div class="row align-items-center">
         <div class="col-auto" style="display: none">
@@ -106,6 +52,14 @@
               severity="info"
               [rounded]="true"
               title="Edit"
+            ></p-button>
+            <p-button
+              icon="pi pi-trash"
+              (onClick)="deletePatient(soapPatientData)"
+              [text]="true"
+              severity="danger"
+              [rounded]="true"
+              title="Delete"
             ></p-button>
           </h5>
         </div>
@@ -138,6 +92,71 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="table-container" *ngIf="filteredPatients && filteredPatients.length > 1">
+      <p-table
+        [value]="filteredPatients"
+        ID="PatientsList"
+        [paginator]="true"
+        [rows]="10"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        styleClass="p-datatable-striped"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Patient ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Date of Birth</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-patient>
+          <tr>
+            <td>{{ patient.mrNumber }}</td>
+            <td>{{ patient.firstName }} {{ patient.lastName || '' }}</td>
+            <td>{{ patient.age }}</td>
+            <td>{{ patient.gender || 'N/A' }}</td>
+            <td>{{ patient.mobileNumber || 'N/A' }}</td>
+            <td>
+              {{
+                patient.patientAddressesList &&
+                patient.patientAddressesList.length > 0 &&
+                patient.patientAddressesList[0].mandal
+                  ? patient.patientAddressesList[0].mandal.name
+                  : 'N/A'
+              }}
+            </td>
+            <td>
+              {{ patient.age }}
+            </td>
+            <td>
+              <p-button
+                icon="pi pi pi-external-link"
+                [text]="true"
+                severity="info"
+                [rounded]="true"
+                (onClick)="showPatientDetails(patient)"
+                title="View Details"
+              ></p-button>
+              <p-button
+                icon="pi pi-trash p-button-icon "
+                [text]="true"
+                severity="danger"
+                [rounded]="true"
+                (onClick)="deletePatient(patient)"
+                title="Delete Patient"
+              ></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
 
     <p-dialog
@@ -389,7 +408,7 @@
       (ngSubmit)="onsoapUserFormSubmit(soapUserForm)"
       (ngReset)="onsoapUserFormReset(soapUserForm)"
     ></form>
-    <div class="soap-container">
+    <div class="soap-container" *ngIf="filteredPatients && filteredPatients.length === 1">
       <div class="soap-header">SOAP Notes - front Office or volunteer</div>
 
       <!-- SUBJECTIVE -->
@@ -568,4 +587,5 @@
       </div>
     </div>
   </div>
+  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
 </div>
