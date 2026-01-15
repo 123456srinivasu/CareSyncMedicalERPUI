@@ -27,6 +27,7 @@ interface Patient {
 interface PatientRecord {
   photo?: string;
   first_name: string;
+  last_name?: string;
   father_name?: string;
   mr_number: string;
   city?: string;
@@ -255,7 +256,7 @@ export class PatientsComponent implements OnInit {
         phone: '+92-300-1234567',
       },
     ];
-    this.loadPatients();
+    //this.loadPatients();
     this.loadStates();
   }
 
@@ -330,6 +331,12 @@ export class PatientsComponent implements OnInit {
     this.patientService.getPatients().subscribe({
       next: (data) => {
         this.patientTableData = this.mapToPatientRecords(data);
+        if (this.patientTableData.length > 0) {
+          const firstPatient = this.patientTableData[0];
+          this.soapPatientData.name = firstPatient.first_name;
+          this.soapPatientData.age = firstPatient.age;
+          this.soapPatientData.sex = firstPatient.gender;
+        }
         this.loading = false;
       },
       error: (error) => {
@@ -348,9 +355,16 @@ export class PatientsComponent implements OnInit {
     }
 
     this.loading = true;
-    this.patientService.searchPatients(this.searchText).subscribe({
+    this.patientService.searchPatientsByMobile(this.searchText).subscribe({
       next: (data) => {
         this.patientTableData = this.mapToPatientRecords(data);
+        if (this.patientTableData.length > 0) {
+          const firstPatient = this.patientTableData[0];
+          this.soapPatientData.name =
+            firstPatient.first_name + (firstPatient.last_name ? ' ' + firstPatient.last_name : '');
+          this.soapPatientData.age = firstPatient.age;
+          this.soapPatientData.sex = firstPatient.gender;
+        }
         this.loading = false;
       },
       error: (error) => {
@@ -367,12 +381,13 @@ export class PatientsComponent implements OnInit {
     return data.map((p) => ({
       photo: '', // No photo in API yet
       first_name: p.firstName + (p.lastName ? ' ' + p.lastName : ''), // Combine names for display
-      father_name: '', // Not in basic API response yet
-      mr_number: p.patientId ? `MR-${p.patientId}` : '', // Generate/Map MR number
-      city: p.address || '',
-      age: this.calculateAge(p.dob),
+      father_name: p.fatherName || '', // Not in basic API response yet
+      mr_number: p.mrNumber ? p.mrNumber : '', // Generate/Map MR number
+      city: p.patientAddressesList[0].city || '',
+      age: p.age || 0,
       gender: p.gender || '',
-      phone: p.phoneNumber || '',
+      phone: p.mobileNumber || '',
+      Address: p.patientAddressesList,
     }));
   }
 
@@ -413,72 +428,27 @@ export class PatientsComponent implements OnInit {
     // SOAP notes related fields can be added here if needed for creation
   };
 
-  /* onSubmit(form: any) {
-    if (form.valid) {
-      const payload = {
-        tblPatientId: 0,
-        mrNumber: '', // Backend usually generates this or expects empty string on creation
-        firstName: this.newPatient.firstName,
-        lastName: this.newPatient.lastName,
-        fatherName: this.newPatient.fatherName,
-        age: this.newPatient.age,
-        weight: this.newPatient.weight,
-        mobileNumber: this.newPatient.phoneNumber,
-        gender: this.newPatient.gender,
-        bloodGroup: this.newPatient.bloodGroup,
-        maritalStatus: this.newPatient.maritalStatus,
-        patientImage: [], // Empty for now as per instructions
-        patientAddressesList: [
-          {
-            addressId: 0,
-            addressLine: this.newPatient.address.street,
-            city: this.newPatient.address.city,
-            stateId: 0,
-            districtId: 0,
-            mandalId: 0,
-            postalCode: '', // Not in form
-            villageName: this.newPatient.address.city, // Assuming village is city for now
-            state: {
-              id: 0,
-              name: this.newPatient.address.state,
-            },
-            district: {
-              id: 0,
-              name: this.newPatient.address.district,
-            },
-            mandal: {
-              id: 0,
-              name: this.newPatient.address.mandal,
-            },
-          },
-        ],
-      };
+  // SOAP Form Data
+  soapPatientData: any = {
+    name: '',
+    age: null,
+    sex: '',
+  };
 
-      this.loading = true;
-      this.patientService.createPatient(payload).subscribe({
-        next: (res) => {
-          console.log('Patient created', res);
-          this.loading = false;
-          alert('Patient created successfully!');
-          this.onClearForm();
-          // Reset the form state (pristine/untouched)
-          form.resetForm();
-          this.isExistingPatient = true;
-          this.loadPatients();
-        },
-        error: (err) => {
-          console.error('Error creating patient', err);
-          this.loading = false;
-          alert('Failed to create patient. Please try again.');
-        },
+  onsoapUserFormSubmit(form: any) {
+    if (form.valid) {
+      console.log('SOAP Form Submitted', this.soapPatientData);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'SOAP data submitted successfully!',
       });
-    } else {
-      // Mark all controls as touched to trigger validation messages
-      Object.keys(form.controls).forEach((key) => {
-        form.controls[key].markAsTouched();
-      });
+      form.resetForm();
+      this.soapPatientData = {
+        name: '',
+      };
     }
-  } */
+  }
 
   onClearForm() {
     this.newPatient = {
@@ -516,5 +486,13 @@ export class PatientsComponent implements OnInit {
   onReset(form: any) {
     form.resetForm();
     this.onClearForm();
+  }
+  onsoapUserFormReset(form: any) {
+    form.resetForm();
+    this.soapPatientData = {
+      name: '',
+      age: null,
+      sex: '',
+    };
   }
 }

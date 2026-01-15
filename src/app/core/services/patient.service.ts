@@ -107,6 +107,36 @@ export class PatientService {
         );
     }
 
+    searchPatientsByMobile(mobileNumber: string): Observable<any[]> {
+        const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH_BY_MOBILE(mobileNumber));
+        return this.http.get<any[]>(url).pipe(
+            catchError(error => {
+                console.error(`Error searching patients with mobile number ${mobileNumber}:`, error);
+                throw error;
+            })
+        );
+    }
+
+    searchPatientsByName(name: string): Observable<any[]> {
+        const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH_BY_NAME(name));
+        return this.http.get<any[]>(url).pipe(
+            catchError(error => {
+                console.error(`Error searching patients with name ${name}:`, error);
+                throw error;
+            })
+        );
+    }
+
+    searchPatientsByFields(mrNumber: string): Observable<any[]> {
+        const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH_BY_FIELDS(mrNumber));
+        return this.http.get<any[]>(url).pipe(
+            catchError(error => {
+                console.error(`Error searching patients with MR number ${mrNumber}:`, error);
+                throw error;
+            })
+        );
+    }
+
     getStates(): Observable<any[]> {
         const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
         return this.http.get<any[]>(url).pipe(

@@ -68,7 +68,10 @@ export const API_CONFIG = {
       BY_ID: (id: number) => `/patient-registration/${id}`,
       UPDATE: (id: number) => `/patient-registration/${id}`,
       DELETE: (id: number) => `/patient-registration/${id}`,
-      SEARCH: (name: string) => `/patient-registration/search?name=${name}`
+      SEARCH: (name: string) => `/patient-registration/search?name=${name}`,
+      SEARCH_BY_MOBILE: (mobileNumber: string) => `/patient-registration/search/by-mobile?mobileNumber=${mobileNumber}`,
+      SEARCH_BY_NAME: (name: string) => `/patient-registration/search/by-name?name=${name}`,
+      SEARCH_BY_FIELDS: (mrNumber: string) => `/patient-registration/search/by-fields?mrNumber=${mrNumber}`
     },
   },
 } as const;
