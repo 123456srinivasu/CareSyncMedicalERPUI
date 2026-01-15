@@ -68,8 +68,8 @@
 }
 .section-title{
   font-weight:600;
-  margin-bottom:16px;
-  padding-bottom:6px;
+  margin-bottom:5px;
+  padding-bottom:0px;
   border-bottom:1px solid #dcdfe4;
 }
 .patient-type{
@@ -168,4 +168,31 @@
     .btn-success {
       background: #16a34a;
       color: #fff;
+    }
+
+
+     .patient-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      padding: 5px;
+      border-left: 10px solid #3367a0;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background: #1e88e5;
+      color: #fff;
+      border-radius: 50%;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .label {
+      font-size: 12px;
+      color: #6c757d;
+    }
+    .value {
+      font-weight: 500;
     }

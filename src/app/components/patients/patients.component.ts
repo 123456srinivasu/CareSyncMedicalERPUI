@@ -109,6 +109,7 @@ export class PatientsComponent implements OnInit {
           this.onClearForm();
           // Reset the form state (pristine/untouched)
           form.resetForm();
+          this.displayPatientDialog = false;
           this.isExistingPatient = true;
           this.loadPatients();
         },
@@ -258,6 +259,27 @@ export class PatientsComponent implements OnInit {
     ];
     //this.loadPatients();
     this.loadStates();
+  }
+
+  displayPatientDialog: boolean = false;
+
+  onNewPatient() {
+    this.isExistingPatient = false;
+    this.onClearForm();
+    this.displayPatientDialog = true;
+  }
+
+  closeDialog() {
+    this.displayPatientDialog = false;
+  }
+
+  onAgeChange() {
+    if (this.newPatient.age) {
+      const currentYear = new Date().getFullYear();
+      this.newPatient.dob = new Date(currentYear - this.newPatient.age, 0, 1);
+      const year = this.newPatient.dob.getFullYear();
+      console.log('Calculated DOB:', year);
+    }
   }
 
   loadStates() {
