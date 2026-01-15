@@ -28,12 +28,17 @@ interface PatientRecord {
   photo?: string;
   first_name: string;
   last_name?: string;
+  fullName?: string;
   father_name?: string;
   mr_number: string;
   city?: string;
   age?: number;
   gender?: string;
   phone?: string;
+  weight?: number;
+  blood_group?: string;
+  marital_status?: string;
+  Address?: any[];
 }
 
 @Component({
@@ -370,6 +375,50 @@ export class PatientsComponent implements OnInit {
     });
   }
 
+  editPatientData(patient: any) {
+    this.isExistingPatient = true;
+    this.newPatient = {
+      firstName: patient.first_name,
+      lastName: patient.last_name,
+      fatherName: patient.father_name,
+      age: patient.age,
+      weight: patient.weight,
+      phoneNumber: patient.phone,
+      gender: patient.gender,
+      bloodGroup: patient.blood_group,
+      maritalStatus: patient.marital_status,
+      address: {
+        street: '',
+        city: patient.city,
+        mandal: '',
+        district: '',
+        state: '',
+        postalCode: '',
+      },
+    };
+
+    if (patient.Address && patient.Address.length > 0) {
+      const addr = patient.Address[0];
+      this.newPatient.address = {
+        street: addr.addressLine || '',
+        city: addr.city || patient.city || '',
+        mandal: addr.mandalId || '',
+        district: addr.districtId || '',
+        state: addr.stateId || '',
+        postalCode: addr.zipCode || addr.postalCode || '',
+      };
+
+      // Load Dependent Dropdowns based on existing data
+      if (this.newPatient.address.state) {
+        this.loadDistricts(this.newPatient.address.state);
+      }
+      if (this.newPatient.address.district) {
+        this.loadMandals(this.newPatient.address.district);
+      }
+    }
+    this.displayPatientDialog = true;
+  }
+
   onSearch() {
     if (!this.searchText) {
       this.loadPatients();
@@ -382,10 +431,7 @@ export class PatientsComponent implements OnInit {
         this.patientTableData = this.mapToPatientRecords(data);
         if (this.patientTableData.length > 0) {
           const firstPatient = this.patientTableData[0];
-          this.soapPatientData.name =
-            firstPatient.first_name + (firstPatient.last_name ? ' ' + firstPatient.last_name : '');
-          this.soapPatientData.age = firstPatient.age;
-          this.soapPatientData.sex = firstPatient.gender;
+          this.soapPatientData = this.patientTableData[0];
         }
         this.loading = false;
       },
@@ -402,14 +448,19 @@ export class PatientsComponent implements OnInit {
 
     return data.map((p) => ({
       photo: '', // No photo in API yet
-      first_name: p.firstName + (p.lastName ? ' ' + p.lastName : ''), // Combine names for display
+      first_name: p.firstName || '',
+      last_name: p.lastName || '',
+      fullName: p.firstName + (p.lastName ? ' ' + p.lastName : ''), // Combine names for display
       father_name: p.fatherName || '', // Not in basic API response yet
       mr_number: p.mrNumber ? p.mrNumber : '', // Generate/Map MR number
-      city: p.patientAddressesList[0].city || '',
+      city: p.patientAddressesList && p.patientAddressesList.length > 0 ? p.patientAddressesList[0].city : '',
       age: p.age || 0,
       gender: p.gender || '',
       phone: p.mobileNumber || '',
-      Address: p.patientAddressesList,
+      weight: p.weight || null,
+      blood_group: p.bloodGroup || '',
+      marital_status: p.maritalStatus || '',
+      Address: p.patientAddressesList || [],
     }));
   }
 
