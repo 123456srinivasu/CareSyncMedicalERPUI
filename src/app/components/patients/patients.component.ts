@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -89,6 +89,8 @@ export class PatientsComponent implements OnInit {
   patientTableData: PatientRecord[] = [];
   loading: boolean = false;
 
+  @ViewChild('newUserForm') newUserForm!: NgForm;
+
   // ... (rest of the file until onSubmit)
 
   onSubmit(form: any) {
@@ -98,7 +100,7 @@ export class PatientsComponent implements OnInit {
         firstName: this.newPatient.firstName,
         lastName: this.newPatient.lastName,
         fatherName: this.newPatient.fatherName,
-        age: this.newPatient.age,
+        age: this.onAgeChange(this.newPatient.age),
         weight: this.newPatient.weight,
         mobileNumber: this.newPatient.phoneNumber,
         gender: this.newPatient.gender,
@@ -293,7 +295,11 @@ export class PatientsComponent implements OnInit {
 
   onNewPatient() {
     this.isExistingPatient = false;
+    this.PatientEditMode = false;
     this.onClearForm();
+    if (this.newUserForm) {
+      this.newUserForm.resetForm();
+    }
     this.displayPatientDialog = true;
   }
 
@@ -301,12 +307,14 @@ export class PatientsComponent implements OnInit {
     this.displayPatientDialog = false;
   }
 
-  onAgeChange() {
+  onAgeChange(age: number): number | undefined {
     if (this.newPatient.age) {
       const currentYear = new Date().getFullYear();
       this.newPatient.dob = new Date(currentYear - this.newPatient.age, 0, 1);
       const year = this.newPatient.dob.getFullYear();
-      console.log('Calculated DOB:', year);
+      return year;
+    } else {
+      return undefined;
     }
   }
 

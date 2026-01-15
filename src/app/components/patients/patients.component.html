@@ -121,7 +121,9 @@
           <tr>
             <td>{{ patient.mrNumber }}</td>
             <td>{{ patient.firstName }} {{ patient.lastName || '' }}</td>
-            <td>{{ patient.age }}</td>
+            <td>
+              {{ patient.age.toString().length > 2 ? calculateAge(patient.age) : patient.age }}
+            </td>
             <td>{{ patient.gender || 'N/A' }}</td>
             <td>{{ patient.mobileNumber || 'N/A' }}</td>
             <td>
@@ -158,250 +160,6 @@
         </ng-template>
       </p-table>
     </div>
-
-    <p-dialog
-      header="Patient Registration"
-      [(visible)]="displayPatientDialog"
-      [modal]="true"
-      [style]="{ width: '80vw' }"
-      [draggable]="false"
-      [resizable]="false"
-    >
-      <form
-        #newUserForm="ngForm"
-        (ngSubmit)="onSubmit(newUserForm)"
-        (ngReset)="onReset(newUserForm)"
-      >
-        <div class="row g-3">
-          <div class="col-md-2">
-            <label class="form-label">Surname <span class="text-danger">*</span></label>
-            <input
-              class="form-control"
-              [(ngModel)]="newPatient.lastName"
-              name="lastName"
-              placeholder="Surname"
-              required
-              #lastName="ngModel"
-              [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)"
-            />
-            <div
-              *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
-              class="invalid-feedback"
-            >
-              Surname is required.
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">First Name <span class="text-danger">*</span></label>
-            <input
-              class="form-control"
-              [(ngModel)]="newPatient.firstName"
-              name="firstName"
-              placeholder="First Name"
-              required
-              #firstName="ngModel"
-              [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)"
-            />
-            <div
-              *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
-              class="invalid-feedback"
-            >
-              First Name is required.
-            </div>
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Father Name</label>
-            <input class="form-control" [(ngModel)]="newPatient.fatherName" name="fatherName" />
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Age <span class="text-danger">*</span></label>
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="newPatient.age"
-              (ngModelChange)="onAgeChange()"
-              name="age"
-              required
-              #age="ngModel"
-              [class.is-invalid]="age.invalid && (age.dirty || age.touched)"
-            />
-            <div *ngIf="age.invalid && (age.dirty || age.touched)" class="invalid-feedback">
-              Age is required.
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Weight</label>
-            <input
-              type="number"
-              class="form-control"
-              [(ngModel)]="newPatient.weight"
-              name="weight"
-            />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
-            <input
-              class="form-control"
-              [(ngModel)]="newPatient.phoneNumber"
-              name="phoneNumber"
-              required
-              pattern="^[0-9]{10}$"
-              #phoneNumber="ngModel"
-              [class.is-invalid]="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
-            />
-            <div
-              *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
-              class="invalid-feedback"
-            >
-              <div *ngIf="phoneNumber.errors?.['required']">Mobile Number is required.</div>
-              <div *ngIf="phoneNumber.errors?.['pattern']">Must be 10 digits.</div>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Gender <span class="text-danger">*</span></label>
-            <select
-              class="form-select"
-              [(ngModel)]="newPatient.gender"
-              name="gender"
-              required
-              #gender="ngModel"
-              [class.is-invalid]="gender.invalid && (gender.dirty || gender.touched)"
-            >
-              <option value="">Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-            <div
-              *ngIf="gender.invalid && (gender.dirty || gender.touched)"
-              class="invalid-feedback"
-            >
-              Gender is required.
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <label class="form-label">Blood Group</label>
-            <select class="form-select" [(ngModel)]="newPatient.bloodGroup" name="bloodGroup">
-              <option value="">Select</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Marital Status</label>
-            <select class="form-select" [(ngModel)]="newPatient.maritalStatus" name="maritalStatus">
-              <option value="">Select</option>
-              <option value="Married">Married</option>
-              <option value="Single">Single</option>
-            </select>
-          </div>
-
-          <div class="section-title">Patient Address</div>
-
-          <div class="col-md-2">
-            <label class="form-label">State <span class="text-danger">*</span></label>
-
-            <select
-              class="form-select"
-              [ngModel]="newPatient.address.state"
-              required
-              (ngModelChange)="newPatient.address.state = $event; onStateChange()"
-              name="state"
-              #state="ngModel"
-              [class.is-invalid]="state.invalid && (state.dirty || state.touched)"
-            >
-              <option value="">Select state</option>
-              <option *ngFor="let state of states" [value]="state.stateLookupId">
-                {{ state.stateName }}
-              </option>
-            </select>
-            <div *ngIf="state.invalid && (state.dirty || state.touched)" class="invalid-feedback">
-              State is required.
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">District <span class="text-danger">*</span></label>
-            <select
-              class="form-select"
-              required
-              [ngModel]="newPatient.address.district"
-              (ngModelChange)="newPatient.address.district = $event; onDistrictChange()"
-              name="district"
-              #district="ngModel"
-              [class.is-invalid]="district.invalid && (district.dirty || district.touched)"
-            >
-              <option value="">Select district</option>
-              <option *ngFor="let district of districts" [value]="district.districtLookupId">
-                {{ district.districtName }}
-              </option>
-            </select>
-            <div
-              *ngIf="district.invalid && (district.dirty || district.touched)"
-              class="invalid-feedback"
-            >
-              District is required.
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Mandal <span class="text-danger">*</span></label>
-            <select
-              class="form-select"
-              [(ngModel)]="newPatient.address.mandal"
-              required
-              name="mandal"
-              #mandal="ngModel"
-              [class.is-invalid]="mandal.invalid && (mandal.dirty || mandal.touched)"
-            >
-              <option value="">Select mandal</option>
-              <option *ngFor="let mandal of mandals" [value]="mandal.mandalLookupId">
-                {{ mandal.mandalName }}
-              </option>
-            </select>
-            <div
-              *ngIf="mandal.invalid && (mandal.dirty || mandal.touched)"
-              class="invalid-feedback"
-            >
-              Mandal is required.
-            </div>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">City /Village </label>
-            <input class="form-control" [(ngModel)]="newPatient.address.city" name="city" />
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Street </label>
-            <input class="form-control" [(ngModel)]="newPatient.address.street" name="street" />
-          </div>
-
-          <div class="col-md-2">
-            <label class="form-label">postalCode </label>
-            <input
-              class="form-control"
-              [(ngModel)]="newPatient.address.postalCode"
-              name="postalCode"
-            />
-          </div>
-        </div>
-
-        <div class="action-bar mt-4">
-          <button type="submit" class="btn btn-primary px-4" [disabled]="newUserForm.invalid">
-            Save Patient
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary px-4"
-            (click)="onClearForm(); newUserForm.resetForm(); closeDialog()"
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
-    </p-dialog>
 
     <form
       #soapUserForm="ngForm"
@@ -588,4 +346,231 @@
     </div>
   </div>
   <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+  <p-dialog
+    header="Patient Registration"
+    [(visible)]="displayPatientDialog"
+    [modal]="true"
+    [style]="{ width: '80vw' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <form #newUserForm="ngForm" (ngSubmit)="onSubmit(newUserForm)" (ngReset)="onReset(newUserForm)">
+      <div class="row g-3">
+        <div class="col-md-2">
+          <label class="form-label">Surname <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.lastName"
+            name="lastName"
+            placeholder="Surname"
+            required
+            #lastName="ngModel"
+            [class.is-invalid]="lastName.invalid && (lastName.dirty || lastName.touched)"
+          />
+          <div
+            *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+            class="invalid-feedback"
+          >
+            Surname is required.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">First Name <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.firstName"
+            name="firstName"
+            placeholder="First Name"
+            required
+            #firstName="ngModel"
+            [class.is-invalid]="firstName.invalid && (firstName.dirty || firstName.touched)"
+          />
+          <div
+            *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+            class="invalid-feedback"
+          >
+            First Name is required.
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Father Name</label>
+          <input class="form-control" [(ngModel)]="newPatient.fatherName" name="fatherName" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Age <span class="text-danger">*</span></label>
+          <input
+            type="number"
+            class="form-control"
+            [(ngModel)]="newPatient.age"
+            name="age"
+            required
+            #age="ngModel"
+            [class.is-invalid]="age.invalid && (age.dirty || age.touched)"
+          />
+          <div *ngIf="age.invalid && (age.dirty || age.touched)" class="invalid-feedback">
+            Age is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Weight</label>
+          <input type="number" class="form-control" [(ngModel)]="newPatient.weight" name="weight" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Mobile Number <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.phoneNumber"
+            name="phoneNumber"
+            required
+            pattern="^[0-9]{10}$"
+            #phoneNumber="ngModel"
+            [class.is-invalid]="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
+          />
+          <div
+            *ngIf="phoneNumber.invalid && (phoneNumber.dirty || phoneNumber.touched)"
+            class="invalid-feedback"
+          >
+            <div *ngIf="phoneNumber.errors?.['required']">Mobile Number is required.</div>
+            <div *ngIf="phoneNumber.errors?.['pattern']">Must be 10 digits.</div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Gender <span class="text-danger">*</span></label>
+          <select
+            class="form-select"
+            [(ngModel)]="newPatient.gender"
+            name="gender"
+            required
+            #gender="ngModel"
+            [class.is-invalid]="gender.invalid && (gender.dirty || gender.touched)"
+          >
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+          <div *ngIf="gender.invalid && (gender.dirty || gender.touched)" class="invalid-feedback">
+            Gender is required.
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">Blood Group</label>
+          <select class="form-select" [(ngModel)]="newPatient.bloodGroup" name="bloodGroup">
+            <option value="">Select</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Marital Status</label>
+          <select class="form-select" [(ngModel)]="newPatient.maritalStatus" name="maritalStatus">
+            <option value="">Select</option>
+            <option value="Married">Married</option>
+            <option value="Single">Single</option>
+          </select>
+        </div>
+
+        <div class="section-title">Patient Address</div>
+
+        <div class="col-md-2">
+          <label class="form-label">State <span class="text-danger">*</span></label>
+
+          <select
+            class="form-select"
+            [ngModel]="newPatient.address.state"
+            required
+            (ngModelChange)="newPatient.address.state = $event; onStateChange()"
+            name="state"
+            #state="ngModel"
+            [class.is-invalid]="state.invalid && (state.dirty || state.touched)"
+          >
+            <option value="">Select state</option>
+            <option *ngFor="let state of states" [value]="state.stateLookupId">
+              {{ state.stateName }}
+            </option>
+          </select>
+          <div *ngIf="state.invalid && (state.dirty || state.touched)" class="invalid-feedback">
+            State is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">District <span class="text-danger">*</span></label>
+          <select
+            class="form-select"
+            required
+            [ngModel]="newPatient.address.district"
+            (ngModelChange)="newPatient.address.district = $event; onDistrictChange()"
+            name="district"
+            #district="ngModel"
+            [class.is-invalid]="district.invalid && (district.dirty || district.touched)"
+          >
+            <option value="">Select district</option>
+            <option *ngFor="let district of districts" [value]="district.districtLookupId">
+              {{ district.districtName }}
+            </option>
+          </select>
+          <div
+            *ngIf="district.invalid && (district.dirty || district.touched)"
+            class="invalid-feedback"
+          >
+            District is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Mandal <span class="text-danger">*</span></label>
+          <select
+            class="form-select"
+            [(ngModel)]="newPatient.address.mandal"
+            required
+            name="mandal"
+            #mandal="ngModel"
+            [class.is-invalid]="mandal.invalid && (mandal.dirty || mandal.touched)"
+          >
+            <option value="">Select mandal</option>
+            <option *ngFor="let mandal of mandals" [value]="mandal.mandalLookupId">
+              {{ mandal.mandalName }}
+            </option>
+          </select>
+          <div *ngIf="mandal.invalid && (mandal.dirty || mandal.touched)" class="invalid-feedback">
+            Mandal is required.
+          </div>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">City /Village </label>
+          <input class="form-control" [(ngModel)]="newPatient.address.city" name="city" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Street </label>
+          <input class="form-control" [(ngModel)]="newPatient.address.street" name="street" />
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">postalCode </label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.address.postalCode"
+            name="postalCode"
+          />
+        </div>
+      </div>
+
+      <div class="action-bar mt-4">
+        <button type="submit" class="btn btn-primary px-4" [disabled]="newUserForm.invalid">
+          Save Patient
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-secondary px-4"
+          (click)="onClearForm(); newUserForm.resetForm(); closeDialog()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </p-dialog>
 </div>
