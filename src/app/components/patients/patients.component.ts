@@ -25,6 +25,7 @@ interface Patient {
 }
 
 interface PatientRecord {
+  tblPatientId?: number;
   photo?: string;
   first_name: string;
   last_name?: string;
@@ -78,6 +79,7 @@ export class PatientsComponent implements OnInit {
   onSubmit(form: any) {
     if (form.valid) {
       const payload = {
+        tblPatientId: this.newPatient.tblPatientId,
         firstName: this.newPatient.firstName,
         lastName: this.newPatient.lastName,
         fatherName: this.newPatient.fatherName,
@@ -102,7 +104,13 @@ export class PatientsComponent implements OnInit {
       };
 
       this.loading = true;
-      this.patientService.createPatient(payload).subscribe({
+      let createOrUpdate$;
+      if (!this.PatientEditMode) {
+        createOrUpdate$ = this.patientService.createPatient(payload);
+      } else {
+        createOrUpdate$ = this.patientService.updatePatient(payload.tblPatientId, payload);
+      }
+      createOrUpdate$.subscribe({
         next: (res) => {
           console.log('Patient created', res);
           this.loading = false;
@@ -111,8 +119,8 @@ export class PatientsComponent implements OnInit {
             summary: 'Success',
             detail: 'Patient created successfully!',
           });
+          this.PatientEditMode = false;
           this.onClearForm();
-          // Reset the form state (pristine/untouched)
           form.resetForm();
           this.displayPatientDialog = false;
           this.isExistingPatient = true;
@@ -267,6 +275,7 @@ export class PatientsComponent implements OnInit {
   }
 
   displayPatientDialog: boolean = false;
+  PatientEditMode: boolean = false;
 
   onNewPatient() {
     this.isExistingPatient = false;
@@ -377,7 +386,9 @@ export class PatientsComponent implements OnInit {
 
   editPatientData(patient: any) {
     this.isExistingPatient = true;
+    this.PatientEditMode = true;
     this.newPatient = {
+      tblPatientId: patient.tblPatientId,
       firstName: patient.first_name,
       lastName: patient.last_name,
       fatherName: patient.father_name,
@@ -448,12 +459,16 @@ export class PatientsComponent implements OnInit {
 
     return data.map((p) => ({
       photo: '', // No photo in API yet
+      tblPatientId: p.tblPatientId || 0,
       first_name: p.firstName || '',
       last_name: p.lastName || '',
       fullName: p.firstName + (p.lastName ? ' ' + p.lastName : ''), // Combine names for display
       father_name: p.fatherName || '', // Not in basic API response yet
       mr_number: p.mrNumber ? p.mrNumber : '', // Generate/Map MR number
-      city: p.patientAddressesList && p.patientAddressesList.length > 0 ? p.patientAddressesList[0].city : '',
+      city:
+        p.patientAddressesList && p.patientAddressesList.length > 0
+          ? p.patientAddressesList[0].city
+          : '',
       age: p.age || 0,
       gender: p.gender || '',
       phone: p.mobileNumber || '',
@@ -483,6 +498,7 @@ export class PatientsComponent implements OnInit {
   // Create Patient Form Data
   newPatient: any = {
     firstName: '',
+    tblPatientId: 0,
     lastName: '',
     fatherName: '',
     age: null,
