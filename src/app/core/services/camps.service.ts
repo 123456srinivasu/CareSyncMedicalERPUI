@@ -36,6 +36,7 @@ export interface Camp {
   createdAt: string;
   campEstablishmentYear?: string;
   medicineStocks: MedicineStock[];
+  content: Camp[];
 }
 
 /**
@@ -152,15 +153,83 @@ export class CampsService {
    * Get all active camps
    * @returns Observable of Camp array
    */
-  getActiveCamps(): Observable<Camp[]> {
-    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.ACTIVE);
-    return this.http.get<Camp[]>(url).pipe(
-      catchError(error => {
-        console.error('Error fetching active camps:', error);
-        throw error;
-      })
-    );
-  }
+  getActiveCamps(params?: any): Observable<any[]> { 
+    let url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.ACTIVE);
+       // Add query parameters if provided
+       if (params) {
+        const queryParams = new URLSearchParams();
+        Object.keys(params).forEach(key => {
+          if (params[key] !== null && params[key] !== undefined) {
+            queryParams.append(key, params[key].toString());
+          }
+        });
+        const queryString = queryParams.toString();
+        if (queryString) {
+          url += `?${queryString}`;
+        }
+      }
+      return this.http.get(url, { responseType: 'text' }).pipe(
+        map((responseText: string) => {
+          try {
+            // Parse JSON manually
+            const parsed = JSON.parse(responseText);
+            // Remove circular references by cleaning up campAddresses
+            if (Array.isArray(parsed)) {
+              return parsed.map((camp: any) => {
+                if (camp.campAddresses && Array.isArray(camp.campAddresses)) {
+                  camp.campAddresses = camp.campAddresses.map((addr: any) => {
+                    // Remove the nested camp object to break circular reference
+                    const { camp, ...addressData } = addr;
+                    return addressData;
+                  });
+                }
+                return camp;
+              });
+            }
+            return parsed;
+          } catch (parseError) {
+            console.error('Error parsing response text:', parseError);
+            throw new Error('Failed to parse response');
+          }
+        }),
+        catchError(error => {
+          console.error('Error fetching camps:', error);
+          // If error has text property, try to parse it
+          if (error.error && error.error.text) {
+            try {
+              const parsed = JSON.parse(error.error.text);
+              // Clean circular references
+              if (Array.isArray(parsed)) {
+                const cleaned = parsed.map((camp: any) => {
+                  if (camp.campAddresses && Array.isArray(camp.campAddresses)) {
+                    camp.campAddresses = camp.campAddresses.map((addr: any) => {
+                      const { camp, ...addressData } = addr;
+                      return addressData;
+                    });
+                  }
+                  return camp;
+                });
+                return of(cleaned);
+              }
+              return of(parsed);
+            } catch (parseError) {
+              console.error('Error parsing error response text:', parseError);
+            }
+          }
+          throw error;
+        })
+      );
+      
+      
+    
+    // return this.http.get<Camp[]>(url).pipe(
+    //   catchError(error => {
+    //     console.error('Error fetching active camps:', error);
+    //     throw error;
+    //   })
+    // );
+  
+}
 
   /**
    * Get camp by ID
@@ -292,6 +361,65 @@ export class CampsService {
     return this.http.get<any[]>(url).pipe(
       catchError(error => {
         console.error(`Error fetching users by role ${role}:`, error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get camp run planning info for a camp
+   * @param campId - Camp ID
+   * @returns Observable of planning data
+   */
+  getCampRunPlanning(campId: number): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.PLANNING(campId));
+    return this.http.get<any>(url).pipe(
+      catchError(error => {
+        console.error(`Error fetching camp run planning for camp ${campId}:`, error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Save / update camp run planning
+   * @param payload - planning payload
+   */
+  saveCampRunPlanning(payload: any): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.SAVE_PLANNING);
+    return this.http.post<any>(url, payload).pipe(
+      catchError(error => {
+        console.error('Error saving camp run planning:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Start a camp run
+   * @param campId - Camp ID
+   * @param campRunId - Camp Run ID
+   */
+  startCampRun(campId: number, campRunId: number): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.START(campId, campRunId));
+    return this.http.post<any>(url, {}).pipe(
+      catchError(error => {
+        console.error(`Error starting camp run ${campRunId} for camp ${campId}:`, error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Stop a camp run
+   * @param campId - Camp ID
+   * @param campRunId - Camp Run ID
+   */
+  stopCampRun(campId: number, campRunId: number): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.STOP(campId, campRunId));
+    return this.http.post<any>(url, {}).pipe(
+      catchError(error => {
+        console.error(`Error stopping camp run ${campRunId} for camp ${campId}:`, error);
         throw error;
       })
     );

@@ -25,9 +25,12 @@ interface CampMedicine {
 }
 
 interface Camp {
+  campReadyToStart?: boolean;
+  campRunId?: number | null;
   schedule_week?: string;
   schedule_day?: string;
   camp_id?: number;
+  campId?: number | undefined;
   camp_code?: string;
   camp_name: string;
   is_active: boolean;
@@ -35,6 +38,7 @@ interface Camp {
   update_at?: Date;
   updated_by?: Date;
   planned_date?: Date;
+  plannedDate?: Date;
   ready_for_camp?: boolean;
   camp_started?: boolean;
   camp_ended?: boolean;
@@ -68,7 +72,7 @@ interface Camp {
   september?: boolean;
   october?: boolean;
   november?: boolean;
-  december?: boolean;  
+  december?: boolean;
   october_week?: string;
   october_day?: string;
   november_week?: string;
@@ -78,6 +82,7 @@ interface Camp {
   medicine_responsibility?: string;
   medicine_responsibility_type?: string;
   medicine_responsibility_outside?: string;
+  campRunUsers?: any[];
 }
 
 @Component({
@@ -151,6 +156,7 @@ export class CampsComponent implements OnInit {
   // Start Camp Confirmation Dialog
   displayStartCampDialog: boolean = false;
   selectedCampForStart: Camp | null = null;
+  campRunIdForStop: number | null = null;
   
   // Stop Camp Confirmation Dialog
   displayStopCampDialog: boolean = false;
@@ -270,11 +276,19 @@ export class CampsComponent implements OnInit {
  
   errorMessage: any = '';
   successMessage: string = '';
-  pageSize: number = 3;
+  pageSize: number = 5;
   pageNumber: number = 0;
+  first: number = 0;
   totalRecords: number = 0;
-  pageSort: string = 'desc';
+  pageSort: string = 'createdAt';
   shortDate='MM/dd/yyyy';
+  plannedDateNotReady: Date | null = null;
+  organizerNameNotReady: string = '';
+  organizerPhoneNoNotReady: string = '';
+  organizerEmailNotReady: string = '';
+  campRunIdNotReady: number | null = null;
+  campReadyToStartNotReady: boolean = false;
+  campRunIdForStart: number | null = null;
 
   ngOnInit() {
     // Sample data
@@ -451,7 +465,8 @@ export class CampsComponent implements OnInit {
           this.totalRecords = response.totalElements;
           
           return {
-            camp_id: apiCamp.campId,
+            camp_id: apiCamp.campId,  
+            campId: apiCamp.campId,
             camp_code: apiCamp.campCode || '',
             camp_name: apiCamp.campName || '',
             is_active: apiCamp.isActive ?? true,
@@ -489,7 +504,11 @@ export class CampsComponent implements OnInit {
             november: schedule?.november || false,
             december: schedule?.december || false,
             plannedDate: apiCamp?.plannedDate || '',
-            medicines: []
+            campReadyToStart: apiCamp?.campReadyToStart || false,
+            campRunning: apiCamp?.campRunning || false,
+            campEnded: apiCamp?.campEnded || false,
+            campRunId: apiCamp?.campRunId || null,
+        medicines: []
           } as Camp;
         });        
         this.onSearch();
@@ -509,28 +528,26 @@ export class CampsComponent implements OnInit {
       }
     });
   }
-  onPage(event: any) {
-    // PrimeNG onPage event provides:
-    // event.page: 0-based page number (0, 1, 2, ...)
-    // event.rows: Number of rows per page
-    // event.first: Index of the first record in the current page
-    
-    // Calculate page number from event
-    // Option 1: Use event.page directly (0-based)
-    //this.pageNumber = event.page;
-    this.pageNumber = Math.floor(event.first / event.rows);
-    
-    // Option 2: Calculate from event.first (if event.page is not available)
-    // this.pageNumber = Math.floor(event.first / event.rows);
-    
-    // Update page size if changed
-    this.pageSize = event.rows;
-    
-    // Trigger search with new page number
-    this.onSearch();
+  onLazyLoad(event: any) {
+    // PrimeNG lazy event provides:
+    // event.first: index of first record
+    // event.rows: page size
+    // event.page: 0-based page number (may be present)
+    const rows = event.rows || this.pageSize;
+    const first = event.first ?? 0;
+    this.pageNumber = event.page ?? Math.floor(first / rows);
+    this.pageSize = rows;
+    this.first = first;
+    this.onSearch(false);
   }
 
-  onSearch() {
+  onSearch(resetPage: boolean = true) {
+    // Reset to first page for user-triggered searches
+    if (resetPage) {
+      this.pageNumber = 0;
+      this.first = 0;
+    }
+
     // Build query parameters with filters
     const queryParams: any = {
       status: this.searchStatus === 'All' ? 'All' : this.searchStatus === 'Active' ? 'ACTIVE' : 'INACTIVE',
@@ -602,6 +619,7 @@ export class CampsComponent implements OnInit {
           
           return {
             camp_id: apiCamp.campId,
+            campId: apiCamp.campId,
             camp_code: apiCamp.campCode || '',
             camp_name: apiCamp.campName || '',
             is_active: apiCamp.isActive ?? true,
@@ -639,7 +657,11 @@ export class CampsComponent implements OnInit {
             november: schedule?.november || false,
             december: schedule?.december || false,
             plannedDate: apiCamp?.plannedDate || '',
-            description: apiCamp.description || ''
+            description: apiCamp.description || '',
+            campReadyToStart: apiCamp?.campReadyToStart || false,
+            campRunning: apiCamp?.campRunning || false,
+            campEnded: apiCamp?.campEnded || false,
+            campRunId: apiCamp?.campRunId || null,
           };
         });
         
@@ -1032,7 +1054,7 @@ export class CampsComponent implements OnInit {
         this.camps[index] = { ...this.campForm, camp_id: this.selectedCamp.camp_id, update_at: new Date() };
       }
     } else {
-      const newId = Math.max(...this.camps.map(c => c.camp_id || 0)) + 1;     
+      const newId = Math.max(...this.camps.map(c => c.camp_id || 0)) + 1;
       console.log('campForm---->',newId,this.campForm);
       let doctorIds = this.selectedDoctors.map(doctor => doctor.value);
       let volunteerIds = this.selectedVolunteers.map(volunteer => volunteer.value);
@@ -1094,7 +1116,7 @@ export class CampsComponent implements OnInit {
       this.campsService.createCamp(payload).subscribe({
         next: (response: any) => {
           console.log('Camp created:', response);
-          this.displayDialog = false;
+    this.displayDialog = false;
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -1168,6 +1190,15 @@ export class CampsComponent implements OnInit {
   }
 
   markNotReadyForCamp(camp: Camp) {
+    if (!camp?.camp_id) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Missing ID',
+        detail: 'Cannot load planning without a valid camp ID.'
+      });
+      return;
+    }
+
     this.selectedCampForNotReady = camp;
     // Initialize selected doctors and volunteers
     this.selectedDoctorsNotReady = [];
@@ -1184,7 +1215,141 @@ export class CampsComponent implements OnInit {
     this.paperAvailable = false;
     // Load medicines for the camp
     this.campMedicinesNotReady = camp.medicines ? [...camp.medicines] : [];
+
+    // Fetch planning info for this camp
+    this.campsService.getCampRunPlanning(camp.camp_id).subscribe({
+      next: (planning: any) => {
+        // Update planned date if available
+        // if (planning?.plannedDate) {
+        //   camp.planned_date = new Date(planning.plannedDate);
+        // }
+        this.plannedDateNotReady = planning?.plannedDate ? new Date(planning.plannedDate) : null;
+        this.organizerNameNotReady = planning?.organizerName || '';
+        this.organizerPhoneNoNotReady = planning?.organizerPhone || '';
+        this.organizerEmailNotReady = planning?.organizerEmail || '';
+        this.campRunIdNotReady = planning?.campRunId || null;
+        this.campReadyToStartNotReady = planning?.campReadyToStart || false;
+        if(planning?.campRunUsers.length > 0){
+        const planningUsers = planning?.campRunUsers || [];
+        // Only doctors (role DOCTOR / DOCOTOR) go into selectedDoctorsNotReady
+        this.selectedDoctorsNotReady = planningUsers
+          .filter((user: any) => {
+            const role = (user.roles[0]  || '').toString().toUpperCase();
+            return role === 'DOCTOR' ; // handle possible typo
+          })
+            .map((user: any) => ({ label: user.firstName + ' ' + user.lastName || '', value: user.userId ,selected:false}));
+          
+        // Keep existing behavior for volunteers (all users for now)
+        this.selectedVolunteersNotReady = planningUsers.filter((user: any) => {
+          const role = (user.roles[0]  || '').toString().toUpperCase();
+          return role === 'VOLUNTEER' ; // handle possible typo
+        }).map((user: any) => ({
+          label: user.firstName + ' ' + user.lastName || '',
+          value: user.userId,
+          selected:false
+        }));
+        // Remove already-selected doctors from available lists
+        if (this.selectedDoctorsNotReady.length) {
+          const selectedIds = new Set(this.selectedDoctorsNotReady.map(d => d.value));
+          this.availableDoctorsNotReady = this.availableDoctorsNotReady.filter(d => !selectedIds.has(d.value));
+          this.availableDoctorsNotReadyFiltered = this.availableDoctorsNotReadyFiltered.filter(d => !selectedIds.has(d.value));
+        }
+        if (this.selectedVolunteersNotReady.length) {
+          const selectedIds = new Set(this.selectedVolunteersNotReady.map(v => v.value));
+          this.availableVolunteersNotReady = this.availableVolunteersNotReady.filter(v => !selectedIds.has(v.value));
+          this.availableVolunteersNotReadyFiltered = this.availableVolunteersNotReadyFiltered.filter(v => !selectedIds.has(v.value));
+        }
+      }
+      if(planning?.campMedicineStockSummaries.length > 0){
+        const campMedicineStockSummaries = planning?.campMedicineStockSummaries || [];
+        this.campMedicinesNotReady = campMedicineStockSummaries.map((item: any) => ({
+          medicine_name: item.medicineLookupNew?.medicationName || '',
+          medicine_type: item.medicineLookupNew?.medicineType || '',
+          quantity: item.quantity,
+        }));
+      }
+        this.displayNotReadyDialog = true;
+      },
+      error: (error: any) => {
+        console.error('Error fetching camp run planning:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load planning info. Showing existing data.'
+        });
     this.displayNotReadyDialog = true;
+      }
+    });
+  }
+  updateNotReadyCamp(){
+    if (!this.selectedCampForNotReady || !this.selectedCampForNotReady.camp_id) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Missing camp',
+        detail: 'Please select a camp before updating planning.'
+      });
+      return;
+    }
+
+    const camp = this.selectedCampForNotReady;
+
+    const formatDate = (d: Date | null) => {
+      if (!d) return null;
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+ 
+    const payload = {
+      campId: camp.camp_id,
+      organizerName: this.organizerNameNotReady,
+      organizerPhone: this.organizerPhoneNoNotReady,
+      organizerEmail: this.organizerEmailNotReady,
+      plannedDate: formatDate(this.plannedDateNotReady),
+      campRunId:this.campRunIdNotReady,
+      campRunUsers: [
+        ...this.selectedDoctorsNotReady.map(d => (d.value )),
+        ...this.selectedVolunteersNotReady.map(v => (v.value))
+      ]
+      //campMedicineStockSummaries: this.campMedicinesNotReady || []
+    };
+
+    this.campsService.saveCampRunPlanning(payload).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Saved',
+          detail: 'Planning updated successfully.'
+        });
+        this.organizerNameNotReady='';  
+        this.organizerPhoneNoNotReady='';
+        this.organizerEmailNotReady='';
+        this.plannedDateNotReady=null;
+        this.campRunIdNotReady=null;
+        this.selectedDoctorsNotReady=[];
+        this.selectedVolunteersNotReady=[];
+        this.availableDoctorsNotReady=[];
+        this.availableVolunteersNotReady=[];
+        this.availableDoctorsNotReadyFiltered=[];
+        this.availableVolunteersNotReadyFiltered=[];
+        this.doctorSearchText='';
+        this.volunteerSearchText='';
+        this.printerAvailable=false;
+        this.paperAvailable=false;
+        this.campMedicinesNotReady=[];
+        this.displayNotReadyDialog = false;
+        this.onSearch();
+      },
+      error: (error: any) => {
+        console.error('Error saving planning:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update planning. Please try again.'
+        });
+      }
+    });
   }
 
   // Methods for moving doctors between panels
@@ -1409,59 +1574,67 @@ export class CampsComponent implements OnInit {
     if (!this.selectedCampForNotReady) {
       return;
     }
-
     const camp = this.selectedCampForNotReady;
-
-    // Helper function to extract week number from "Week 1", "Week 2", etc.
-    const extractWeekNumber = (weekStr: string | undefined): number => {
-      if (!weekStr) return 1;
-      const match = weekStr.match(/\d+/);
-      return match ? parseInt(match[0], 10) : 1;
+    const formatDate = (d: Date | null) => {
+      if (!d) return null;
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+ 
+    const payload = {
+      campId: camp.camp_id,
+      organizerName: this.organizerNameNotReady,
+      organizerPhone: this.organizerPhoneNoNotReady,
+      organizerEmail: this.organizerEmailNotReady,
+      plannedDate: formatDate(this.plannedDateNotReady),
+      campRunId:this.campRunIdNotReady,
+      campReadyToStart: true,
+      campRunUsers: [
+        ...this.selectedDoctorsNotReady.map(d => (d.value )),
+        ...this.selectedVolunteersNotReady.map(v => (v.value))
+      ]
+      //campMedicineStockSummaries: this.campMedicinesNotReady || []
     };
 
-    // Helper function to convert day name to uppercase format
-    const formatDayOfWeek = (dayStr: string | undefined): string => {
-      if (!dayStr) return 'MONDAY';
-      return dayStr.toUpperCase();
-    };
-
-    // Use schedule_week and schedule_day from camp
-    const dayOfWeek = formatDayOfWeek(camp.schedule_day);
-    const weekOfMonth = extractWeekNumber(camp.schedule_week);
-
-    // Map medicine responsibility - API expects "GBL" but component has "GBR Warehouse" or "Outside"
-    let medicineResponsibility = 'GBL';
-    if (camp.medicine_responsibility === 'GBR Warehouse') {
-      medicineResponsibility = 'GBL';
-    } else if (camp.medicine_responsibility === 'Outside') {
-      medicineResponsibility = camp.medicine_responsibility_outside || 'GBL';
-    }
-
+    this.campsService.saveCampRunPlanning(payload).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Camp ready for start saved successfully.'
+        });
+        this.organizerNameNotReady='';  
+        this.organizerPhoneNoNotReady='';
+        this.organizerEmailNotReady='';
+        this.plannedDateNotReady=null;
+        this.campRunIdNotReady=null;
+        this.selectedDoctorsNotReady=[];
+        this.selectedVolunteersNotReady=[];
+        this.availableDoctorsNotReady=[];
+        this.availableVolunteersNotReady=[];
+        this.availableDoctorsNotReadyFiltered=[];
+        this.availableVolunteersNotReadyFiltered=[];
+        this.doctorSearchText='';
+        this.volunteerSearchText='';
+        this.printerAvailable=false;
+        this.paperAvailable=false;
+        this.campMedicinesNotReady=[];
+        this.displayNotReadyDialog = false;
+        this.onSearch();
+      },
+      error: (error: any) => {
+        console.error('Error saving camp ready for start:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to save camp ready for start. Please try again.'
+        });
+      }
+    });
   
-
-    //Call the API
-    // this.campsService.createCamp(payload).subscribe({
-    //   next: (response) => {
-    //     console.log('Camp created successfully:', response);
-    //     // Update local camp data
-    //     const index = this.camps.findIndex(c => c.camp_id === camp.camp_id);
-    //     if (index !== -1) {
-    //       this.camps[index].update_at = new Date();
-    //       this.camps[index].ready_for_camp = true;
-    //       this.filteredCamps = [...this.camps];
-    //     }
-    //     // Close dialog
-    //     this.cancelNotReadyDialog();
-    //     // You can also show a toast notification here
-    //   },
-    //   error: (error) => {
-    //     console.error('Error creating camp:', error);
-    //     // Handle error - you can show an error message to the user
-    //   }
-    // });
-
-    console.log('Selected Volunteers:', this.selectedVolunteersNotReady);
-    console.log('Selected Providers:', this.selectedDoctorsNotReady);
+    
   }
 
   openDisablePasswordDialog(camp: Camp) {
@@ -1513,35 +1686,143 @@ export class CampsComponent implements OnInit {
 
   // Start Camp Methods
   openStartCampDialog(camp: Camp) {
+    this.campRunIdForStart = null;
     this.selectedCampForStart = camp;
-    this.displayStartCampDialog = true;
+    if (camp.campId === undefined) {
+      console.error('Camp ID is undefined.');
+      return;
+    }
+    this.campsService.getCampRunPlanning(camp.campId).subscribe({
+      next: (planning: any) => {
+        // Update planned date if available`
+        if(planning?.campReadyToStart){
+          this.campRunIdForStart = planning?.campRunId;
+          this.displayStartCampDialog = true;
+        }else{
+          this.displayStartCampDialog = false;
+        }        
+      },
+      error: (error: any) => {
+        console.error('Error fetching camp run planning:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load planning info. Showing existing data.'
+        });
+        this.displayStartCampDialog = false;
+      }
+    });
+    
   }
 
   startCamp() {
-    if (this.selectedCampForStart) {
-      const index = this.camps.findIndex(c => c.camp_id === this.selectedCampForStart?.camp_id);
-      if (index !== -1) {
-        this.camps[index].camp_started = true;
-        this.filteredCamps = [...this.camps];
-      }
-      this.closeStartCampDialog();
+    if (!this.selectedCampForStart || !this.selectedCampForStart.camp_id || !this.campRunIdForStart) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Missing data',
+        detail: 'Camp or Camp Run ID is missing.'
+      });
+      return;
     }
+
+    const campId = this.selectedCampForStart.camp_id;
+    const campRunId = this.campRunIdForStart;
+
+    this.campsService.startCampRun(campId, campRunId).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Started',
+          detail: 'Camp has been started.'
+        });
+        this.displayStartCampDialog = false;
+        this.selectedCampForStart = null;
+        this.campRunIdForStart = null;
+        this.onSearch();
+      },
+      error: (error: any) => {
+        console.error('Error starting camp:', error);
+        const apiMessage = error?.error?.message || 'Failed to start camp. Please try again.';
+        const apiErrors = error?.error?.errors;
+        const detail = Array.isArray(apiErrors) && apiErrors.length > 0
+          ? apiErrors.map((e: any) => `${e.field}: ${e.message}`).join(' | ')
+          : apiMessage;
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail
+        });
+      }
+    });
   }
 
   openStopCampDialog(camp: Camp) {
     this.selectedCampForStop = camp;
+    //this.campRunIdForStop = camp.campRunId ?? null;
     this.displayStopCampDialog = true;
+    if (camp.campId === undefined) {
+      console.error('Camp ID is undefined.');
+      return;
+    }
+    
+
+    // this.campsService.getCampRunPlanning(camp.campId).subscribe({
+    //   next: (planning: any) => {
+    //     this.campRunIdForStop = planning?.campRunId || null;
+    //     this.displayStopCampDialog = true;
+    //   },
+    //   error: (error: any) => {
+    //     console.error('Error fetching camp run planning:', error);
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Error',
+    //       detail: 'Failed to load planning info for stop.'
+    //     });
+    //     this.displayStopCampDialog = false;
+    //   }
+    // });
   }
 
   stopCamp() {
     if (this.selectedCampForStop) {
-      const index = this.camps.findIndex(c => c.camp_id === this.selectedCampForStop?.camp_id);
-      if (index !== -1) {
-        this.camps[index].camp_started = true;
-        this.camps[index].camp_ended = true;
-        this.filteredCamps = [...this.camps];
+      if (!this.selectedCampForStop.camp_id || !this.selectedCampForStop.campRunId) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Missing data',
+          detail: 'Camp or Camp Run ID is missing.'
+        });
+        return;
       }
-      this.closeStopCampDialog();
+
+      const campId = this.selectedCampForStop.camp_id;
+      const campRunId = this.selectedCampForStop.campRunId;
+
+      this.campsService.stopCampRun(campId, campRunId).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Stopped',
+            detail: 'Camp has been stopped.'
+          });
+          this.closeStopCampDialog();
+          this.onSearch();
+        },
+        error: (error: any) => {
+          console.error('Error stopping camp:', error);
+          const apiMessage = error?.error?.message || 'Failed to stop camp. Please try again.';
+          const apiErrors = error?.error?.errors;
+          const detail = Array.isArray(apiErrors) && apiErrors.length > 0
+            ? apiErrors.map((e: any) => `${e.field}: ${e.message}`).join(' | ')
+            : apiMessage;
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail
+          });
+        }
+      });
     }
   }
 
@@ -1596,53 +1877,54 @@ export class CampsComponent implements OnInit {
 
   openDateDialog(camp: Camp) {
     this.selectedCampForDate = camp;
-    this.newPlannedDate = camp.planned_date ? new Date(camp.planned_date) : null;
+    this.newPlannedDate = camp.plannedDate ? new Date(camp.plannedDate) : null;   
     // Initialize selected doctors and volunteers (you can load from camp data if available)
-    this.selectedDoctors = [];
-    this.selectedVolunteers = [];
-    // Initialize organizer fields
-    this.tempOrganizerName1 = camp.organizer_name_1 || '';
-    this.tempOrganizerName2 = camp.organizer_name_2 || '';
-    this.tempOrganizerPhone1 = camp.organizer_phone_no_1 || '';
-    this.tempOrganizerPhone2 = camp.organizer_phone_no_2 || '';
-    this.editingOrganizerName = false;
-    this.editingOrganizerPhone = false;
-    // Initialize medicines
-    this.campMedicines = camp.medicines ? [...camp.medicines] : [];
     this.displayDateDialog = true;
   }
 
   savePlannedDate() {
     if (this.selectedCampForDate && this.newPlannedDate) {
       const index = this.camps.findIndex(c => c.camp_id === this.selectedCampForDate?.camp_id);
-      if (index !== -1) {
-        this.camps[index].planned_date = this.newPlannedDate;
-        // Save organizer information if edited
-        if (this.editingOrganizerName || this.editingOrganizerPhone) {
-          this.camps[index].organizer_name_1 = this.tempOrganizerName1;
-          this.camps[index].organizer_name_2 = this.tempOrganizerName2;
-          this.camps[index].organizer_phone_no_1 = this.tempOrganizerPhone1;
-          this.camps[index].organizer_phone_no_2 = this.tempOrganizerPhone2;
+      const formatDate = (d: Date | null) => {
+        if (!d) return null;
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+   
+      const payload = {
+        campId: this.selectedCampForDate.camp_id,
+        organizerName: this.selectedCampForDate.organizer_name_1 || '',
+        organizerPhone: this.selectedCampForDate.organizer_phone_no_1 || '',
+        organizerEmail: this.selectedCampForDate.organizer_email_1 || '',
+        plannedDate: formatDate(this.newPlannedDate),
+        campRunUsers: this.selectedCampForDate.campRunUsers
+        //campMedicineStockSummaries: this.campMedicinesNotReady || []
+      };
+  
+      this.campsService.saveCampRunPlanning(payload).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Saved',
+            detail: 'Planning updated successfully.'
+          });
+          this.displayNotReadyDialog = false;
+        },
+        error: (error: any) => {
+          console.error('Error saving planning:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update planning. Please try again.'
+          });
         }
-        // Medicines are read-only, no need to save
-        this.camps[index].update_at = new Date();
-        // Save selected doctors and volunteers (you can add these fields to Camp interface if needed)
-        // For now, we'll just update the planned date
-        this.filteredCamps = [...this.camps];
-      }
+      });
+
     }
     this.displayDateDialog = false;
-    this.selectedCampForDate = null;
-    this.newPlannedDate = null;
-    this.selectedDoctors = [];
-    this.selectedVolunteers = [];
-    this.editingOrganizerName = false;
-    this.editingOrganizerPhone = false;
-    this.tempOrganizerName1 = '';
-    this.tempOrganizerName2 = '';
-    this.tempOrganizerPhone1 = '';
-    this.tempOrganizerPhone2 = '';
-    this.campMedicines = [];
+    
   }
 
   cancelDateDialog() {

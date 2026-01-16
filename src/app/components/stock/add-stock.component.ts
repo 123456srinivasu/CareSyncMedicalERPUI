@@ -69,7 +69,8 @@ export class AddStockComponent implements OnInit {
   paymentModes: { label: string, value: string }[] = [];
   loading: boolean = false;
   errorMessage: string = '';
-  selectedCampId: number = 0;//TODO: get the selected camp id from the url params
+  campOptions: { label: string; value: number }[] = [];
+  selectedCampId?: number;
   stockForm: StockForm = {
     supplier_id: undefined,
     invoice_id: '',
@@ -79,11 +80,39 @@ export class AddStockComponent implements OnInit {
     medicines: []
   };
 
+
   ngOnInit() {
-    this.selectedCampId = 2;
+    this.selectedCampId = undefined;
+    this.loadCamps();
     this.loadSuppliers();
     this.loadMedicines();
     this.loadPaymentModes();
+  }
+
+  loadCamps() {
+    this.loading = true;
+    this.campsService.getAllCamps({ status: 'All', page: 0, size: 1000, sort: 'desc' }).subscribe({
+      next: (response: any) => {
+        let apiCamps: any[] = [];
+        if (Array.isArray(response?.content)) {
+          apiCamps = response.content;
+        } else if (Array.isArray(response)) {
+          apiCamps = response;
+        } else if (response && Array.isArray(response.data)) {
+          apiCamps = response.data;
+        }
+        this.campOptions = apiCamps.map((camp: any) => ({
+          label: camp.campName || camp.camp_code || `Camp ${camp.campId}`,
+          value: camp.campId
+        }));
+        this.loading = false;
+      },
+      error: (error: any) => {
+        console.error('Error loading camps:', error);
+        this.errorMessage = 'Failed to load camps. Please try again later.';
+        this.loading = false;
+      }
+    });
   }
 
   loadPaymentModes() {
@@ -129,6 +158,15 @@ export class AddStockComponent implements OnInit {
   loadMedicines() {
     // Medicines will be loaded based on selected supplier
     this.medicineOptions = [];
+  }
+
+  onCampChange() {
+    // Reset any camp-related errors
+    this.errorMessage = '';
+  }
+
+  clearSelection() {
+    this.selectedCampId = undefined;
   }
 
   onSupplierChange() {
@@ -234,9 +272,9 @@ export class AddStockComponent implements OnInit {
 
   saveStock() {
     // Validate form
-    if (!this.stockForm.supplier_id || !this.stockForm.invoice_id || !this.stockForm.invoice_date || 
+    if (!this.selectedCampId || !this.stockForm.supplier_id || !this.stockForm.invoice_id || !this.stockForm.invoice_date || 
         !this.stockForm.invoice_amount || !this.stockForm.payment_mode || this.stockForm.medicines.length === 0) {
-      this.errorMessage = 'Please fill in all required fields and add at least one medicine.';
+      this.errorMessage = 'Please select a camp and fill in all required fields, then add at least one medicine.';
       return;
     }
 
@@ -275,7 +313,7 @@ export class AddStockComponent implements OnInit {
             invoiceId: invoiceResponse.invoiceId.toString()
           },
           camp: {
-            campId: this.selectedCampId.toString()
+            campId: this.selectedCampId!.toString()
           }
         }));
    
@@ -283,7 +321,7 @@ export class AddStockComponent implements OnInit {
         console.log('Stock Payload:', stockPayload);
 
         // Then, create the medicine stock
-        this.campsService.addCampMedicineStock(this.selectedCampId, stockPayload).subscribe({
+        this.campsService.addCampMedicineStock(this.selectedCampId!, stockPayload).subscribe({
           next: (response: any) => {
             console.log('Stock saved:', response);
             this.loading = false;
