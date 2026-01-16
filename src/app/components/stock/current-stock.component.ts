@@ -44,6 +44,9 @@ export class CurrentStockComponent implements OnInit {
   filteredStockItems: StockItem[] = [];
   loading: boolean = false;
   errorMessage: string = '';
+  pageSize: number = 1000;
+  pageNumber: number = 0; 
+  pageSort: string = 'createdAt';
 
   ngOnInit() {
     this.loadCamps();
@@ -52,8 +55,14 @@ export class CurrentStockComponent implements OnInit {
   loadCamps() {
     this.loading = true;
     this.errorMessage = '';
+    const queryParams: any = {
+      status: 'ACTIVE',
+      page: this.pageNumber,
+      size: this.pageSize,
+      sort: this.pageSort
+    };
     
-    this.campsService.getActiveCamps()
+    this.campsService.getActiveCamps(queryParams)
       .pipe(
         catchError(error => {
           console.error('Error loading camps:', error);
@@ -63,11 +72,14 @@ export class CurrentStockComponent implements OnInit {
         })
       )
       .subscribe({
-        next: (camps: Camp[]) => {
+        next: (response: any) => {
+          // Accept both paginated `{ content: Camp[] }` or direct `Camp[]`
+          let camps: Camp[] = Array.isArray(response) ? response : response.content ?? [];
+          console.log('camps--->', camps);
           this.camps = camps;
-          if(this.camps.length > 0) {
-          this.campOptions = this.camps
-            .filter(c => c.campId !== undefined)
+          if (this.camps.length > 0) {
+            this.campOptions = this.camps
+              .filter(c => c.campId !== undefined)
             .map(c => ({
               label: c.campCode ? `${c.campCode} - ${c.campName}` : c.campName,
               value: c.campId

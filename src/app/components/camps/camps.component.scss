@@ -201,6 +201,21 @@
   gap: 20px;
   padding: 20px 0;
 
+  .organizer-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: nowrap; 
+
+    .organizer-field {
+      flex: 1;
+      margin: 0;
+    }
+
+    @media (max-width: 900px) {
+      flex-wrap: wrap;
+    }
+  }
+
   .field {
     display: flex;
     flex-direction: column;

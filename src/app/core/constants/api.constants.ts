@@ -13,7 +13,7 @@ export const API_CONFIG = {
   ENDPOINTS: {
     CAMPS: {
       BASE: '/camps',
-      ACTIVE: '/camps/active',
+      ACTIVE: '/camps',
       BY_ID: (id: number) => `/camps/${id}`,
       CREATE: '/camps',
       UPDATE: (id: number) => `/camps/${id}`,
@@ -30,6 +30,12 @@ export const API_CONFIG = {
     },
     CAMP_MEDICINE_STOCK: {
       ADD: (campId: number) => `/medicine-stock/batch`,
+    },
+    CAMP_RUNS: {
+      PLANNING: (campId: number) => `/camp-runs/planning?campId=${campId}`,
+      SAVE_PLANNING: '/camp-runs/camp-runs/planning',
+      START: (campId: number, campRunId: number) => `/camp-runs/${campId}/${campRunId}/start`,
+      STOP: (campId: number, campRunId: number) => `/camp-runs/${campId}/${campRunId}/stop`
     },
     MEDICINES: {
       BASE: '/medicines',
@@ -62,6 +68,8 @@ export const API_CONFIG = {
     USERS: {
       BY_ROLE: (role: string) => `/users/role/${role}`
     },
+    
+
     PATIENTS: {
       BASE: '/patient-registration',
       CREATE: '/patient-registration',

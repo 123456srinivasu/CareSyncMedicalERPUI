@@ -1,10 +1,28 @@
 <div class="add-stock-container">
   <p-card header="Add Stock">
     <div class="form-container">
+    
+
       <!-- Invoice Details Section -->
-      <div class="form-section">
-        <h3 class="section-title">Invoice Details</h3>
+      <div class="form-section">       
         <div class="form-row">
+          <div class="field">
+            <label for="camp">Select Camp <span class="red-star">*</span></label>
+            <p-dropdown 
+              id="camp" 
+              [(ngModel)]="selectedCampId" 
+              [options]="campOptions" 
+              optionLabel="label" 
+              optionValue="value"
+              placeholder="Select Camp to Add Stock" 
+              [showClear]="true"
+              [disabled]="loading"
+              (onChange)="onCampChange()"
+              (onClear)="clearSelection()"
+              appendTo="body"
+              class="w-full">
+            </p-dropdown>
+          </div>
           <div class="field">
             <label for="supplier">Supplier <span class="red-star">*</span></label>
             <p-dropdown 
@@ -81,7 +99,7 @@
       <!-- Medicines Section -->
       <div class="form-section">
         <div class="section-header">
-          <h3 class="section-title">Medicines</h3> {{medicineOptions.length}}
+          <h3 class="section-title">Medicines</h3> 
           <p-button 
             [disabled]="medicineOptions.length <= 0"
             label="Add Medicine" 
@@ -181,7 +199,7 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="form-actions">{{stockForm.medicines.length}}
+      <div class="form-actions">
         <p-button
           label="Cancel"
           [text]="true"

@@ -47,7 +47,14 @@
   </p-card>
 
     <p-card>
-      <p-table [value]="filteredCamps" [paginator]="true" [rows]="pageSize" [totalRecords]="totalRecords" [lazy]="true" (onPage)="onPage($event)" styleClass="p-datatable-striped">
+      <p-table [value]="filteredCamps"
+               [paginator]="true"
+               [rows]="pageSize"
+               [totalRecords]="totalRecords"
+               [lazy]="true"
+               [(first)]="first"
+               (onLazyLoad)="onLazyLoad($event)"
+               styleClass="p-datatable-striped">
         <ng-template pTemplate="header">
           <tr>
             <th>Camp Name</th>
@@ -74,17 +81,7 @@
             
             <td>
               <p-button 
-                *ngIf="camp.ready_for_camp" 
-                icon="pi pi-check-circle"  
-                (onClick)="markReadyForCamp(camp)" 
-                [text]="true" 
-                severity="success" 
-                [rounded]="true" 
-                title="Ready for Camp" 
-                styleClass="ready-camp-btn">
-              </p-button>
-              <p-button 
-                *ngIf="!camp.ready_for_camp" 
+                *ngIf="!camp.campReadyToStart" 
                 icon="pi pi-times-circle"  
                 (onClick)="markNotReadyForCamp(camp)" 
                 [text]="true" 
@@ -93,8 +90,18 @@
                 title="Not Ready for Camp" 
                 styleClass="not-ready-camp-btn">
               </p-button>
+              <p-button                
+                *ngIf="camp.campReadyToStart"
+                icon="pi pi-check-circle"  
+                (onClick)="markReadyForCamp(camp)" 
+                [text]="true" 
+                severity="success" 
+                [rounded]="true" 
+                title="Ready for Camp" 
+                styleClass="ready-camp-btn">
+              </p-button>              
               <p-button 
-                *ngIf="camp.ready_for_camp && !camp.camp_started && !camp.camp_ended" 
+                *ngIf="camp.campReadyToStart && !camp.campRunning" 
                 icon="pi pi-play"  
                 (onClick)="openStartCampDialog(camp)" 
                 [text]="true" 
@@ -103,7 +110,7 @@
                 title="Start Camp">
               </p-button>
               <p-button 
-                *ngIf="camp.camp_started && !camp.camp_ended" 
+                *ngIf="camp.campReadyToStart && camp.campRunning && !camp.camp_ended" 
                 icon="pi pi-stop"  
                 (onClick)="openStopCampDialog(camp)" 
                 [text]="true" 
@@ -112,7 +119,7 @@
                 title="Stop Camp">
               </p-button>
               <p-button 
-                *ngIf="camp.camp_started && !camp.camp_ended" 
+                *ngIf="camp.campReadyToStart && camp.campRunning" 
                 icon="pi pi-lock"  
                 [text]="true" 
                 severity="secondary" 
@@ -120,9 +127,9 @@
                 (onClick)="openDisablePasswordDialog(camp)"
                 title="Password">
               </p-button>
-              <p-button icon="pi pi-calendar" (onClick)="openDateDialog(camp)" [text]="true" severity="secondary" [rounded]="true" title="Change Planned Date"></p-button>
-              <p-button icon="pi pi-pencil" (onClick)="editCamp(camp)" [text]="true" severity="info" [rounded]="true" title="Edit"></p-button>
-              <p-button icon="pi pi-trash" (onClick)="deleteCamp(camp)" [text]="true" severity="danger" [rounded]="true" title="Delete"></p-button>
+              <!-- <p-button icon="pi pi-calendar" (onClick)="openDateDialog(camp)" [text]="true" severity="secondary" [rounded]="true" title="Change Planned Date"></p-button> -->
+              <!-- <p-button icon="pi pi-pencil" (onClick)="editCamp(camp)" [text]="true" severity="info" [rounded]="true" title="Edit"></p-button> -->
+              <!-- <p-button icon="pi pi-trash" (onClick)="deleteCamp(camp)" [text]="true" severity="danger" [rounded]="true" title="Delete"></p-button> -->
             </td>
           </tr>
         </ng-template>
@@ -525,15 +532,16 @@
   <p-dialog [(visible)]="displayDateDialog" [header]="'Change Planned Date - ' + (selectedCampForDate?.camp_name || '')" [modal]="true" [style]="{width: '800px'}">
     <div class="form-container">
       <div class="field full-width">
-        <label for="plannedDate">Planned Date *</label>
+        <label for="plannedDateChange">Planned Date *</label>
         <p-calendar 
-          id="plannedDate" 
+          id="plannedDateChange" 
           [(ngModel)]="newPlannedDate" 
           [required]="true" 
           dateFormat="yy-mm-dd" 
           [showIcon]="true" 
           [showButtonBar]="true"
-          [appendTo]="'body'"
+          inputStyleClass=""
+          appendTo="body"
           class="w-full">
         </p-calendar>
       </div>
@@ -550,6 +558,34 @@
   <!-- Not Ready for Camp Dialog -->
   <p-dialog [(visible)]="displayNotReadyDialog" [header]="'Not Ready for Camp - ' + (selectedCampForNotReady?.camp_name || '')" [modal]="true" [style]="{width: '900px'}">
     <div class="form-container">
+      <div class="full-width organizer-row">
+        <div class=" organizer-field">
+          <label>Organizer Name</label>
+          <input pInputText [(ngModel)]="organizerNameNotReady" class="w-full">
+        </div>
+        <div class=" organizer-field">
+          <label>Organizer Phone No</label>
+          <input pInputText [(ngModel)]="organizerPhoneNoNotReady" class="w-full">
+        </div>
+        <div class=" organizer-field">
+          <label>Organizer Email</label>
+          <input pInputText [(ngModel)]="organizerEmailNotReady" class="w-full">
+        </div>
+      </div>
+      <div class="field full-width">
+        <label for="plannedDateNotReady">Planned Date</label>
+        <p-calendar 
+          id="plannedDateNotReady" 
+          [(ngModel)]="plannedDateNotReady" 
+          [required]="true" 
+          dateFormat="mm-dd-yy" 
+          [showIcon]="true" 
+          [showButtonBar]="true"
+          inputStyleClass=""
+          appendTo="body"
+          class="w-full">
+        </p-calendar>
+      </div>
       <!-- Providers (Doctors) Section with Left-Right Panels -->
       <div class="field full-width">
         <label>Providers (Doctors) *</label>
@@ -789,6 +825,7 @@
     </div>
     <ng-template pTemplate="footer">
       <p-button label="Cancel" (onClick)="cancelNotReadyDialog()" [text]="true"></p-button>
+      <p-button label="Update" *ngIf="!campReadyToStartNotReady" (onClick)="updateNotReadyCamp()" severity="success"></p-button>
       <p-button label="Ready" (onClick)="saveNotReadyCamp()" severity="success"></p-button>
     </ng-template>
   </p-dialog>

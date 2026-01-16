@@ -42,12 +42,12 @@ export class NavigationComponent implements OnInit {
   expandedMenus: { [key: string]: boolean } = {};
   
   menuItems: MenuItem[] = [
-    { label: 'Dashboard', icon: 'pi-home', route: '/dashboard' },
+    // { label: 'Dashboard', icon: 'pi-home', route: '/dashboard' },
     { label: 'Patients', icon: 'pi-users', route: '/patients' },
-    { label: 'Visits', icon: 'pi-calendar-plus', route: '/visits' },
+    // { label: 'Visits', icon: 'pi-calendar-plus', route: '/visits' },
     { label: 'Camps', icon: 'pi-building', route: '/camps' },
-    { label: 'Camp Runs', icon: 'pi-calendar', route: '/camp-runs' },
-    { label: 'Medicines', icon: 'pi-shopping-cart', route: '/medicines' },
+    // { label: 'Camp Runs', icon: 'pi-calendar', route: '/camp-runs' },
+    // { label: 'Medicines', icon: 'pi-shopping-cart', route: '/medicines' },
     { 
       label: 'Stock', 
       icon: 'pi pi-box', 
@@ -57,8 +57,8 @@ export class NavigationComponent implements OnInit {
         
       ]
     },
-    { label: 'Staff', icon: 'pi-id-card', route: '/staff' },
-    { label: 'Reports', icon: 'pi-chart-bar', route: '/reports' }
+    // { label: 'Staff', icon: 'pi-id-card', route: '/staff' },
+    // { label: 'Reports', icon: 'pi-chart-bar', route: '/reports' }
   ];
   userMenuItems = [
     { label: 'Profile', icon: 'pi pi-user', command: () => {} },
