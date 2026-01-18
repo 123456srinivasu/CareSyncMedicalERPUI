@@ -35,7 +35,7 @@ export const API_CONFIG = {
       PLANNING: (campId: number) => `/camp-runs/planning?campId=${campId}`,
       SAVE_PLANNING: '/camp-runs/camp-runs/planning',
       START: (campId: number, campRunId: number) => `/camp-runs/${campId}/${campRunId}/start`,
-      STOP: (campId: number, campRunId: number) => `/camp-runs/${campId}/${campRunId}/stop`
+      STOP: (campId: number, campRunId: number) => `/camp-runs/${campId}/${campRunId}/stop`,
     },
     MEDICINES: {
       BASE: '/medicines',
@@ -55,20 +55,19 @@ export const API_CONFIG = {
     },
     STATES: {
       BASE: '/states',
-      BY_ID: (id: number) => `/states/${id}`
+      BY_ID: (id: number) => `/states/${id}`,
     },
     DISTRICTS: {
       BASE: '/districts',
-      BY_STATE: (stateLookupId: number) => `/districts/by-state/${stateLookupId}`
+      BY_STATE: (stateLookupId: number) => `/districts/by-state/${stateLookupId}`,
     },
     MANDALS: {
       BASE: '/mandals',
-      BY_DISTRICT: (districtLookupId: number) => `/mandals/by-district/${districtLookupId}`
+      BY_DISTRICT: (districtLookupId: number) => `/mandals/by-district/${districtLookupId}`,
     },
     USERS: {
-      BY_ROLE: (role: string) => `/users/role/${role}`
+      BY_ROLE: (role: string) => `/users/role/${role}`,
     },
-    
 
     PATIENTS: {
       BASE: '/patient-registration',
@@ -76,10 +75,12 @@ export const API_CONFIG = {
       BY_ID: (id: number) => `/patient-registration/${id}`,
       UPDATE: (id: number) => `/patient-registration/${id}`,
       DELETE: (id: number) => `/patient-registration/${id}`,
-      SEARCH: (name: string) => `/patient-registration/search?name=${name}`,
-      SEARCH_BY_MOBILE: (mobileNumber: string) => `/patient-registration/search/by-mobile?mobileNumber=${mobileNumber}`,
+      SEARCH: (searchPatient: string) => `/patient-registration/search?searchPatient=${name}`,
+      SEARCH_BY_MOBILE: (mobileNumber: string) =>
+        `/patient-registration/search/by-mobile?mobileNumber=${mobileNumber}`,
       SEARCH_BY_NAME: (name: string) => `/patient-registration/search/by-name?name=${name}`,
-      SEARCH_BY_FIELDS: (mrNumber: string) => `/patient-registration/search/by-fields?mrNumber=${mrNumber}`
+      SEARCH_BY_FIELDS: (mrNumber: string) =>
+        `/patient-registration/search/by-fields?mrNumber=${mrNumber}`,
     },
   },
 } as const;

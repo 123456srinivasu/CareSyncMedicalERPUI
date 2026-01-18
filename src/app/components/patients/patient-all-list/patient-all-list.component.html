@@ -1,0 +1,109 @@
+<div class="card">
+  <p-table
+    [value]="customers"
+    sortField="representative.name"
+    sortMode="single"
+    dataKey="representative.name"
+    rowGroupMode="subheader"
+    groupRowsBy="representative.name"
+    [tableStyle]="{ 'min-width': '70rem' }"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 20%">Name</th>
+        <th style="width: 20%">Patient ID</th>
+        <th style="width: 20%">Age</th>
+        <th style="width: 20%">Gender</th>
+        <th style="width: 20%">Phone</th>
+        <th style="width: 20%">Address</th>
+        <th style="width: 20%">DOB</th>
+        <th style="width: 20%">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #groupheader let-customer let-rowIndex="rowIndex" let-expanded="expanded">
+      <tr>
+        <td>
+          <button
+            type="button"
+            pButton
+            pRipple
+            [pRowToggler]="customer"
+            text
+            rounded
+            plain
+            class="mr-2"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          ></button>
+          <span class="font-bold ml-2">{{ customer.representative.name }}</span>
+        </td>
+        <td style="width: 20%; font-weight: normal">
+          {{ customer.representative.mrNumber }}
+        </td>
+        <td style="width: 20%; font-weight: normal">
+          {{ customer.representative.age }}
+        </td>
+        <td style="width: 20%; font-weight: normal">
+          {{ customer.representative.gender }}
+        </td>
+        <td style="width: 20%; font-weight: normal">
+          {{ customer.representative.mobileNumber }}
+        </td>
+        <td style="width: 20%; font-weight: normal">
+          {{
+            customer.patientAddressesList &&
+            customer.patientAddressesList.length > 0 &&
+            customer.patientAddressesList[0].mandal
+              ? customer.patientAddressesList[0].mandal.name
+              : 'N/A'
+          }}
+        </td>
+        <td style="width: 20%; font-weight: normal">
+          {{ customer.representative.age }}
+        </td>
+        <td style="width: 20%; font-weight: normal">Actions</td>
+      </tr>
+      <tr *ngIf="expanded" class="surface-ground font-bold">
+        <td colspan="8" style="background-color: #f0f0f091">
+          <table style="width: 100%; font-weight: bold; border-collapse: collapse">
+            <thead>
+              <tr>
+                <th style="width: 20%">Camp ID</th>
+                <th style="width: 20%">Problem</th>
+                <th style="width: 20%">specialist</th>
+                <th style="width: 20%">Medicine</th>
+                <th style="width: 20%">Date</th>
+              </tr>
+            </thead>
+          </table>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #groupfooter let-customer>
+      <tr class="p-rowgroup-footer">
+        <td colspan="4" style="text-align: right">Total attended camps :</td>
+        <td>{{ calculateCustomerTotal(customer.representative.name) }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-customer>
+      <tr style="background-color: #f0f0f091">
+        <td>
+          {{ customer.name }}
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span>{{ customer.country.name }}</span>
+          </div>
+        </td>
+        <td>
+          {{ customer.company }}
+        </td>
+        <td>
+          <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" />
+        </td>
+        <td>{{ customer.date }}</td>
+        <td colspan="3">&nbsp;</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

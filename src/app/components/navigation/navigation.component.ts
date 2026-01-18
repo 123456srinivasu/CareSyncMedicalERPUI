@@ -31,16 +31,16 @@ interface MenuItem {
     AvatarModule,
     DrawerModule,
     TieredMenuModule,
-    TooltipModule
+    TooltipModule,
   ],
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.scss'
+  styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent implements OnInit {
   opened = true;
   collapsed = false;
   expandedMenus: { [key: string]: boolean } = {};
-  
+
   menuItems: MenuItem[] = [
     // { label: 'Dashboard', icon: 'pi-home', route: '/dashboard' },
     { label: 'Patients', icon: 'pi-users', route: '/patients' },
@@ -48,14 +48,22 @@ export class NavigationComponent implements OnInit {
     { label: 'Camps', icon: 'pi-building', route: '/camps' },
     // { label: 'Camp Runs', icon: 'pi-calendar', route: '/camp-runs' },
     // { label: 'Medicines', icon: 'pi-shopping-cart', route: '/medicines' },
-    { 
-      label: 'Stock', 
-      icon: 'pi pi-box', 
+    {
+      label: 'Stock',
+      icon: 'pi pi-box',
       items: [
         { label: 'Stock Report', route: '/stock/current' },
-        { label: 'Add Stock', route: '/stock/add' }
-        
-      ]
+        { label: 'Add Stock', route: '/stock/add' },
+      ],
+    },
+    {
+      label: 'User List',
+      icon: 'pi pi-box',
+      items: [
+        { label: 'patient all list', route: '/patient-list' },
+        { label: 'Camp list', route: '/stock/add' },
+        { label: 'Doctor list ', route: '/stock/add' },
+      ],
     },
     // { label: 'Staff', icon: 'pi-id-card', route: '/staff' },
     // { label: 'Reports', icon: 'pi-chart-bar', route: '/reports' }
@@ -63,7 +71,7 @@ export class NavigationComponent implements OnInit {
   userMenuItems = [
     { label: 'Profile', icon: 'pi pi-user', command: () => {} },
     { label: 'Settings', icon: 'pi pi-cog', command: () => {} },
-    { label: 'Logout', icon: 'pi pi-sign-out', command: () => {} }
+    { label: 'Logout', icon: 'pi pi-sign-out', command: () => {} },
   ];
 
   ngOnInit(): void {
@@ -101,4 +109,3 @@ export class NavigationComponent implements OnInit {
     return !!(item.items && item.items.length > 0);
   }
 }
-
