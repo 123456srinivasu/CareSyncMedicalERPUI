@@ -1,0 +1,116 @@
+<div class="camp-place-order-container">
+  <p-toast></p-toast>
+  <p-card header="Camp - Place Order">
+    <div class="form-container">
+      <div class="field-row">
+        <div class="field flex-1">
+          <label for="camp">Select Camp <span class="red-star">*</span></label>
+          <p-dropdown 
+            id="camp" 
+            [(ngModel)]="selectedCampId" 
+            [options]="campOptions" 
+            optionLabel="label" 
+            optionValue="value"
+            placeholder="Select Camp"
+            [showClear]="true"
+            [disabled]="loading"
+            (onChange)="onCampChange()"
+            (onClear)="clearSelection()"
+            appendTo="body"
+            class="w-full">
+          </p-dropdown>
+          <small *ngIf="loading" class="loading-text">Loading camps...</small>
+        </div>
+        <div class="field flex-1">
+          <label for="comments">Comments</label>
+          <input 
+            id="comments"
+            pInputText
+            [(ngModel)]="orderComments"
+            placeholder="Add comments for this order"
+            class="w-full">
+        </div>
+      </div>
+
+      <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage"></p-message>
+      <p-message *ngIf="successMessage" severity="success" [text]="successMessage"></p-message>
+
+      <div class="section">
+        <div class="section-header">
+          <h4>Medicines</h4>
+          <p-button 
+            label="Add Medicine" 
+            icon="pi pi-plus" 
+            [text]="true"
+            (onClick)="addMedicineRow()">
+          </p-button>
+        </div>
+
+        <p-table [value]="orderItems" *ngIf="orderItems.length > 0">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 40%">Supplier</th>
+              <th style="width: 40%">Medicine</th>
+              <th style="width: 15%">Quantity</th>
+              <th style="width: 5%">Action</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+              <td>
+                <p-dropdown 
+                  [(ngModel)]="row.supplierId" 
+                  [options]="supplierOptions" 
+                  optionLabel="label" 
+                  optionValue="value"
+                  placeholder="Select Supplier" 
+                  appendTo="body"
+                  class="w-full"
+                  (onChange)="onSupplierChange(rowIndex)">
+                </p-dropdown>
+              </td>
+              <td>
+                <p-dropdown 
+                  [(ngModel)]="row.medicineId" 
+                  [options]="getMedicineOptionsForRow(rowIndex)" 
+                  optionLabel="label" 
+                  optionValue="value"
+                  placeholder="Select Medicine" 
+                  appendTo="body"
+                  class="w-full"
+                  (onChange)="onMedicineSelect()">
+                </p-dropdown>
+              </td>
+              <td>
+                <p-inputNumber 
+                  [(ngModel)]="row.quantity" 
+                  [min]="1" 
+                  mode="decimal" 
+                  [showButtons]="true"
+                  class="w-full">
+                </p-inputNumber>
+              </td>
+              <td>
+                <p-button 
+                  icon="pi pi-trash" 
+                  [text]="true" 
+                  severity="danger"
+                  (onClick)="removeMedicineRow(rowIndex)">
+                </p-button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="4" style="text-align:center;padding:12px;">No medicines added.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <div class="actions">
+        <p-button label="Create Order" [disabled]="!selectedCampId || loading" (onClick)="createOrder()"></p-button>
+      </div>
+    </div>
+  </p-card>
+</div>

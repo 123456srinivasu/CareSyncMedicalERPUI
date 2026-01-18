@@ -49,6 +49,12 @@ export const API_CONFIG = {
       BASE: '/pharmacy-supplier',
       ACTIVE: '/pharmacy-supplier/active',
     },
+    CAMP_PURCHASE_ORDERS: {
+      BASE: '/camp-purchase-orders',
+      BY_SUPPLIER: (supplierId: number) => `/camp-purchase-orders/supplier/${supplierId}`,
+      ORDER_LINES: (purchaseOrderId: number) => `/camp-purchase-orders/${purchaseOrderId}/order-lines`,
+      REVIEW: (purchaseOrderId: number) => `/camp-purchase-orders/${purchaseOrderId}/review`
+    },
     INVOICE: {
       BASE: '/invoice',
       CREATE: '/invoice',

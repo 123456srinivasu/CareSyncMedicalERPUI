@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { getApiUrl, API_CONFIG } from '../constants/api.constants';
@@ -420,6 +420,69 @@ export class CampsService {
     return this.http.post<any>(url, {}).pipe(
       catchError(error => {
         console.error(`Error stopping camp run ${campRunId} for camp ${campId}:`, error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Create a camp purchase order
+   */
+  createCampPurchaseOrder(payload: any): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.BASE);
+    return this.http.post<any>(url, payload).pipe(
+      catchError(error => {
+        console.error('Error creating camp purchase order:', error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get camp purchase orders by supplier with optional filters
+   */
+  getCampPurchaseOrdersBySupplier(supplierId: number, params?: any): Observable<any> {
+    // Assuming the endpoint appends the supplierId as a query param, since BY_SUPPLIER doesn't exist.
+    let url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.BASE);
+    let httpParams = new HttpParams().set('supplierId', supplierId.toString());
+
+    if (params) {
+      Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+          httpParams = httpParams.set(key, params[key].toString());
+        }
+      });
+    }
+
+    return this.http.get<any>(url, { params: httpParams }).pipe(
+      catchError(error => {
+        console.error(`Error fetching camp purchase orders for supplier ${supplierId}:`, error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Get camp purchase order lines
+   */
+  getCampPurchaseOrderLines(purchaseOrderId: number): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.ORDER_LINES(purchaseOrderId));
+    return this.http.get<any>(url).pipe(
+      catchError(error => {
+        console.error(`Error fetching order lines for purchase order ${purchaseOrderId}:`, error);
+        throw error;
+      })
+    );
+  }
+
+  /**
+   * Review/approve a camp purchase order
+   */
+  reviewCampPurchaseOrder(purchaseOrderId: number, payload: any): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.REVIEW(purchaseOrderId));
+    return this.http.put<any>(url, payload).pipe(
+      catchError(error => {
+        console.error(`Error reviewing purchase order ${purchaseOrderId}:`, error);
         throw error;
       })
     );

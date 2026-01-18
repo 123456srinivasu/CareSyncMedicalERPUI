@@ -1,0 +1,152 @@
+<p-toast></p-toast>
+
+<div class="camp-accept-order-container">
+  <p-card header="Camp - Accept Order">
+    <div class="form-container">
+      <div class="field-row">
+        <div class="field flex-1">
+          <label for="camp">Select Camp</label>
+          <p-dropdown
+            id="camp"
+            [(ngModel)]="selectedCampId"
+            [options]="campOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="All Camps"
+            [showClear]="true"
+            [disabled]="loading"
+            (onChange)="onCampChange()"
+            (onClear)="clearSelection()"
+            appendTo="body"
+            class="w-full">
+          </p-dropdown>
+          <small *ngIf="loading" class="loading-text">Loading camps...</small>
+          <small *ngIf="errorMessage" class="error-text">{{ errorMessage }}</small>
+        </div>
+        <div class="field flex-1">
+          <label for="status">Order Status</label>
+          <p-dropdown
+            id="status"
+            [(ngModel)]="selectedStatus"
+            [options]="statusOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="All"
+            [showClear]="true"
+            (onChange)="onStatusChange()"
+            appendTo="body"
+            class="w-full">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <p-table [value]="filteredOrders" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 10%">Order #</th>
+            <th style="width: 20%">Camp Name</th> 
+            <th style="width: 20%">Ordered Date</th>
+            <th style="width: 10%">Status</th>
+            <th style="width: 15%">Comments</th>
+            <th style="width: 15%">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.purchaseOrderId }}</td>  
+            <td>{{ row.campName }}</td>
+            <td>{{ row.orderedDate | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              <p-tag [value]="row.status" [severity]="getStatusSeverity(row.status)"></p-tag>
+            </td> 
+            <td>{{ row.comments }}</td>
+            <td class="actions">             
+              <p-button label="View" icon="pi pi-eye" [text]="true" (onClick)="viewOrderDetailsPopup(row)">
+              </p-button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" style="text-align:center;padding:12px;">No orders found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-card>
+
+  <p-dialog
+    header="Order Details"
+    [(visible)]="displayOrderDialog"
+    [modal]="true"
+    [style]="{ width: '900px' }"
+    [draggable]="false"
+    [resizable]="false">
+    
+    <ng-container *ngIf="selectedOrder">
+      <div class="order-summary">      
+        <div>
+          <label>Purchase Order ID</label>
+          <div class="value">{{ selectedOrder.purchaseOrderId }}</div>
+        </div>
+        <div>
+          <label>Camp Name</label>
+          <div class="value">{{ selectedOrder.campName }}</div>
+        </div>
+        <div>
+          <label>Order Date</label>
+          <div class="value">{{ selectedOrder.orderedDate | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+       
+        <div>
+          <label>Status</label>
+          <div class="value">
+            <p-tag [value]="selectedOrder.status" [severity]="getStatusSeverity(selectedOrder.status)"></p-tag>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-lines">
+        <p-table [value]="orderLines" styleClass="p-datatable-striped">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 5%">Select</th>
+              <th style="width: 20%">Medicine</th>
+              <th style="width: 15%">Ordered Qty</th>
+              <th style="width: 20%">Accepted Qty</th>
+              <th style="width: 15%">Unit Price</th>
+              <th style="width: 15%">Total Price</th>
+              <th style="width: 10%">Remarks</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-line>
+            <tr>
+              <td>
+                <p-checkbox [(ngModel)]="line.selected" binary="true"></p-checkbox>
+              </td>
+              <td>{{ line.medicineName }}</td>
+              <td>{{ line.orderedQuantity }}</td>
+              <td>
+                <p-inputNumber [(ngModel)]="line.acceptedQuantity" [min]="0" [max]="line.orderedQuantity"></p-inputNumber>
+              </td>
+              <td><p-inputNumber [(ngModel)]="line.unitPrice" [min]="0" [max]="line.unitPrice"></p-inputNumber></td>
+              <td>{{ line.acceptedQuantity * line.unitPrice || 0 | currency:'INR' }}</td>
+              <td>
+                <input pInputText [(ngModel)]="line.remarks" placeholder="Remarks" class="w-full" />
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" style="text-align:center;padding:12px;">No line items.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <div class="dialog-actions">
+        <p-button label="Approve" icon="pi pi-check" (onClick)="approveSelected()" [disabled]="orderLines.length === 0"></p-button>
+      </div>
+    </ng-container>
+  </p-dialog>
+</div>

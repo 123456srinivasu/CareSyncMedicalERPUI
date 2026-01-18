@@ -54,6 +54,8 @@ export class NavigationComponent implements OnInit {
       items: [
         { label: 'Stock Report', route: '/stock/current' },
         { label: 'Add Stock', route: '/stock/add' },
+        { label: 'Camp - Place Order', route: '/stock/camp-place-order' },
+        { label: 'Camp - Accept Order', route: '/stock/camp-accept-order' },
       ],
     },
     {
