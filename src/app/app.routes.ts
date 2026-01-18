@@ -44,6 +44,14 @@ export const routes: Routes = [
       {
         path: 'current',
         loadComponent: () => import('./components/stock/current-stock.component').then(m => m.CurrentStockComponent)
+      },
+      {
+        path: 'camp-place-order',
+        loadComponent: () => import('./components/stock/camp-place-order.component').then(m => m.CampPlaceOrderComponent)
+      },
+      {
+        path: 'camp-accept-order',
+        loadComponent: () => import('./components/stock/camp-accept-order.component').then(m => m.CampAcceptOrderComponent)
       }
     ]
   },
