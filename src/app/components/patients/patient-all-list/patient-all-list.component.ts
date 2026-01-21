@@ -50,6 +50,13 @@ export class PatientAllListComponent implements OnInit {
   searchText = signal<string>('');
   customers!: any[];
 
+  // 1.1 Tab State
+  activeTab = signal<string>('Patient');
+
+  setActiveTab(tab: string) {
+    this.activeTab.set(tab);
+  }
+
   // 2. Track expanded rows using a Signal
   // The key will be the 'tblPatientId'
   expandedRows = signal<{ [key: string]: boolean }>({});

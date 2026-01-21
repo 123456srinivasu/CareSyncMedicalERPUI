@@ -1,6 +1,30 @@
-<div class="card">
+<h1 style="padding-bottom: 15px; font-size: 2rem; margin-top: -15px">History or Reports</h1>
+<div class="card" style="padding: 0">
+  <ul class="nav nav-tabs">
+    <li [class.active]="activeTab() === 'Camp'" (click)="setActiveTab('Camp')">Camps (99)</li>
+    <li [class.active]="activeTab() === 'Patient'" (click)="setActiveTab('Patient')">
+      Patient Details (1.81k )
+    </li>
+    <li [class.active]="activeTab() === 'Medicine'" (click)="setActiveTab('Medicine')">
+      Medicine Details (100)
+    </li>
+    <li [class.active]="activeTab() === 'Doctor'" (click)="setActiveTab('Doctor')">
+      Doctor Details (280)
+    </li>
+    <li [class.active]="activeTab() === 'Discount'" (click)="setActiveTab('Discount')">
+      Discount Details list (200 k)
+    </li>
+    <li [class.active]="activeTab() === 'Date'" (click)="setActiveTab('Date')">
+      Date range Details
+    </li>
+  </ul>
   <p-table
     [value]="customers"
+    id="campTable"
+    *ngIf="activeTab() === 'Patient'"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 20]"
     sortField="representative.name"
     sortMode="single"
     dataKey="representative.name"
@@ -17,7 +41,7 @@
         <th style="width: 20%">Phone</th>
         <th style="width: 20%">Address</th>
         <th style="width: 20%">DOB</th>
-        <th style="width: 20%">Actions</th>
+        <th style="width: 20%">Status</th>
       </tr>
     </ng-template>
     <ng-template #groupheader let-customer let-rowIndex="rowIndex" let-expanded="expanded">
@@ -60,7 +84,7 @@
         <td style="width: 20%; font-weight: normal">
           {{ customer.representative.age }}
         </td>
-        <td style="width: 20%; font-weight: normal">Actions</td>
+        <td style="width: 20%; font-weight: normal">Active</td>
       </tr>
       <tr *ngIf="expanded" class="surface-ground font-bold">
         <td colspan="8" style="background-color: #f0f0f091">
