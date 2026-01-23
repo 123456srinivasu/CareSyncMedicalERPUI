@@ -165,6 +165,14 @@ export class CampsComponent implements OnInit {
   // Disable Password Dialog
   displayDisablePasswordDialog: boolean = false;
   selectedCampForDisablePassword: Camp | null = null;
+
+  // History Dialog
+  displayHistoryDialog: boolean = false;
+  selectedCampForHistory: Camp | null = null;
+  campHistoryEntries: any[] = [];
+  filteredHistoryEntries: any[] = [];
+  historyDateOptions: Array<{ label: string; value: string }> = [];
+  selectedHistoryDate: string = 'All';
   
   doctors: any[] = [
     // { label: 'Dr. John Smith', value: 1, selected: false },
@@ -276,7 +284,7 @@ export class CampsComponent implements OnInit {
  
   errorMessage: any = '';
   successMessage: string = '';
-  pageSize: number = 5;
+  pageSize: number = 10;
   pageNumber: number = 0;
   first: number = 0;
   totalRecords: number = 0;
@@ -1046,7 +1054,40 @@ export class CampsComponent implements OnInit {
     const datePart = `${day}${month}${year}`;
     return `${namePart}${datePart}`;
   }
-
+isSaveDisabled() {
+  console.log('isSaveDisabled---->',this.campForm, this.campForm.camp_name, this.selectedDoctors.length, this.selectedVolunteers.length, this.campForm.schedule_week, this.campForm.schedule_day, this.campForm.medicine_responsibility, this.campForm.medicine_responsibility_type, this.campForm.medicine_responsibility_outside);
+   
+  return this.campForm.camp_name=='' ||
+  this.selectedDoctors.length === 0 || 
+  this.selectedVolunteers.length === 0 ||
+  this.campForm.schedule_week=='' ||
+  this.campForm.schedule_day=='' ||
+ this.campForm.shipping_state=='' ||
+  this.campForm.shipping_district=='' ||
+  this.campForm.shipping_mandle=='' ||
+  this.campForm.shipping_address=='' ||
+  this.campForm.shipping_city=='' ||   
+  this.campForm.location_state=='' ||
+  this.campForm.location_district=='' ||
+  this.campForm.location_mandle=='' ||
+  this.campForm.location_address=='' ||
+  this.campForm.location_city=='' ||
+   this.campForm.organizer_name_1=='' ||
+   this.campForm.organizer_phone_no_1=='' || 
+   !(this.campForm.january==true ||
+    this.campForm.february==true ||
+    this.campForm.march==true ||
+    this.campForm.april==true ||
+    this.campForm.may==true ||
+    this.campForm.june==true ||
+    this.campForm.july==true ||
+    this.campForm.august==true ||
+    this.campForm.september==true ||
+    this.campForm.october==true ||
+    this.campForm.november==true ||
+    this.campForm.december==true)||
+    (this.campForm.medicine_responsibility === 'Outside' && this.campForm.medicine_responsibility_outside === ''); 
+}
   saveCamp() {
     if (this.isEditMode && this.selectedCamp?.camp_id) {
       const index = this.camps.findIndex(c => c.camp_id === this.selectedCamp?.camp_id);
@@ -1067,6 +1108,7 @@ export class CampsComponent implements OnInit {
         "organizerEmail": this.campForm.organizer_email_1,
         "organizerPhone": this.campForm.organizer_phone_no_1,
         "medicineResponsibility": this.campForm.medicine_responsibility,
+        "medicineResponsibilityOutsideDetails": this.campForm.medicine_responsibility_outside,
         "locationAddress": {
           "addressLine1": this.campForm.location_address, 
           "addressLine2": this.campForm.location_address,
@@ -1657,6 +1699,74 @@ export class CampsComponent implements OnInit {
   closeDisablePasswordDialog() {
     this.displayDisablePasswordDialog = false;
     this.selectedCampForDisablePassword = null;
+  }
+
+  openHistoryDialog(camp: Camp) {
+    this.selectedCampForHistory = camp;
+    const rawHistory =
+      (camp as any)?.history ||
+      (camp as any)?.campHistory ||
+      (camp as any)?.campHistoryList ||
+      [];
+    this.campHistoryEntries = Array.isArray(rawHistory) ? rawHistory : [];
+    this.historyDateOptions = this.buildHistoryDateOptions(this.campHistoryEntries);
+    this.selectedHistoryDate = 'All';
+    this.filteredHistoryEntries = [...this.campHistoryEntries];
+    this.displayHistoryDialog = true;
+  }
+
+  closeHistoryDialog() {
+    this.displayHistoryDialog = false;
+    this.selectedCampForHistory = null;
+    this.campHistoryEntries = [];
+    this.filteredHistoryEntries = [];
+    this.historyDateOptions = [];
+    this.selectedHistoryDate = 'All';
+  }
+
+  onHistoryDateChange() {
+    if (this.selectedHistoryDate === 'All' || !this.selectedHistoryDate) {
+      this.filteredHistoryEntries = [...this.campHistoryEntries];
+      return;
+    }
+    this.filteredHistoryEntries = this.campHistoryEntries.filter(entry => {
+      return this.getHistoryDateKey(entry) === this.selectedHistoryDate;
+    });
+  }
+
+  private buildHistoryDateOptions(entries: any[]): Array<{ label: string; value: string }> {
+    const dates = new Map<string, string>();
+    entries.forEach(entry => {
+      const rawDate = this.getHistoryDateKey(entry);
+      if (!rawDate) {
+        return;
+      }
+      const label = this.formatHistoryDateLabel(rawDate);
+      dates.set(rawDate, label);
+    });
+    return [
+      { label: 'All', value: 'All' },
+      ...Array.from(dates.entries()).map(([value, label]) => ({ label, value }))
+    ];
+  }
+
+  private getHistoryDateKey(entry: any): string | null {
+    if (!entry) {
+      return null;
+    }
+    const value = entry.date || entry.updated_at || entry.created_at || entry.timestamp;
+    if (!value) {
+      return null;
+    }
+    return typeof value === 'string' ? value : new Date(value).toISOString();
+  }
+
+  private formatHistoryDateLabel(rawDate: string): string {
+    const parsed = new Date(rawDate);
+    if (Number.isNaN(parsed.getTime())) {
+      return rawDate;
+    }
+    return parsed.toLocaleDateString();
   }
 
   cancelNotReadyDialog() {

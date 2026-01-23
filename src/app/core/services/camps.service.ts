@@ -487,5 +487,26 @@ export class CampsService {
       })
     );
   }
+
+  /**
+   * Get all camp purchase orders (with optional filters)
+   */
+  getCampPurchaseOrders(params?: any): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.BASE);
+    let httpParams = new HttpParams();
+    if (params) {
+      Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+          httpParams = httpParams.set(key, params[key].toString());
+        }
+      });
+    }
+    return this.http.get<any>(url, { params: httpParams }).pipe(
+      catchError(error => {
+        console.error('Error fetching camp purchase orders:', error);
+        throw error;
+      })
+    );
+  }
 }
 

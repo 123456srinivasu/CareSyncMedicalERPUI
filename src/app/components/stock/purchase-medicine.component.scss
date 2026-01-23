@@ -1,4 +1,4 @@
-.camp-place-order-container {
+.purchase-medicine-container {
   .form-container {
     display: flex;
     flex-direction: column;
@@ -13,6 +13,12 @@
 
   .flex-1 {
     width: 50%;
+  }
+
+  .actions {
+    display: flex;
+    align-items: flex-end;
+    width: 279px;
   }
 
   .field {

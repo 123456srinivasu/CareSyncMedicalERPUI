@@ -46,12 +46,20 @@ export const routes: Routes = [
         loadComponent: () => import('./components/stock/current-stock.component').then(m => m.CurrentStockComponent)
       },
       {
-        path: 'camp-place-order',
-        loadComponent: () => import('./components/stock/camp-place-order.component').then(m => m.CampPlaceOrderComponent)
+        path: 'purchase-medicine',
+        loadComponent: () => import('./components/stock/purchase-medicine.component').then(m => m.PurchaseMedicineComponent)
+      },
+      {
+        path: 'purchase-medicine-orders-report',
+        loadComponent: () => import('./components/stock/purchase-medicine-orders-report.component').then(m => m.PurchaseMedicineOrdersReportComponent)
       },
       {
         path: 'camp-accept-order',
         loadComponent: () => import('./components/stock/camp-accept-order.component').then(m => m.CampAcceptOrderComponent)
+      },
+      {
+        path: 'camp-accept-order-report',
+        loadComponent: () => import('./components/stock/camp-accept-order-report.component').then(m => m.CampAcceptOrderReportComponent)
       }
     ]
   },

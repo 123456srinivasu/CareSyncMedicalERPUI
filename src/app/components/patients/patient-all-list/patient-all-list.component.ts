@@ -218,6 +218,7 @@ export class PatientAllListComponent implements OnInit {
         balance: 45250,
       },
     ];
+    console.log('customers-==>',this.customers);
   }
 
   onSearch() {

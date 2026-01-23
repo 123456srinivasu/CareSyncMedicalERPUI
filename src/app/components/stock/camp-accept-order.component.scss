@@ -7,12 +7,12 @@
 
   .field-row {
     display: flex;
+    flex-direction: row;
     gap: 12px;
-    flex-wrap: wrap;
   }
 
   .flex-1 {
-    flex: 1 1 240px;
+    width: 50%;
   }
 
   .field {

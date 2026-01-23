@@ -161,43 +161,9 @@ export class CampAcceptOrderComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('Error loading purchase orders:', error);
-          this.errorMessage = error?.error?.message || 'Failed to load purchase orders.';          
-          const res=[
-            {
-              "purchaseOrderId": 1001,
-              "campId": 456,
-              "campName": "Health Camp - Downtown",
-              "pharmacySupplierId": 123,
-              "supplierName": "MediSupply Corp",
-              "orderStatus": "PENDING",
-              "requestedAt": "2026-01-15T10:30:00.000+00:00",
-              "reviewedAt": "2026-01-16T14:45:00.000+00:00",
-              "remarks": "Urgent order for upcoming camp",
-              
-            },
-            {
-              "purchaseOrderId": 1002,
-              "campId": 456,
-              "campName": "Health Camp - Downtown",
-              "pharmacySupplierId": 123,
-              "supplierName": "MediSupply Corp",
-              "orderStatus": "PENDING",
-              "requestedAt": "2026-01-17T09:15:00.000+00:00",
-              "reviewedAt": "2026-01-18T11:20:00.000+00:00",
-              "remarks": "Additional supplies needed",
-              
-            }
-          ];
-          const mapToOrder = (po: any): CampOrderItem => ({
-            purchaseOrderId: po.purchaseOrderId ?? 0,
-            campId: po.campId ?? 0,
-            campName: po.campName ?? '',
-            orderedDate: po.requestedAt ?? '',
-            comments: po.remarks ?? '',
-            status: (po.orderStatus ?? po.status ?? 'PENDING') as OrderStatus,
-            supplierName: po.supplierName ?? ''
-          });
-          this.orders = res.map(mapToOrder);
+          this.errorMessage = error?.error?.message || 'Failed to load purchase orders.';
+         
+          this.orders = [];
           this.applyFilter();
         }
       });
@@ -252,25 +218,13 @@ export class CampAcceptOrderComponent implements OnInit {
           totalPrice: line.totalPrice ?? ((line.acceptedQuantity ?? line.requestedQuantity ?? 0) * (line.unitPrice ?? line.price ?? 0)),
           remarks: line.remarks ?? '',
           selected: true
-        }));
-
-        // Fallback if no lines returned
-        if (this.orderLines.length === 0) {
-          this.orderLines = [
-            { id: 1, medicineName: 'Paracetamol 500mg', orderedQuantity: 200, acceptedQuantity: 200, unitPrice: 5, totalPrice: 1000, remarks: '', selected: true },
-            { id: 2, medicineName: 'Ibuprofen 200mg', orderedQuantity: 120, acceptedQuantity: 110, unitPrice: 4, totalPrice: 480, remarks: '', selected: true }
-          ];
-        }
+        }));      
 
         this.displayOrderDialog = true;
       },
       error: (error: any) => {
         console.error('Error loading purchase order lines:', error);
-        // Keep placeholder for visibility on error
-        this.orderLines = [
-          { id: 1, medicineName: 'Paracetamol 500mg', orderedQuantity: 200, acceptedQuantity: 200, unitPrice: 5, totalPrice: 1000, remarks: '', selected: true },
-          { id: 2, medicineName: 'Ibuprofen 200mg', orderedQuantity: 120, acceptedQuantity: 110, unitPrice: 4, totalPrice: 480, remarks: '', selected: true }
-        ];
+        this.orderLines = [];
         this.displayOrderDialog = true;
       }
     });
@@ -283,45 +237,18 @@ export class CampAcceptOrderComponent implements OnInit {
       .filter(l => l.selected)
       .map(l => ({
         orderLineId: l.id,
-        acceptedQuantity: l.acceptedQuantity ?? 0,
-        unitPrice: l.unitPrice ?? 0,
-        remarks: l.remarks ?? ''
+        approvedQuantity: l.acceptedQuantity ?? 0,
+        approvedUnitPrice: l.unitPrice ?? 0,
+        lineStatus: 'APPROVED',
+        supplierComment: l.remarks ?? '',
       }));
 
     const payload = {
       purchaseOrderId: this.selectedOrder.purchaseOrderId,
-      status: 'ACCEPTED',
+      orderStatus: 'ACCEPTED',
       remarks: this.selectedOrder.comments || '',
       orderLines: selectedLines
-    };
-    // {
-    //   "purchaseOrderId": 123,
-    //   "orderStatus": "PARTIALLY_ACCEPTED",
-    //   "remarks": "Review completed. Some items are out of stock.",
-    //   "orderLines": [
-    //     {
-    //       "orderLineId": 1001,
-    //       "approvedQuantity": 500,
-    //       "approvedUnitPrice": 2.50,
-    //       "lineStatus": "APPROVED",
-    //       "supplierComment": "Available and approved"
-    //     },
-    //     {
-    //       "orderLineId": 1002,
-    //       "approvedQuantity": 100,
-    //       "approvedUnitPrice": 5.75,
-    //       "lineStatus": "PARTIAL",
-    //       "supplierComment": "Only 100 units available"
-    //     },
-    //     {
-    //       "orderLineId": 1003,
-    //       "approvedQuantity": 0,
-    //       "approvedUnitPrice": 0.00,
-    //       "lineStatus": "REJECTED",
-    //       "supplierComment": "Out of stock"
-    //     }
-    //   ]
-    // }
+    };   
 
     this.campsService.reviewCampPurchaseOrder(this.selectedOrder.purchaseOrderId, payload).subscribe({
       next: (response: any) => {

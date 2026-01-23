@@ -1,0 +1,239 @@
+<div class="purchase-orders-report-container">
+  <p-card header="Purchase Medicine Orders Report">
+    <div class="form-container">
+      <div class="field-row">
+        <div class="field flex-1">
+          <label for="status">Status</label>
+          <p-select
+            id="status"
+            [(ngModel)]="selectedStatus"
+            [options]="statusOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="All"
+            [showClear]="true"
+            (onChange)="onFilterChange()"
+            appendTo="body"
+            class="w-full">
+          </p-select>
+        </div>
+        <div class="field flex-1">
+          <label for="search">Search</label>
+          <input
+            id="search"
+            pInputText
+            [(ngModel)]="searchText"
+            (ngModelChange)="onFilterChange()"
+            placeholder="Search by Order #, Supplier, Camp"
+            class="w-full" />
+        </div>
+        <div class="actions">
+          <p-button label="Purchase Medicine" icon="pi pi-shopping-cart" (onClick)="goToPurchase()"></p-button>
+        </div>
+      </div>
+      <p-table
+        #dt
+        [value]="filteredOrders"
+        dataKey="purchaseOrderId"
+        [rowHover]="true"
+        [expandedRowKeys]="expandedRows"
+        (onRowExpand)="onRowExpand($event)"
+        (onRowCollapse)="onRowCollapse($event)"
+        [tableStyle]="{ 'min-width': '70rem' }">
+
+        <ng-template pTemplate="caption">
+          <div class="table-caption">
+            <span *ngIf="loading">Loading orders...</span>
+            <span *ngIf="!loading && filteredOrders.length === 0">No matching orders</span>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 4%"></th>
+            <th style="width: 12%">Order #</th>
+            <th style="width: 22%">Camp</th>
+            <th style="width: 18%">Supplier</th>
+            <th style="width: 14%">Requested At</th>
+            <th style="width: 10%">Status</th>
+            <th style="width: 20%">Remarks</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-expanded="expanded">
+          <tr>
+            <td>
+              <button
+                type="button"
+                pButton
+                pRipple
+                [pRowToggler]="row"
+                text
+                rounded
+                plain
+                class="mr-2"
+                [icon]="expandedRows[row.purchaseOrderId.toString()] ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+              </button>
+            </td>
+            <td>{{ row.purchaseOrderId }}</td>
+            <td>{{ row.campName }}</td>
+            <td>{{ row.supplierName }}</td>
+            <td>{{ row.requestedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td><p-tag [value]="row.orderStatus" [severity]="getStatusSeverity(row.orderStatus)"></p-tag></td>
+            <td>{{ row.remarks || '-' }}</td>
+          </tr>
+        <!-- </ng-template>
+        
+        <ng-template  let-rowData> -->
+          <tr *ngIf="expandedRows[row.purchaseOrderId.toString()]">
+            <td colspan="7">
+              <p-table  [value]="row.orderLines || []" styleClass="p-datatable-sm">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width: 30%">Medicine</th>
+                    <th style="width: 15%">Requested Qty</th>
+                    <th style="width: 15%">Approved Qty</th>
+                    <th style="width: 15%">Unit Price</th>
+                    <th style="width: 10%">Status</th>
+                    <th style="width: 15%">Comment</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-line>
+                  <tr>
+                    <td>{{ line.medicationName }}</td>
+                    <td>{{ line.requestedQuantity }}</td>
+                    <td>{{ line.approvedQuantity }}</td>
+                    <td>{{ line.approvedUnitPrice | currency:'INR' }}</td>
+                    <td>{{ line.lineStatus || '-' }}</td>
+                    <td>{{ line.supplierComment || '-' }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="6" style="text-align:center;padding:8px;">No order lines.</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" style="text-align:center;padding:12px;">No purchase orders found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-card>
+  <!-- <div class="card">
+    <p-table
+      [value]="customers"
+      sortField="representative.name"
+      sortMode="single"
+      dataKey="representative.name"
+      rowGroupMode="subheader"
+      groupRowsBy="representative.name"
+      [tableStyle]="{ 'min-width': '70rem' }"
+    >
+      <ng-template #header>
+        <tr>
+          <th style="width: 20%">Name</th>
+          <th style="width: 20%">Patient ID</th>
+          <th style="width: 20%">Age</th>
+          <th style="width: 20%">Gender</th>
+          <th style="width: 20%">Phone</th>
+          <th style="width: 20%">Address</th>
+          <th style="width: 20%">DOB</th>
+          <th style="width: 20%">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #groupheader let-customer let-rowIndex="rowIndex" let-expanded="expanded">
+        <tr>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              [pRowToggler]="customer"
+              text
+              rounded
+              plain
+              class="mr-2"
+              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+            ></button>
+            <span class="font-bold ml-2">{{ customer.representative.name }}</span>
+          </td>
+          <td style="width: 20%; font-weight: normal">
+            {{ customer.representative.mrNumber }}
+          </td>
+          <td style="width: 20%; font-weight: normal">
+            {{ customer.representative.age }}
+          </td>
+          <td style="width: 20%; font-weight: normal">
+            {{ customer.representative.gender }}
+          </td>
+          <td style="width: 20%; font-weight: normal">
+            {{ customer.representative.mobileNumber }}
+          </td>
+          <td style="width: 20%; font-weight: normal">
+            {{
+              customer.patientAddressesList &&
+              customer.patientAddressesList.length > 0 &&
+              customer.patientAddressesList[0].mandal
+                ? customer.patientAddressesList[0].mandal.name
+                : 'N/A'
+            }}
+          </td>
+          <td style="width: 20%; font-weight: normal">
+            {{ customer.representative.age }}
+          </td>
+          <td style="width: 20%; font-weight: normal">Actions</td>
+        </tr>
+        <tr *ngIf="expanded" class="surface-ground font-bold">
+          <td colspan="8" style="background-color: #f0f0f091">
+            <table style="width: 100%; font-weight: bold; border-collapse: collapse">
+              <thead>
+                <tr>
+                  <th style="width: 20%">Camp ID</th>
+                  <th style="width: 20%">Problem</th>
+                  <th style="width: 20%">specialist</th>
+                  <th style="width: 20%">Medicine</th>
+                  <th style="width: 20%">Date</th>
+                </tr>
+              </thead>
+            </table>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #groupfooter let-customer>
+        <tr class="p-rowgroup-footer">
+          <td colspan="4" style="text-align: right">Total attended camps :</td>
+          <td>{{ calculateCustomerTotal(customer.representative.name) }}</td>
+        </tr>
+      </ng-template>
+  
+      <ng-template #expandedrow let-customer>
+        <tr style="background-color: #f0f0f091">
+          <td>
+            {{ customer.name }}
+          </td>
+          <td>
+            <div class="flex items-center gap-2">
+              <span>{{ customer.country.name }}</span>
+            </div>
+          </td>
+          <td>
+            {{ customer.company }}
+          </td>
+          <td>
+            <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" />
+          </td>
+          <td>{{ customer.date }}</td>
+          <td colspan="3">&nbsp;</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div> -->
+  
+</div>
