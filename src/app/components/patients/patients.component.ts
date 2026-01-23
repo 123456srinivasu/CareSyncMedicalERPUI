@@ -639,7 +639,8 @@ export class PatientsComponent implements OnInit {
     if (!dob) return 0;
     const today = new Date();
     const birthDate = new Date(dob);
-    let age = today.getFullYear() - birthDate.getFullYear();
+    //let age = today.getFullYear() - birthDate.getFullYear();
+    let age = today.getFullYear() - Number(dob);
     const monthDiff = today.getMonth() - birthDate.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
