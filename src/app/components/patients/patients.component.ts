@@ -109,7 +109,9 @@ export class PatientsComponent implements OnInit {
         patientImage: [], // Empty for now as per instructions
         patientAddressesList: [
           {
-            addressLine: this.newPatient.address.street,
+            addressLine: this.newPatient.address.street
+              ? this.newPatient.address.street
+              : this.newPatient.address.city,
             city: this.newPatient.address.city,
             stateId: this.newPatient.address.state,
             districtId: this.newPatient.address.district,

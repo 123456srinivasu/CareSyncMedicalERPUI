@@ -393,8 +393,21 @@
           </div>
         </div>
         <div class="col-md-4">
-          <label class="form-label">Father Name</label>
-          <input class="form-control" [(ngModel)]="newPatient.fatherName" name="fatherName" />
+          <label class="form-label">Father Name <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.fatherName"
+            name="fatherName"
+            required
+            #fatherName="ngModel"
+            [class.is-invalid]="fatherName.invalid && (fatherName.dirty || fatherName.touched)"
+          />
+          <div
+            *ngIf="fatherName.invalid && (fatherName.dirty || fatherName.touched)"
+            class="invalid-feedback"
+          >
+            Father Name is required.
+          </div>
         </div>
         <div class="col-md-2">
           <label class="form-label">Age <span class="text-danger">*</span></label>
@@ -541,12 +554,27 @@
           </div>
         </div>
         <div class="col-md-2">
-          <label class="form-label">City /Village </label>
-          <input class="form-control" [(ngModel)]="newPatient.address.city" name="city" />
+          <label class="form-label">City /Village <span class="text-danger">*</span></label>
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.address.city"
+            name="city"
+            required
+            #city="ngModel"
+            [class.is-invalid]="city.invalid && (city.dirty || city.touched)"
+          />
+          <div *ngIf="city.invalid && (city.dirty || city.touched)" class="invalid-feedback">
+            City /Village is required.
+          </div>
         </div>
         <div class="col-md-2">
           <label class="form-label">Street </label>
-          <input class="form-control" [(ngModel)]="newPatient.address.street" name="street" />
+          <input
+            class="form-control"
+            [(ngModel)]="newPatient.address.street"
+            name="street"
+            #street="ngModel"
+          />
         </div>
 
         <div class="col-md-2">
