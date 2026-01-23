@@ -1,0 +1,79 @@
+<p-toast></p-toast>
+
+<p-card header="Camp Accept Order Report" styleClass="report-card">
+  <div class="filters">
+    <div class="filter-group">
+      <label>Status</label>
+      <p-select
+        [options]="statusOptions"
+        [(ngModel)]="selectedStatus"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="All statuses"
+        (onChange)="applyFilters()"
+        class="w-full">
+      </p-select>
+    </div>
+
+    <div class="filter-group">
+      <label>Search</label>
+      <span class="p-input-icon-left w-full">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          [(ngModel)]="searchText"
+          (keyup.enter)="applyFilters()"
+          placeholder="Search by camp, supplier or order id"
+          class="w-full" />
+      </span>
+    </div>
+
+    <div class="actions">
+      <button pButton type="button" label="Apply" icon="pi pi-filter" class="p-button-sm" (click)="applyFilters()"></button>
+      <button pButton type="button" label="Clear" icon="pi pi-times" class="p-button-text p-button-sm" (click)="clearFilters()"></button>
+      <button pButton type="button" label="Refresh" icon="pi pi-refresh" class="p-button-text p-button-sm" (click)="refresh()"></button>
+    </div>
+  </div>
+
+  <p-table
+    [value]="filteredOrders"
+    dataKey="purchaseOrderId"
+    [loading]="loading"
+    styleClass="p-datatable-striped"
+    [tableStyle]="{ 'min-width': '65rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 120px;">Order ID</th>
+        <th>Camp</th>
+        <th>Supplier</th>
+        <th style="width: 140px;">Status</th>
+        <th style="width: 160px;">Requested At</th>
+        <th style="width: 140px;">Total</th>
+        <th>Remarks</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr>
+        <td>{{ row.purchaseOrderId }}</td>
+        <td>{{ row.campName || '-' }}</td>
+        <td>{{ row.supplierName || '-' }}</td>
+        <td>
+          <p-tag [value]="row.orderStatus" [severity]="getStatusSeverity(row.orderStatus)"></p-tag>
+        </td>
+        <td>{{ row.requestedAt | date: 'MM/dd/yyyy' }}</td>
+        <td>{{ row.totalAmount | number: '1.0-2' }}</td>
+        <td>{{ row.remarks || '-' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7">
+          <div class="empty-message">
+            {{ loading ? 'Loading orders...' : 'No camp purchase orders found.' }}
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

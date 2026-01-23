@@ -1,6 +1,6 @@
-<div class="camp-place-order-container">
+<div class="purchase-medicine-container">
   <p-toast></p-toast>
-  <p-card header="Camp - Place Order">
+  <p-card header="Purchase Medicine">
     <div class="form-container">
       <div class="field-row">
         <div class="field flex-1">
@@ -29,6 +29,9 @@
             [(ngModel)]="orderComments"
             placeholder="Add comments for this order"
             class="w-full">
+        </div>
+        <div class="actions">
+          <p-button label="View Purchase Orders" icon="pi pi-list" (onClick)="goToReport()"></p-button>
         </div>
       </div>
 

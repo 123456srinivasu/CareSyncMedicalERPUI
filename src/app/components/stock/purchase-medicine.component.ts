@@ -13,10 +13,11 @@ import { MessageService } from 'primeng/api';
 import { CampsService } from '../../core/services/camps.service';
 import { SuppliersService, PharmacySupplier } from '../../core/services/suppliers.service';
 import { catchError, finalize } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
 @Component({
-  selector: 'app-camp-place-order',
+  selector: 'app-purchase-medicine',
   standalone: true,
   imports: [
     CommonModule,
@@ -31,13 +32,14 @@ import { of } from 'rxjs';
     InputTextModule
   ],
   providers: [MessageService],
-  templateUrl: './camp-place-order.component.html',
-  styleUrl: './camp-place-order.component.scss'
+  templateUrl: './purchase-medicine.component.html',
+  styleUrl: './purchase-medicine.component.scss'
 })
-export class CampPlaceOrderComponent implements OnInit {
+export class PurchaseMedicineComponent implements OnInit {
   private readonly campsService = inject(CampsService);
   private readonly suppliersService = inject(SuppliersService);
   private readonly messageService = inject(MessageService);
+  private readonly router = inject(Router);
 
   campOptions: { label: string; value: number }[] = [];
   selectedCampId?: number;
@@ -222,36 +224,7 @@ export class CampPlaceOrderComponent implements OnInit {
       remarks: this.orderComments || '',
       supplierOrders: Array.from(supplierOrdersMap.values())
     };
-    // {
-    //   "campId": 12,
-    //   "requestedBy": "user",
-    //   "remarks": "Medicines required for January camp",
-    //   "supplierOrders": [
-    //     {
-    //       "supplierId": row.supplierId,
-    //       "medicines": [
-    //         {
-    //           "medicationId": row.medicineId,
-    //           "requestedQuantity": row.quantity
-    //         },
-    //         {
-    //           "medicationId": row.medicineId,
-    //           "requestedQuantity": row.quantity
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       "supplierId": row.supplierId,
-    //       "medicines": [
-    //         {
-    //           "medicationId": row.medicineId,
-    //           "requestedQuantity": row.quantity
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // }
-
+    
     this.loading = true;
     this.campsService.createCampPurchaseOrder(payload)
       .pipe(
@@ -284,5 +257,9 @@ export class CampPlaceOrderComponent implements OnInit {
           });
         }
       });
+  }
+
+  goToReport(): void {
+    this.router.navigate(['/stock/purchase-medicine-orders-report']);
   }
 }
