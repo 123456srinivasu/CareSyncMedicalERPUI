@@ -24,13 +24,25 @@
     [value]="patients"
     dataKey="patientId"
     *ngIf="activeTab() === 'Patient'"
+    [paginator]="true"
+    [rows]="7"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[7, 10, 20]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} patients"
+    [tableStyle]="{ 'min-width': '50rem' }"
   >
     <ng-template #header>
       <tr>
         <th style="width: 3rem"></th>
         <th>Patient Name</th>
+        <th>Father Name</th>
         <th>Age</th>
-        <th>Total Camps Attended</th>
+        <th>Camps Attended</th>
+        <th>Diagnosis</th>
+        <th>diseases</th>
+        <th>campRx</th>
+        <th>outsideRx</th>
+        <th>comments</th>
       </tr>
     </ng-template>
 
@@ -45,9 +57,46 @@
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
           />
         </td>
-        <td>{{ patient.name }}</td>
+        <td class="font-bold text-blue-800">{{ patient.name }}</td>
+        <td>{{ patient.fatherName }}</td>
         <td>{{ patient.age }}</td>
-        <td>{{ patient.campsAttended?.length || 0 }}</td>
+        <td>
+          <span class="p-badge p-badge-info">{{ patient.campsAttended?.length || 0 }}</span>
+        </td>
+        <td>{{ patient.diagnosis }}</td>
+        <td>
+          <div class="flex flex-wrap gap-1">
+            <p-tag
+              *ngFor="let disease of patient.diseases"
+              [value]="disease"
+              severity="danger"
+              [rounded]="true"
+            ></p-tag>
+          </div>
+        </td>
+        <td>
+          <div class="flex flex-wrap gap-1">
+            <p-tag *ngFor="let rx of patient.campRx" [value]="rx" severity="success"></p-tag>
+          </div>
+        </td>
+        <td>
+          <div class="flex flex-wrap gap-1">
+            <p-tag
+              *ngFor="let outRx of patient.outsideRx"
+              [value]="outRx"
+              severity="warning"
+            ></p-tag>
+          </div>
+        </td>
+        <td>
+          <span
+            class="text-sm italic text-gray-600 truncate block"
+            style="max-width: 200px"
+            [title]="patient.comments"
+          >
+            {{ patient.comments }}
+          </span>
+        </td>
       </tr>
     </ng-template>
 
@@ -118,13 +167,25 @@
     </ng-template>
   </p-table>
 
-  <p-table id="threeLevelCampTable" [value]="camps" dataKey="campId" *ngIf="activeTab() === 'Camp'">
+  <p-table
+    id="threeLevelCampTable"
+    [value]="camps"
+    dataKey="campId"
+    *ngIf="activeTab() === 'Camp'"
+    [paginator]="true"
+    [rows]="7"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[7, 10, 20]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} camps"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
     <ng-template #header>
       <tr>
         <th style="width: 3rem"></th>
         <th>Camp Name</th>
         <th>Date</th>
         <th>Location</th>
+        <th>Patient Count</th>
       </tr>
     </ng-template>
 
@@ -139,21 +200,26 @@
             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
           />
         </td>
-        <td>{{ camp.campName }}</td>
+        <td class="font-bold">{{ camp.campName }}</td>
         <td>{{ camp.date }}</td>
         <td>{{ camp.location }}</td>
+        <td>
+          <span [class]="camp.patientCount > 5 ? 'p-badge p-badge-danger' : 'p-badge p-badge-info'">
+            {{ camp.patientCount }} Patients
+          </span>
+        </td>
       </tr>
     </ng-template>
 
     <ng-template #expandedrow let-camp>
       <tr>
-        <td colspan="4" class="p-3 bg-gray-50">
+        <td colspan="5" class="p-3 bg-gray-50">
           <div class="ml-4">
             <p-table [value]="camp.patients" dataKey="patientId">
               <ng-template #header>
                 <tr>
                   <th style="width: 3rem"></th>
-                  <th>Patient</th>
+                  <th>Patient Name</th>
                   <th>Age</th>
                   <th>Diagnosis</th>
                 </tr>
@@ -173,27 +239,31 @@
                   </td>
                   <td>{{ patient.name }}</td>
                   <td>{{ patient.age }}</td>
-                  <td>{{ patient.diagnosis }}</td>
+                  <td>
+                    <span class="p-tag p-tag-rounded">{{ patient.diagnosis }}</span>
+                  </td>
                 </tr>
               </ng-template>
 
               <ng-template #expandedrow let-patient>
                 <tr>
                   <td colspan="4" class="p-3">
-                    <div class="ml-8 border-1 surface-border border-round">
+                    <div class="ml-8 border-1 surface-border border-round shadow-1">
                       <p-table [value]="patient.medicines" dataKey="medicineId">
                         <ng-template #header>
                           <tr class="bg-blue-50">
                             <th>Medicine Name</th>
                             <th>Dosage</th>
-                            <th>Quantity</th>
+                            <th>Days</th>
+                            <th>Total Quantity</th>
                           </tr>
                         </ng-template>
                         <ng-template #body let-medicine>
                           <tr>
                             <td>{{ medicine.medicineName }}</td>
                             <td>{{ medicine.dosage }}</td>
-                            <td>{{ medicine.quantity }}</td>
+                            <td>{{ medicine.days }} days</td>
+                            <td class="font-bold">{{ medicine.quantity }}</td>
                           </tr>
                         </ng-template>
                       </p-table>
@@ -213,6 +283,12 @@
     [value]="medicinesMaster"
     dataKey="medicineId"
     *ngIf="activeTab() === 'Medicine'"
+    [paginator]="true"
+    [rows]="7"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[7, 10, 20]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} medicines"
+    [tableStyle]="{ 'min-width': '50rem' }"
   >
     <ng-template #header>
       <tr>
@@ -312,6 +388,12 @@
     [value]="doctorsMaster"
     dataKey="doctorId"
     *ngIf="activeTab() === 'Doctor'"
+    [paginator]="true"
+    [rows]="7"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[7, 10, 20]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} doctor"
+    [tableStyle]="{ 'min-width': '50rem' }"
   >
     <ng-template #header>
       <tr>
@@ -433,6 +515,12 @@
     [value]="illnessMaster"
     dataKey="illnessId"
     *ngIf="activeTab() === 'Illness'"
+    [paginator]="true"
+    [rows]="7"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[7, 10, 20]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} illnesses"
+    [tableStyle]="{ 'min-width': '50rem' }"
   >
     <ng-template #header>
       <tr>
@@ -538,6 +626,12 @@
     [value]="discountMaster"
     dataKey="discountValue"
     *ngIf="activeTab() === 'Discount'"
+    [paginator]="true"
+    [rows]="7"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[7, 10, 20]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} discount categories"
+    [tableStyle]="{ 'min-width': '50rem' }"
   >
     <ng-template #header>
       <tr>
