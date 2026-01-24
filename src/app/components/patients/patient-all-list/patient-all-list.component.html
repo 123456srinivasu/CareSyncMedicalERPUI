@@ -14,124 +14,110 @@
     <li [class.active]="activeTab() === 'Discount'" (click)="setActiveTab('Discount')">
       Discount Details list (200 k)
     </li>
-    <li [class.active]="activeTab() === 'Date'" (click)="setActiveTab('Date')">
-      Date range Details
+    <li [class.active]="activeTab() === 'Illness'" (click)="setActiveTab('Illness')">
+      Illness Details
     </li>
   </ul>
-  <!--
+
   <p-table
-    [value]="customers"
-    id="campTable"
+    id="threeLevelPatientTable"
+    [value]="patients"
+    dataKey="patientId"
     *ngIf="activeTab() === 'Patient'"
-    [paginator]="true"
-    [rows]="10"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    sortField="representative.name"
-    sortMode="single"
-    dataKey="representative.name"
-    rowGroupMode="subheader"
-    groupRowsBy="representative.name"
-    [tableStyle]="{ 'min-width': '70rem' }"
   >
     <ng-template #header>
       <tr>
-        <th style="width: 20%">Name</th>
-        <th style="width: 20%">Patient ID</th>
-        <th style="width: 20%">Age</th>
-        <th style="width: 20%">Gender</th>
-        <th style="width: 20%">Phone</th>
-        <th style="width: 20%">Address</th>
-        <th style="width: 20%">DOB</th>
-        <th style="width: 20%">Status</th>
-      </tr>
-    </ng-template>
-    <ng-template #groupheader let-customer let-rowIndex="rowIndex" let-expanded="expanded">
-      <tr>
-        <td>
-          <button
-            type="button"
-            pButton
-            pRipple
-            [pRowToggler]="customer"
-            text
-            rounded
-            plain
-            class="mr-2"
-            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-          ></button>
-          <span class="font-bold ml-2">{{ customer.representative.name }}</span>
-        </td>
-        <td style="width: 20%; font-weight: normal">
-          {{ customer.representative.mrNumber }}
-        </td>
-        <td style="width: 20%; font-weight: normal">
-          {{ customer.representative.age }}
-        </td>
-        <td style="width: 20%; font-weight: normal">
-          {{ customer.representative.gender }}
-        </td>
-        <td style="width: 20%; font-weight: normal">
-          {{ customer.representative.mobileNumber }}
-        </td>
-        <td style="width: 20%; font-weight: normal">
-          {{
-            customer.patientAddressesList &&
-            customer.patientAddressesList.length > 0 &&
-            customer.patientAddressesList[0].mandal
-              ? customer.patientAddressesList[0].mandal.name
-              : 'N/A'
-          }}
-        </td>
-        <td style="width: 20%; font-weight: normal">
-          {{ customer.representative.age }}
-        </td>
-        <td style="width: 20%; font-weight: normal">Active</td>
-      </tr>
-      <tr *ngIf="expanded" class="surface-ground font-bold">
-        <td colspan="8" style="background-color: #f0f0f091">
-          <table style="width: 100%; font-weight: bold; border-collapse: collapse">
-            <thead>
-              <tr>
-                <th style="width: 20%">Camp ID</th>
-                <th style="width: 20%">Problem</th>
-                <th style="width: 20%">specialist</th>
-                <th style="width: 20%">Medicine</th>
-                <th style="width: 20%">Date</th>
-              </tr>
-            </thead>
-          </table>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template #groupfooter let-customer>
-      <tr class="p-rowgroup-footer">
-        <td colspan="4" style="text-align: right">Total attended camps :</td>
-        <td>{{ calculateCustomerTotal(customer.representative.name) }}</td>
+        <th style="width: 3rem"></th>
+        <th>Patient Name</th>
+        <th>Age</th>
+        <th>Total Camps Attended</th>
       </tr>
     </ng-template>
 
-    <ng-template #expandedrow let-customer>
-      <tr style="background-color: #f0f0f091">
+    <ng-template #body let-patient let-expanded="expanded">
+      <tr>
         <td>
-          {{ customer.name }}
+          <p-button
+            type="button"
+            [pRowToggler]="patient"
+            [text]="true"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
         </td>
-        <td>
-          <div class="flex items-center gap-2">
-            <span>{{ customer.country.name }}</span>
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.age }}</td>
+        <td>{{ patient.campsAttended?.length || 0 }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-patient>
+      <tr>
+        <td colspan="4" class="p-3 bg-gray-50">
+          <div class="ml-4">
+            <p-table [value]="patient.campsAttended" dataKey="campId">
+              <ng-template #header>
+                <tr>
+                  <th style="width: 3rem"></th>
+                  <th>Camp Name</th>
+                  <th>Date</th>
+                  <th>Diagnosis at Camp</th>
+                </tr>
+              </ng-template>
+
+              <ng-template #body let-camp let-pExpanded="expanded">
+                <tr>
+                  <td>
+                    <p-button
+                      type="button"
+                      [pRowToggler]="camp"
+                      [text]="true"
+                      [rounded]="true"
+                      severity="secondary"
+                      [icon]="pExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                    />
+                  </td>
+                  <td>{{ camp.campName }}</td>
+                  <td>{{ camp.date }}</td>
+                  <td>
+                    <span class="font-bold text-blue-600">{{ camp.diagnosis }}</span>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template #expandedrow let-camp>
+                <tr>
+                  <td colspan="4" class="p-3">
+                    <div class="ml-8 border-1 surface-border border-round shadow-1">
+                      <p-table [value]="camp.medicines" dataKey="medicineId">
+                        <ng-template #header>
+                          <tr class="bg-blue-50">
+                            <th>Medicine Name</th>
+                            <th>Dosage</th>
+                            <th>Duration (Days)</th>
+                            <th>Total Qty</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template #body let-medicine>
+                          <tr>
+                            <td>{{ medicine.medicineName }}</td>
+                            <td>{{ medicine.dosage }}</td>
+                            <td>{{ medicine.days }} days</td>
+                            <td>{{ medicine.quantity }}</td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
         </td>
-        <td>
-          {{ customer.company }}
-        </td>
-        <td>
-          <p-tag [value]="customer.status" [severity]="getSeverity(customer.status)" />
-        </td>
-        <td>{{ customer.date }}</td>
-        <td colspan="3">&nbsp;</td>
       </tr>
     </ng-template>
   </p-table>
--->
+
   <p-table id="threeLevelCampTable" [value]="camps" dataKey="campId" *ngIf="activeTab() === 'Camp'">
     <ng-template #header>
       <tr>
@@ -208,6 +194,422 @@
                             <td>{{ medicine.medicineName }}</td>
                             <td>{{ medicine.dosage }}</td>
                             <td>{{ medicine.quantity }}</td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-table
+    id="threeLevelMedicineTable"
+    [value]="medicinesMaster"
+    dataKey="medicineId"
+    *ngIf="activeTab() === 'Medicine'"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem"></th>
+        <th>Medicine Name</th>
+        <th>Medicine ID</th>
+        <th>Total Distribution</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-medicine let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            [pRowToggler]="medicine"
+            [text]="true"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td>
+        <td class="font-bold text-blue-700">{{ medicine.medicineName }}</td>
+        <td>{{ medicine.medicineId }}</td>
+        <td>{{ medicine.totalDistributed }} units</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-medicine>
+      <tr>
+        <td colspan="4" class="p-3 bg-gray-50">
+          <div class="ml-4">
+            <p-table [value]="medicine.campsFoundIn" dataKey="campId">
+              <ng-template #header>
+                <tr>
+                  <th style="width: 3rem"></th>
+                  <th>Camp Name</th>
+                  <th>Date</th>
+                  <th>Reach</th>
+                </tr>
+              </ng-template>
+
+              <ng-template #body let-camp let-cExpanded="expanded">
+                <tr>
+                  <td>
+                    <p-button
+                      type="button"
+                      [pRowToggler]="camp"
+                      [text]="true"
+                      [rounded]="true"
+                      severity="secondary"
+                      [icon]="cExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                    />
+                  </td>
+                  <td>{{ camp.campName }}</td>
+                  <td>{{ camp.date }}</td>
+                  <td>{{ camp.patientsUsing?.length }} Patients</td>
+                </tr>
+              </ng-template>
+
+              <ng-template #expandedrow let-camp>
+                <tr>
+                  <td colspan="4" class="p-3">
+                    <div class="ml-8 border-1 surface-border border-round shadow-sm">
+                      <p-table [value]="camp.patientsUsing" dataKey="patientId">
+                        <ng-template #header>
+                          <tr class="bg-green-50">
+                            <th>Patient Name</th>
+                            <th>Diagnosis</th>
+                            <th>Dosage Given</th>
+                            <th>Quantity</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template #body let-patient>
+                          <tr>
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.diagnosis }}</td>
+                            <td>
+                              <span class="p-tag p-tag-info">{{ patient.dosage }}</span>
+                            </td>
+                            <td>{{ patient.qtyGiven }}</td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-table
+    id="threeLevelDoctorTable"
+    [value]="doctorsMaster"
+    dataKey="doctorId"
+    *ngIf="activeTab() === 'Doctor'"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem"></th>
+        <th>Doctor Name</th>
+        <th>Doctor ID</th>
+        <th>Specialization</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-doctor let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            [pRowToggler]="doctor"
+            [text]="true"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td>
+        <td class="font-bold text-teal-700">{{ doctor.doctorName }}</td>
+        <td>{{ doctor.doctorId }}</td>
+        <td>
+          <span class="p-tag p-tag-warning">{{ doctor.specialization }}</span>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-doctor>
+      <tr>
+        <td colspan="4" class="p-3 bg-gray-50">
+          <div class="ml-4">
+            <p-table [value]="doctor.campsWorked" dataKey="campId">
+              <ng-template #header>
+                <tr>
+                  <th style="width: 3rem"></th>
+                  <th>Camp Name</th>
+                  <th>Date</th>
+                  <th>Total Consultations</th>
+                </tr>
+              </ng-template>
+
+              <ng-template #body let-camp let-cExpanded="expanded">
+                <tr>
+                  <td>
+                    <p-button
+                      type="button"
+                      [pRowToggler]="camp"
+                      [text]="true"
+                      [rounded]="true"
+                      severity="secondary"
+                      [icon]="cExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                    />
+                  </td>
+                  <td>{{ camp.campName }}</td>
+                  <td>{{ camp.date }}</td>
+                  <td>{{ camp.patientsConsulted?.length }} Patients</td>
+                </tr>
+              </ng-template>
+
+              <ng-template #expandedrow let-camp>
+                <tr>
+                  <td colspan="4" class="p-3">
+                    <div class="ml-8 border-1 surface-border border-round shadow-sm">
+                      <p-table [value]="camp.patientsConsulted" dataKey="patientId">
+                        <ng-template #header>
+                          <tr class="bg-orange-50">
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th>Diagnosis</th>
+                            <th>Follow Up</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template #body let-patient>
+                          <tr>
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.age }}</td>
+                            <td>{{ patient.diagnosis }}</td>
+                            <td>
+                              <span
+                                [class]="
+                                  patient.followUp === 'Yes'
+                                    ? 'text-green-600 font-bold'
+                                    : 'text-red-500'
+                                "
+                              >
+                                {{ patient.followUp }}
+                              </span>
+                            </td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-table
+    id="threeLevelIllnessTable"
+    [value]="illnessMaster"
+    dataKey="illnessId"
+    *ngIf="activeTab() === 'Illness'"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem"></th>
+        <th>Illness Name</th>
+        <th>ID</th>
+        <th>Severity</th>
+        <th>Total Camps Reported</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-illness let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            [pRowToggler]="illness"
+            [text]="true"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td>
+        <td class="font-bold text-red-700">{{ illness.illnessName }}</td>
+        <td>{{ illness.illnessId }}</td>
+        <td>
+          <p-tag [value]="illness.severity" severity="danger" />
+        </td>
+        <td>{{ illness.campsAffected?.length }} Camps</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-illness>
+      <tr>
+        <td colspan="5" class="p-3 bg-gray-50">
+          <div class="ml-4">
+            <p-table [value]="illness.campsAffected" dataKey="campId">
+              <ng-template #header>
+                <tr>
+                  <th style="width: 3rem"></th>
+                  <th>Camp Name</th>
+                  <th>Detection Date</th>
+                  <th>Case Count</th>
+                </tr>
+              </ng-template>
+
+              <ng-template #body let-camp let-cExpanded="expanded">
+                <tr>
+                  <td>
+                    <p-button
+                      type="button"
+                      [pRowToggler]="camp"
+                      [text]="true"
+                      [rounded]="true"
+                      severity="secondary"
+                      [icon]="cExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                    />
+                  </td>
+                  <td>{{ camp.campName }}</td>
+                  <td>{{ camp.date }}</td>
+                  <td>
+                    <span class="p-badge p-badge-warning"
+                      >{{ camp.patientList?.length }} Cases</span
+                    >
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template #expandedrow let-camp>
+                <tr>
+                  <td colspan="4" class="p-3">
+                    <div class="ml-8 border-1 surface-border border-round shadow-sm">
+                      <p-table [value]="camp.patientList" dataKey="patientId">
+                        <ng-template #header>
+                          <tr class="bg-red-50">
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th>Current Vitals</th>
+                            <th>Last Visit Status</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template #body let-patient>
+                          <tr>
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.age }}</td>
+                            <td class="font-medium">{{ patient.currentVitals }}</td>
+                            <td>{{ patient.lastVisit }}</td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-table
+    id="threeLevelDiscountTable"
+    [value]="discountMaster"
+    dataKey="discountValue"
+    *ngIf="activeTab() === 'Discount'"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 3rem"></th>
+        <th>Discount Category</th>
+        <th>Amount (Rs.)</th>
+        <th>Total Value Redeemed</th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-discount let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button
+            type="button"
+            [pRowToggler]="discount"
+            [text]="true"
+            [rounded]="true"
+            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+          />
+        </td>
+        <td class="font-bold">
+          <span [class]="discount.discountValue > 0 ? 'text-green-600' : 'text-gray-600'">
+            {{ discount.label }}
+          </span>
+        </td>
+        <td>₹{{ discount.discountValue }}</td>
+        <td>₹{{ discount.totalRedeemed }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template #expandedrow let-discount>
+      <tr>
+        <td colspan="4" class="p-3 bg-gray-50">
+          <div class="ml-4">
+            <p-table [value]="discount.camps" dataKey="campId">
+              <ng-template #header>
+                <tr>
+                  <th style="width: 3rem"></th>
+                  <th>Camp Name</th>
+                  <th>Date</th>
+                  <th>Total Camp Discount</th>
+                </tr>
+              </ng-template>
+
+              <ng-template #body let-camp let-cExpanded="expanded">
+                <tr>
+                  <td>
+                    <p-button
+                      type="button"
+                      [pRowToggler]="camp"
+                      [text]="true"
+                      [rounded]="true"
+                      severity="secondary"
+                      [icon]="cExpanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                    />
+                  </td>
+                  <td>{{ camp.campName }}</td>
+                  <td>{{ camp.date }}</td>
+                  <td>
+                    <span class="p-badge p-badge-success">₹{{ camp.totalDiscountApplied }}</span>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template #expandedrow let-camp>
+                <tr>
+                  <td colspan="4" class="p-3">
+                    <div class="ml-8 border-1 surface-border border-round shadow-sm">
+                      <p-table [value]="camp.patientList" dataKey="patientId">
+                        <ng-template #header>
+                          <tr class="bg-bluegray-50">
+                            <th>Patient Name</th>
+                            <th>Bill Amount</th>
+                            <th>Discount</th>
+                            <th>Net Paid</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template #body let-patient>
+                          <tr>
+                            <td>{{ patient.name }}</td>
+                            <td>₹{{ patient.billAmount }}</td>
+                            <td class="text-green-600 font-bold">-₹{{ patient.discount }}</td>
+                            <td class="font-bold text-blue-800">₹{{ patient.finalPay }}</td>
                           </tr>
                         </ng-template>
                       </p-table>
