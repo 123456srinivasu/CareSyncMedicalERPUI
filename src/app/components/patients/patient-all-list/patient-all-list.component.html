@@ -319,6 +319,8 @@
         <th>Doctor Name</th>
         <th>Doctor ID</th>
         <th>Specialization</th>
+        <th>attended camps</th>
+        <th>consulted Patient Count</th>
       </tr>
     </ng-template>
 
@@ -338,12 +340,18 @@
         <td>
           <span class="p-tag p-tag-warning">{{ doctor.specialization }}</span>
         </td>
+        <td>
+          <span class="p-tag p-tag-warning">{{ doctor.attendedCampCount }}</span>
+        </td>
+        <td>
+          <span class="p-tag p-tag-warning">{{ doctor.consultedPatientCount }}</span>
+        </td>
       </tr>
     </ng-template>
 
     <ng-template #expandedrow let-doctor>
       <tr>
-        <td colspan="4" class="p-3 bg-gray-50">
+        <td colspan="6" class="p-3 bg-gray-50">
           <div class="ml-4">
             <p-table [value]="doctor.campsWorked" dataKey="campId">
               <ng-template #header>
@@ -351,7 +359,9 @@
                   <th style="width: 3rem"></th>
                   <th>Camp Name</th>
                   <th>Date</th>
+                  <th>Medicine</th>
                   <th>Total Consultations</th>
+                  <th>Cash</th>
                 </tr>
               </ng-template>
 
@@ -370,12 +380,14 @@
                   <td>{{ camp.campName }}</td>
                   <td>{{ camp.date }}</td>
                   <td>{{ camp.patientsConsulted?.length }} Patients</td>
+                  <td>--</td>
+                  <td>--</td>
                 </tr>
               </ng-template>
 
               <ng-template #expandedrow let-camp>
                 <tr>
-                  <td colspan="4" class="p-3">
+                  <td colspan="6" class="p-3">
                     <div class="ml-8 border-1 surface-border border-round shadow-sm">
                       <p-table [value]="camp.patientsConsulted" dataKey="patientId">
                         <ng-template #header>

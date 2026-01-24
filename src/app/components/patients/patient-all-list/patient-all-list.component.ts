@@ -368,6 +368,8 @@ export class PatientAllListComponent implements OnInit {
         doctorId: 'D-001',
         doctorName: 'Dr. Anjali Sharma',
         specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
         campsWorked: [
           {
             campId: 'CAMP-001',
@@ -397,6 +399,8 @@ export class PatientAllListComponent implements OnInit {
         doctorId: 'D-002',
         doctorName: 'Dr. Meena Iyer',
         specialization: 'Pediatrician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
         campsWorked: [
           {
             campId: 'CAMP-004',
@@ -426,6 +430,8 @@ export class PatientAllListComponent implements OnInit {
         doctorId: 'D-003',
         doctorName: 'Dr. Vikram Raj',
         specialization: 'Ophthalmologist',
+        attendedCampCount: 1,
+        consultedPatientCount: 1,
         campsWorked: [
           {
             campId: 'CAMP-002',
@@ -448,6 +454,8 @@ export class PatientAllListComponent implements OnInit {
         doctorId: 'D-004',
         doctorName: 'Dr. Suresh Naik',
         specialization: 'Orthopedic',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
         campsWorked: [
           {
             campId: 'CAMP-005',
@@ -477,6 +485,8 @@ export class PatientAllListComponent implements OnInit {
         doctorId: 'D-005',
         doctorName: 'Dr. Kavitha Reddy',
         specialization: 'Diabetologist',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
         campsWorked: [
           {
             campId: 'CAMP-006',
@@ -506,6 +516,8 @@ export class PatientAllListComponent implements OnInit {
         doctorId: 'D-006',
         doctorName: 'Dr. Rajesh Khanna',
         specialization: 'Cardiologist',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
         campsWorked: [
           {
             campId: 'CAMP-007',
@@ -535,6 +547,8 @@ export class PatientAllListComponent implements OnInit {
         doctorId: 'D-007',
         doctorName: 'Dr. Farooq Ahmed',
         specialization: 'Pulmonologist',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
         campsWorked: [
           {
             campId: 'CAMP-008',
