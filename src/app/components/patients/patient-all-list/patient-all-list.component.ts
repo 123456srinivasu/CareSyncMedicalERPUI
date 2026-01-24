@@ -49,6 +49,7 @@ export class PatientAllListComponent implements OnInit {
   loading = signal<boolean>(false);
   searchText = signal<string>('');
   customers!: any[];
+  camps: any[] = [];
 
   // 1.1 Tab State
   activeTab = signal<string>('Patient');
@@ -218,7 +219,77 @@ export class PatientAllListComponent implements OnInit {
         balance: 45250,
       },
     ];
-    console.log('customers-==>',this.customers);
+
+    this.camps = [
+      {
+        campId: 'CAMP-001',
+        campName: 'Free Medical Camp – Adilabad',
+        date: '2026-01-12',
+        location: 'Adilabad',
+        patients: [
+          {
+            patientId: 'P-1001',
+            name: 'Ramesh Kumar',
+            age: 55,
+            diagnosis: 'Diabetes',
+            medicines: [
+              {
+                medicineId: 1,
+                medicineName: 'Metformin 500mg',
+                dosage: '1-0-1',
+                days: 30,
+                quantity: 60,
+              },
+              {
+                medicineId: 2,
+                medicineName: 'Calcium Tablet',
+                dosage: '0-1-0',
+                days: 15,
+                quantity: 15,
+              },
+            ],
+          },
+          {
+            patientId: 'P-1002',
+            name: 'Sita Devi',
+            age: 38,
+            diagnosis: 'Viral Fever',
+            medicines: [
+              {
+                medicineId: 1,
+                medicineName: 'Paracetamol 650mg',
+                dosage: '1-1-1',
+                days: 5,
+                quantity: 15,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        campId: 'CAMP-002',
+        campName: 'Eye Checkup Camp – Nirmal',
+        date: '2026-01-15',
+        location: 'Nirmal',
+        patients: [
+          {
+            patientId: 'P-1003',
+            name: 'Lakshmi',
+            age: 62,
+            diagnosis: 'Vision Issue',
+            medicines: [
+              {
+                medicineId: 1,
+                medicineName: 'Eye Drops',
+                dosage: '0-0-1',
+                days: 10,
+                quantity: 1,
+              },
+            ],
+          },
+        ],
+      },
+    ];
   }
 
   onSearch() {
