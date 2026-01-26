@@ -102,7 +102,7 @@
 
     <ng-template #expandedrow let-patient>
       <tr>
-        <td colspan="4" class="p-3 bg-gray-50">
+        <td colspan="10" class="p-3 bg-gray-50">
           <div class="ml-4">
             <p-table [value]="patient.campsAttended" dataKey="campId">
               <ng-template #header>
@@ -111,6 +111,7 @@
                   <th>Camp Name</th>
                   <th>Date</th>
                   <th>Diagnosis at Camp</th>
+                  <th>Doctor</th>
                 </tr>
               </ng-template>
 
@@ -131,12 +132,13 @@
                   <td>
                     <span class="font-bold text-blue-600">{{ camp.diagnosis }}</span>
                   </td>
+                  <td>doctorName</td>
                 </tr>
               </ng-template>
 
               <ng-template #expandedrow let-camp>
                 <tr>
-                  <td colspan="4" class="p-3">
+                  <td colspan="5">
                     <div class="ml-8 border-1 surface-border border-round shadow-1">
                       <p-table [value]="camp.medicines" dataKey="medicineId">
                         <ng-template #header>
