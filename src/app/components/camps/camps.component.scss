@@ -705,4 +705,53 @@
   }
 }
 
+.stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f3f3f3;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-bottom: 12px;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #f1f4f7;
+  color: #0d1a39;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  .count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #0c1a3a;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+  }
+}
+
+.stat-pill.active {
+  background: #0c1a3a;
+  color: #ffffff;
+
+  .count {
+    background: #e6eefb;
+    color: #0c1a3a;
+  }
+}
+
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit,signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -298,12 +298,294 @@ export class CampsComponent implements OnInit {
   campReadyToStartNotReady: boolean = false;
   campRunIdForStart: number | null = null;
 
+  activeTab = signal<string>('Patient');
+  campAttendedPatients: any[] = [];
+  campAttendedDoctors: any[] = [];
+
   ngOnInit() {
     // Sample data
     this.loadCamps();
     this.loadStates();
     this.loadDoctors();
     this.loadVolunteers();
+    this.campAttendedDoctors = [
+      {
+        doctorId: 'D-001',
+        doctorName: 'Dr. Anjali Sharma',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },
+      {
+        doctorId: 'D-002',
+        doctorName: 'Dr. Ramesh Kumar',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },
+      {
+        doctorId: 'D-003',
+        doctorName: 'Dr. Ramesh Kumar',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },
+      {
+        doctorId: 'D-004',
+        doctorName: 'Dr. Ramesh Kumar',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },
+      {
+        doctorId: 'D-005',
+        doctorName: 'Dr. Ramesh Kumar',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },
+      {
+        doctorId: 'D-006',
+        doctorName: 'Dr. Ramesh Kumar',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },
+      {
+        doctorId: 'D-007',
+        doctorName: 'Dr. Ramesh Kumar',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },
+      {
+        doctorId: 'D-008',
+        doctorName: 'Dr. Ramesh Kumar',
+        specialization: 'General Physician',
+        attendedCampCount: 1,
+        consultedPatientCount: 2,
+      },  
+    ];
+   
+
+    this.campAttendedPatients = [
+      {
+        patientId: 'P-1001',
+        name: 'Ramesh Kumar',
+        fatherName: 'Ramesh',
+        city: 'Akkapalem',
+        age: 55,
+        diagnosis: 'Diabetes',
+        diseases: ['Diabetic', 'Asthma'],
+        campRx: ['Metformin', 'Farxiga', 'Jardiance'],
+        outsideRx: ['Ozempic', 'Mounjaro', 'Trulicity'],
+        comments:
+          'Individuals with poorly controlled diabetes (and obesity) often have more severe asthma symptoms.',        
+      },
+
+      {
+        patientId: 'P-1002',
+        name: 'Sita Devi',
+        fatherName: 'Raju',
+        city: 'Chittela',
+        age: 38,
+
+        diagnosis: 'Viral Fever',
+        diseases: ['HTN', 'Diabetic'],
+        campRx: ['Lisinopril', 'Amlodipine'],
+        outsideRx: ['Chlorthalidone'],
+        comments: 'Regular exercise and reduced salt intake (DASH diet) are critical.',
+       
+      },
+
+      {
+        patientId: 'P-1003',
+        name: 'Lakshmi',
+        fatherName: '',
+        city: 'Nirmal',
+        age: 62,
+
+        diagnosis: 'Vision Issue',
+        diseases: [],
+        campRx: [],
+        outsideRx: [],
+        comments: '',
+        medicines: [
+          { medicineId: 6, medicineName: 'Eye Drops', dosage: '0-0-1', days: 10, quantity: 1 },
+        ],
+      
+      },
+
+      {
+        patientId: 'P-1004',
+        name: 'Anil Varma',
+        fatherName: 'Srinivas',
+        city: 'Karimnagar',
+        age: 42,
+
+        diagnosis: 'Type 2 Diabetes',
+        diseases: ['Diabetic'],
+        campRx: ['Metformin'],
+        outsideRx: [],
+        comments: 'Diet and exercise advised',
+        
+      },
+
+      {
+        patientId: 'P-1005',
+        name: 'Sunita Reddy',
+        fatherName: 'Narasimha',
+        city: 'Hyderabad',
+        age: 45,
+
+        diagnosis: 'Thyroid',
+        diseases: ['Thyroid'],
+        campRx: ['Thyronorm'],
+        outsideRx: [],
+        comments: 'Regular monitoring required',
+        
+      },
+
+      {
+        patientId: 'P-1006',
+        name: 'Mohan Lal',
+        fatherName: 'Govind',
+        city: 'Warangal',
+        age: 60,
+        diagnosis: 'Joint Pain',
+        diseases: ['Arthritis'],
+        campRx: ['Glucosamine'],
+        outsideRx: [],
+        comments: 'Physiotherapy suggested',
+        
+      },
+
+      {
+        patientId: 'P-1007',
+        name: 'Rahim Khan',
+        fatherName: 'Abdul',
+        city: 'Adilabad',
+        age: 48,
+
+        diagnosis: 'Asthma',
+        diseases: ['Asthma'],
+        campRx: ['Salbutamol'],
+        outsideRx: [],
+        comments: 'Avoid allergens',
+        
+      },
+
+      {
+        patientId: 'P-1008',
+        name: 'Renuka',
+        fatherName: 'Ravi',
+        city: 'Vijayawada',
+        age: 29,
+
+        diagnosis: 'Anemia',
+        diseases: ['Anemia'],
+        campRx: ['Iron Tablets'],
+        outsideRx: [],
+        comments: 'Hb low',
+       
+      },
+
+      {
+        patientId: 'P-1009',
+        name: 'Krishna',
+        fatherName: 'Satyanarayana',
+        city: 'Warangal',
+        age: 65,
+
+        diagnosis: 'Heart Disease',
+        diseases: ['Cardiac'],
+        campRx: ['Aspirin'],
+        outsideRx: [],
+        comments: 'Regular follow-up required',
+        
+      },
+
+      {
+        patientId: 'P-1010',
+        name: 'Farah',
+        fatherName: 'Irfan',
+        city: 'Guntur',
+        age: 50,
+
+        diagnosis: 'Anemia',
+        diseases: ['Anemia'],
+        campRx: ['Iron Tablets'],
+        outsideRx: [],
+        comments: '',
+        
+      },
+
+      {
+        patientId: 'P-1011',
+        name: 'Suresh',
+        fatherName: 'Mallesh',
+        city: 'Suryapet',
+        age: 36,
+
+        diagnosis: 'Back Pain',
+        diseases: ['Muscle Strain'],
+        campRx: ['Pain Relief Gel'],
+        outsideRx: [],
+        comments: '',
+     
+      },
+
+      {
+        patientId: 'P-1012',
+        name: 'Rukmini',
+        fatherName: 'Subba Rao',
+        city: 'Ongole',
+        age: 64,
+
+        diagnosis: 'Cataract',
+        diseases: ['Eye'],
+        campRx: ['Eye Drops'],
+        outsideRx: [],
+        comments: 'Surgery advised',
+        
+      },
+
+      {
+        patientId: 'P-1013',
+        name: 'Naresh',
+        fatherName: 'Ranga',
+        city: 'Vizag',
+        age: 54,
+        
+      },
+
+      {
+        patientId: 'P-1014',
+        name: 'Padma',
+        fatherName: 'Venkat',
+        city: 'Nellore',
+        age: 52,
+        
+      },
+
+      {
+        patientId: 'P-1015',
+        name: 'Imran',
+        fatherName: 'Salim',
+        city: 'Hyderabad',
+        age: 35,
+     
+      },
+
+      {
+        patientId: 'P-1016',
+        name: 'Venkat Rao',
+        fatherName: 'Narasimha',
+        city: 'Nirmal',
+        age: 68,
+        
+      },
+    ];
   }
 
   loadStates() {
@@ -2112,5 +2394,11 @@ isSaveDisabled() {
       this.campForm.medicine_responsibility_outside = '';
     }
   }
+
+  setActiveTab(tab: string) {
+    this.activeTab.set(tab);  
+  } 
+
+
 }
 
