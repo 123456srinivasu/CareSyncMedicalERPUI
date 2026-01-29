@@ -1,4 +1,4 @@
-# CareSync Medical ERP UI v2.0
+# GBR Foundation Medical ERP UI v2.0
 
 A modern, comprehensive Medical ERP (Enterprise Resource Planning) system built with Angular 19, PrimeNG, and Angular Material.
 

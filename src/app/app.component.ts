@@ -25,6 +25,6 @@ import { NavigationComponent } from './components/navigation/navigation.componen
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'CareSync Medical ERP';
+  title = 'GBR Foundation Medical ERP';
 }
 

@@ -29,7 +29,7 @@
 html, body {
   height: 100%;
   font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--medical-bg);
+  background-color: #fff;
 }
 
 body {
@@ -125,18 +125,21 @@ body {
 
 /* Medical Admin Toolbar Styling */
 .p-toolbar {
-  background: #0c679f !important;  
+  background: #001A51 !important;  
+  border: none!important;
+  border-radius: 0!important;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 }
 .p-drawer-header{
   padding: 0 !important;
-  background: #0c679f !important;  
+  background: #001A51 !important;  
   .p-button{
     margin-right: 5px !important;
   }
 }
 ::ng-deep .p-toolbar {
   background: #1062ab;
-  border: none;
+  border: none!important;
   border-radius: 0;
   padding: 16px 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -410,3 +413,64 @@ body {
   box-shadow: 0 2px 8px var(--medical-shadow);
 }
 
+
+.card-title{
+  color: #737373;
+}
+.card-count{
+  font-size: 2rem;
+  font-weight: bold;
+}
+.db-reg-count{
+  color: #19A1A2;
+}
+.db-doctors-count{
+  color: #E29D00;
+}
+.db-pharmacy-count{
+ color: #5BB949;
+}
+.db-cashier-count{
+  color: #23BAFA;
+}
+.db-insulin-count{
+  color: #4147D4;
+}
+.db-exit-count{
+  color: #DB305B;
+}
+
+.search-section{
+      background-color: #F7F7F7;
+    padding: 16px;
+    margin: -20px -20px 0 -20px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+        display: flex;
+    justify-content: center;
+}
+
+.add-new-patinet-search{
+    background-color: transparent!important;
+    border: none!important;
+    color: #727272!important;
+    position: absolute!important;
+    right: 0;
+}
+
+.patients-container-btn{
+  background-color: #E7447E!important;
+  border: 1px solid #E7447E!important;
+}
+
+.newPatient-set {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    gap: 20px;
+}
+
+.table-container{
+  width: 100%;
+}
