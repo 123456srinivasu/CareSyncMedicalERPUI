@@ -31,7 +31,7 @@ export class SoapNoteComponent implements OnInit {
   private patientService = inject(PatientService);
   private messageService = inject(MessageService);
 
-  activeTab = signal<string>('Patient');
+  activeTab = signal<string>('Subject');
 
   setActiveTab(tab: string) {
     this.activeTab.set(tab);

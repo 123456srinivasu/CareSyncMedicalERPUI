@@ -304,8 +304,8 @@ textarea {
 /* Cards */
 .medical-card {
   border-radius: 14px;
-  border: 1px solid #dfe3f3;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  // border: 1px solid #dfe3f3;
+  // box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
 /* Section Titles */
@@ -612,7 +612,7 @@ a {
     color: #555;
     cursor: default;
     background-color: #fff;
-    border: 1px solid #ddd;
+    // border: 1px solid #ddd;
     border-bottom-color: transparent;
     font-weight: bold;
 }
@@ -779,4 +779,144 @@ a {
   color: white;
   padding: 8px 26px;
   border-radius: 10px;
+}
+
+
+
+.summary-wrapper {
+  background: #f6f8ff;
+  border: 2px solid #9fb2ff;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+/* Section */
+.summary-section {
+  border-bottom: 1px solid #e3e8ff;
+  padding: 18px 0;
+}
+
+/* Titles */
+.section-title {
+  color: #3f5ec9;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* Chips */
+.chip-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.chip.red {
+  border: 1px solid #ff4d4f;
+  color: #ff4d4f;
+  background: #fff1f1;
+}
+
+.chip.green {
+  border: 1px solid #4caf50;
+  color: #4caf50;
+  background: #effaf0;
+}
+
+/* Vitals */
+.vitals-summary {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.vital-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.vital-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.bg-blue { background:#4fa6b7; }
+.bg-lightblue { background:#5c8df6; }
+.bg-red { background:#e74c3c; }
+.bg-purple { background:#8e44ad; }
+.bg-green { background:#27ae60; }
+
+.vital-label { color:#777; font-size:14px; }
+.vital-value { font-weight:700; font-size:18px; }
+
+.red-text { color:#e53935; }
+.green-text { color:#4caf50; }
+
+/* Allergy */
+.badge-yes {
+  background:#ffe5e5;
+  color:#e53935;
+  padding:4px 12px;
+  border-radius:16px;
+  margin:0 16px 0 6px;
+}
+
+.badge-no {
+  background:#e8f5e9;
+  color:#2e7d32;
+  padding:4px 12px;
+  border-radius:16px;
+  margin:0 16px 0 6px;
+}
+
+/* Medication */
+.medication-table thead {
+  background:#eef2ff;
+}
+
+.new-badge {
+  background:#66c6de;
+  color:white;
+  padding:6px 14px;
+  border-radius:18px;
+}
+
+
+.vital-icon {
+  width: 60px;
+    height: 30px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-top: 25px;
+}
+
+.weight-icon { background:#59b3c6; }
+.bp-icon { background:#5c8df6; }
+.pulse-icon { background:#e74c3c; }
+.temp-icon { background:#6c63ff; }
+.spo2-icon { background:#27ae60; }
+
+.vital-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #666;
+}
+.input-group-text-soap{
+  position: absolute;
+    right: 5px;
+    top: 8px;
 }

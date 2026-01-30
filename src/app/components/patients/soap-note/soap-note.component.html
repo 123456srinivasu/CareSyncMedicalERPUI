@@ -1,11 +1,10 @@
-<div class="container-fluid medical-wrapper p-3">
-  <div class="patient-header card">
+<div class="container-fluid medical-wrapper p-0">
+  <div class="patient-header card" style="padding: 0.2rem">
     <div class="card-body">
       <div class="row align-items-center g-3">
         <!-- Patient Info -->
-        <div class="col-lg-4 d-flex align-items-center gap-3 border-end pe-4">
+        <div class="col-lg-4 d-flex align-items-center border-end">
           <div class="patient-avatar"></div>
-
           <div>
             <div class="patient-name">AKAD234 | Akkala Adhi Reddy | Male | 55</div>
             <div class="patient-sub">S/o Somi Reddy, Kambhampadu</div>
@@ -53,7 +52,7 @@
   </div>
 
   <!-- PrimeNG Tabs -->
-  <div class="row g-0">
+  <div class="row g-0 mt-3">
     <!-- LEFT SIDE -->
     <div class="col-lg-8 left-panel">
       <div class="card" style="padding: 0">
@@ -92,13 +91,13 @@
             </div>
           </li>
         </ul>
-        <div *ngIf="activeTab() === 'Subject'" class="p-3">
+        <div *ngIf="activeTab() === 'Subject'">
           <!-- Content -->
-          <div class="card medical-card mt-3">
+          <div class="medical-card mt-3">
             <div class="card-body">
               <!-- General Questions -->
 
-              <div class="general-questions card p-4">
+              <div class="general-questions" style="border: 0">
                 <h5 class="section-title">General Questions <span>(సాధారణ ప్రశ్నలు)</span></h5>
 
                 <div class="row mt-3">
@@ -254,7 +253,7 @@
           </div>
 
           <!-- Diabetes Section -->
-          <div class="card medical-card mt-3">
+          <div class="medical-card mt-3" style="border: 0">
             <div class="card-body">
               <h5 class="section-title">Diabetes (మధుమేహం)</h5>
 
@@ -336,59 +335,75 @@
         </div>
         <div *ngIf="activeTab() === 'Objective'" class="p-3">
           <div class="objective-wrapper">
-            <!-- Vitals Row -->
-            <div class="vitals-bar">
-              <div class="vital-item">
-                <div class="vital-icon bg-weight">⚖</div>
-                <div>
-                  <label>Weight</label>
-                  <div class="input-group">
-                    <input class="form-control" />
-                    <span class="input-group-text">Kg’s</span>
+            <div class="container-fluid">
+              <div class="row g-3">
+                <!-- Weight -->
+                <div class="col">
+                  <div class="vital-box d-flex align-items-center gap-2">
+                    <div class="vital-icon weight-icon">⚖</div>
+                    <div>
+                      <label class="vital-label">Weight</label>
+                      <div class="input-group">
+                        <input class="form-control" />
+                        <span class="input-group-text-soap">Kg’s</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="vital-item">
-                <div class="vital-icon bg-bp">🩺</div>
-                <div>
-                  <label>BP</label>
-                  <div class="input-group">
-                    <input class="form-control" />
-                    <span class="input-group-text">mmHg</span>
+                <!-- BP -->
+                <div class="col">
+                  <div class="vital-box d-flex align-items-center gap-2">
+                    <div class="vital-icon bp-icon">🩺</div>
+                    <div>
+                      <label class="vital-label">BP</label>
+                      <div class="input-group">
+                        <input class="form-control" />
+                        <span class="input-group-text-soap">mmHg</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="vital-item">
-                <div class="vital-icon bg-pulse">❤️</div>
-                <div>
-                  <label>Pulse</label>
-                  <div class="input-group">
-                    <input class="form-control" />
-                    <span class="input-group-text">/min</span>
+                <!-- Pulse -->
+                <div class="col">
+                  <div class="vital-box d-flex align-items-center gap-2">
+                    <div class="vital-icon pulse-icon">❤</div>
+                    <div>
+                      <label class="vital-label">Pulse</label>
+                      <div class="input-group">
+                        <input class="form-control" />
+                        <span class="input-group-text-soap">/min</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="vital-item">
-                <div class="vital-icon bg-temp">🌡</div>
-                <div>
-                  <label>Temp</label>
-                  <div class="input-group">
-                    <input class="form-control" />
-                    <span class="input-group-text">°F</span>
+                <!-- Temp -->
+                <div class="col">
+                  <div class="vital-box d-flex align-items-center gap-2">
+                    <div class="vital-icon temp-icon">🌡</div>
+                    <div>
+                      <label class="vital-label">Temp</label>
+                      <div class="input-group">
+                        <input class="form-control" />
+                        <span class="input-group-text-soap">°F</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="vital-item">
-                <div class="vital-icon bg-spo2">🫁</div>
-                <div>
-                  <label>SpO2</label>
-                  <div class="input-group">
-                    <input class="form-control" />
-                    <span class="input-group-text">%</span>
+                <!-- SpO2 -->
+                <div class="col">
+                  <div class="vital-box d-flex align-items-center gap-2">
+                    <div class="vital-icon spo2-icon">🫁</div>
+                    <div>
+                      <label class="vital-label">SpO2</label>
+                      <div class="input-group">
+                        <input class="form-control" />
+                        <span class="input-group-text-soap">%</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1010,20 +1025,157 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Diagnosis -->
-        <div class="diagnosis-section">
-          <div class="section-title">DIAGNOSIS</div>
+      <!-- New code start -->
+      <div class="summary-wrapper container-fluid mt-3">
+        <!-- DIAGNOSIS -->
+        <div class="summary-section">
+          <h5 class="section-title">DIAGNOSIS</h5>
 
-          <div class="d-flex flex-wrap gap-2">
-            <span class="diag-chip red">Diabetes</span>
-            <span class="diag-chip red">HTN</span>
-            <span class="diag-chip red">Stroke</span>
-            <span class="diag-chip red">APD</span>
-            <span class="diag-chip red">Asthama</span>
+          <div class="chip-row">
+            <span class="chip red">Diabetes</span>
+            <span class="chip red">HTN</span>
+            <span class="chip red">Stroke</span>
+            <span class="chip red">APD</span>
+            <span class="chip red">Asthama</span>
           </div>
         </div>
+
+        <!-- VITALS SUMMARY -->
+        <div class="summary-section">
+          <h5 class="section-title">VITALS SUMMARY</h5>
+
+          <div class="vitals-summary">
+            <div class="vital-box">
+              <div class="vital-icon bg-blue">⚖</div>
+              <div>
+                <div class="vital-label">Weight</div>
+                <div class="vital-value">75</div>
+              </div>
+            </div>
+
+            <div class="vital-box">
+              <div class="vital-icon bg-lightblue">🩺</div>
+              <div>
+                <div class="vital-label">BP</div>
+                <div class="vital-value red-text">135/90</div>
+              </div>
+            </div>
+
+            <div class="vital-box">
+              <div class="vital-icon bg-red">❤</div>
+              <div>
+                <div class="vital-label">Pulse</div>
+                <div class="vital-value green-text">80</div>
+              </div>
+            </div>
+
+            <div class="vital-box">
+              <div class="vital-icon bg-purple">🌡</div>
+              <div>
+                <div class="vital-label">Temp</div>
+                <div class="vital-value green-text">98.6°F</div>
+              </div>
+            </div>
+
+            <div class="vital-box">
+              <div class="vital-icon bg-green">🫁</div>
+              <div>
+                <div class="vital-label">SpO2</div>
+                <div class="vital-value green-text">99%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALLERGIES -->
+        <div class="summary-section">
+          <h5 class="section-title">ALLERGIES</h5>
+
+          <div class="allergy-row">
+            Drug <span class="badge-yes">Yes</span> Food
+            <span class="badge-no">No</span> Environment <span class="badge-no">No</span>
+          </div>
+
+          <div class="allergy-note">Penicillin, Amoxicillin, Sulfa drugs</div>
+        </div>
+
+        <!-- TEST RESULTS -->
+        <div class="summary-section">
+          <h5 class="section-title">TEST RESULTS</h5>
+
+          <div class="result-block">
+            <div>
+              <strong>Diabetes</strong>
+              <div class="chip-row">
+                <span class="chip red">HBA1C: 8</span>
+                <span class="chip red">FBS: 142</span>
+                <span class="chip green">PLBS: 170</span>
+              </div>
+            </div>
+
+            <div>
+              <strong>HTN</strong>
+              <div class="chip-row">
+                <span class="chip red">140/85</span>
+              </div>
+            </div>
+
+            <div>
+              <strong>Stroke</strong>
+              <div class="chip-row">
+                <span class="chip red">LT</span>
+                <span class="chip red">Onset: 1hr</span>
+                <span class="chip green">2D Echo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MEDICATION TABLE -->
+        <div class="summary-section">
+          <h5 class="section-title">MEDICATION</h5>
+
+          <table class="table medication-table">
+            <thead>
+              <tr>
+                <th>Medicine Name</th>
+                <th>Dosage</th>
+                <th>Schedule (M-A-N)</th>
+                <th>RX</th>
+                <th>Remarks / Start Date</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Pantop 80</td>
+                <td>80 mg</td>
+                <td>1 - 0 - 0</td>
+                <td>Inside</td>
+                <td>12/10/2025</td>
+              </tr>
+              <tr>
+                <td>Asprin</td>
+                <td>300 mg</td>
+                <td>0 - 1 - 1</td>
+                <td>Inside</td>
+                <td>12/10/2025</td>
+              </tr>
+              <tr>
+                <td>Telmisartan</td>
+                <td>40 mg</td>
+                <td>1 - 0 - 1</td>
+                <td>Outside</td>
+                <td><span class="new-badge">New</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <!-- New code End -->
     </div>
   </div>
 </div>
