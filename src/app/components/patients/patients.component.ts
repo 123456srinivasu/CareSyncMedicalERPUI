@@ -648,6 +648,7 @@ export class PatientsComponent implements OnInit {
     return age;
   }
 
+  
   onReset(form: any) {
     form.resetForm();
     this.onClearForm();

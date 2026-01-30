@@ -196,3 +196,66 @@
     .value {
       font-weight: 500;
     }
+
+    .patinet-details-row{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #F5F8FF;
+    border: 1px solid #E4EAF6;
+    border-radius: 9px;
+    margin-top: 16px;
+    padding: 16px;
+    gap: 16px;
+}
+
+.patinet-id{
+  color: #001A51;
+  font-weight: 600;
+}
+
+.patinet-other-details{
+  color: #757575;
+}
+
+.vitals-set{
+  display: flex;
+  flex-direction: column;
+}
+
+.vitals-head{
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #265AC9;
+  font-size: 17px;
+}
+
+.vitals-item{
+  margin-bottom: 6px;
+  color: #4B4B4B;
+  background-color: #fff;
+  border: 1px solid #E5E5E5;
+  font-size: 12px;
+  border-radius: 100px;
+  padding: 2px 6px;
+}
+
+.vitals-label{
+  font-weight: 600;
+  margin-right: 3px;
+}
+
+.br-l{
+  border-left: 1px solid #B3C0D9;
+  padding-left: 16px;
+}
+
+.diagnosis-item{
+  margin-bottom: 6px;
+  color: #EF1C26;
+  background-color: #FFEBEC;
+  border: 1px solid #EF1C26;
+  font-size: 12px;
+  border-radius: 100px;
+  padding: 2px 6px;
+}
