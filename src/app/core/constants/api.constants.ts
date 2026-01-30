@@ -52,8 +52,9 @@ export const API_CONFIG = {
     CAMP_PURCHASE_ORDERS: {
       BASE: '/camp-purchase-orders',
       BY_SUPPLIER: (supplierId: number) => `/camp-purchase-orders/supplier/${supplierId}`,
-      ORDER_LINES: (purchaseOrderId: number) => `/camp-purchase-orders/${purchaseOrderId}/order-lines`,
-      REVIEW: (purchaseOrderId: number) => `/camp-purchase-orders/${purchaseOrderId}/review`
+      ORDER_LINES: (purchaseOrderId: number) =>
+        `/camp-purchase-orders/${purchaseOrderId}/order-lines`,
+      REVIEW: (purchaseOrderId: number) => `/camp-purchase-orders/${purchaseOrderId}/review`,
     },
     INVOICE: {
       BASE: '/invoice',
@@ -81,7 +82,8 @@ export const API_CONFIG = {
       BY_ID: (id: number) => `/patient-registration/${id}`,
       UPDATE: (id: number) => `/patient-registration/${id}`,
       DELETE: (id: number) => `/patient-registration/${id}`,
-      SEARCH: (searchPatient: string) => `/patient-registration/search?searchPatient=${name}`,
+      SEARCH: (searchPatient: string) =>
+        `/patient-registration/search?searchPatient=${searchPatient}`,
       SEARCH_BY_MOBILE: (mobileNumber: string) =>
         `/patient-registration/search/by-mobile?mobileNumber=${mobileNumber}`,
       SEARCH_BY_NAME: (name: string) => `/patient-registration/search/by-name?name=${name}`,
