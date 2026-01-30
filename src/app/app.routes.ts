@@ -19,6 +19,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/patients/patient-all-list/patient-all-list.component').then(m => m.PatientAllListComponent)
   },
   {
+    path: 'patient-soap/:id',
+    loadComponent: () => import('./components/patients/soap-note/soap-note.component').then(m => m.SoapNoteComponent)
+  },
+  {
     path: 'visits',
     loadComponent: () => import('./components/visits/visits.component').then(m => m.VisitsComponent)
   },

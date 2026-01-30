@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -65,10 +66,12 @@ interface PatientRecord {
     InputTextModule,
     TagModule,
     CardModule,
+    CardModule,
     DialogModule,
     DialogModule,
     ToastModule,
     ConfirmDialogModule,
+    RouterModule,
   ],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.scss',
@@ -648,7 +651,7 @@ export class PatientsComponent implements OnInit {
     return age;
   }
 
-  
+
   onReset(form: any) {
     form.resetForm();
     this.onClearForm();

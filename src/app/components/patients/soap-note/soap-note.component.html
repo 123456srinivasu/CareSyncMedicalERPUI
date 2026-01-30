@@ -1,0 +1,1029 @@
+<div class="container-fluid medical-wrapper p-3">
+  <div class="patient-header card">
+    <div class="card-body">
+      <div class="row align-items-center g-3">
+        <!-- Patient Info -->
+        <div class="col-lg-4 d-flex align-items-center gap-3 border-end pe-4">
+          <div class="patient-avatar"></div>
+
+          <div>
+            <div class="patient-name">AKAD234 | Akkala Adhi Reddy | Male | 55</div>
+            <div class="patient-sub">S/o Somi Reddy, Kambhampadu</div>
+          </div>
+        </div>
+
+        <!-- Vitals -->
+        <div class="col-lg-3 border-end pe-4">
+          <div class="section-title-small">Vitals</div>
+
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <span class="vital-chip">Weight 75</span>
+            <span class="vital-chip">BP 120/80</span>
+            <span class="vital-chip">Pulse 80</span>
+            <span class="vital-chip">Temp 98.6°F</span>
+            <span class="vital-chip">SpO2 98%</span>
+          </div>
+        </div>
+
+        <!-- Diagnosis -->
+        <div class="col-lg-3 border-end pe-4">
+          <div class="section-title-small">Diagnosis</div>
+
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <span class="diag-chip red">Diabetes</span>
+            <span class="diag-chip red">HTN</span>
+            <span class="diag-chip red">Stroke</span>
+            <span class="diag-chip red">APD</span>
+            <span class="diag-chip red">Asthama</span>
+          </div>
+        </div>
+
+        <!-- Allergies -->
+        <div class="col-lg-2">
+          <div class="section-title-small">Allergies</div>
+
+          <div class="d-flex flex-wrap gap-3 mt-2">
+            <div>Drug <span class="status-chip yes">Yes</span></div>
+            <div>Food <span class="status-chip no">No</span></div>
+            <div>Environment <span class="status-chip no">No</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PrimeNG Tabs -->
+  <div class="row g-0">
+    <!-- LEFT SIDE -->
+    <div class="col-lg-8 left-panel">
+      <div class="card" style="padding: 0">
+        <ul class="nav nav-tabs">
+          <li [class.active]="activeTab() === 'Subject'" (click)="setActiveTab('Subject')">
+            <div class="med-tab">
+              <div class="tab-title">Subject</div>
+              <div class="tab-sub">Chief Complaints</div>
+            </div>
+          </li>
+          <li [class.active]="activeTab() === 'Objective'" (click)="setActiveTab('Objective')">
+            <div class="med-tab">
+              <div class="tab-title">Objective</div>
+              <div class="tab-sub">Vitals / Labs</div>
+            </div>
+          </li>
+          <li [class.active]="activeTab() === 'Assessment'" (click)="setActiveTab('Assessment')">
+            <div class="med-tab">
+              <div class="tab-title">Assessment</div>
+              <div class="tab-sub">Diagnosis</div>
+            </div>
+          </li>
+          <li
+            [class.active]="activeTab() === 'Recommendation'"
+            (click)="setActiveTab('Recommendation')"
+          >
+            <div class="med-tab">
+              <div class="tab-title">Plan / Recommendation</div>
+              <div class="tab-sub">Inside RX / Outside RX</div>
+            </div>
+          </li>
+          <li [class.active]="activeTab() === 'Summary'" (click)="setActiveTab('Summary')">
+            <div class="med-tab">
+              <div class="tab-title">Summary</div>
+              <div class="tab-sub">Description</div>
+            </div>
+          </li>
+        </ul>
+        <div *ngIf="activeTab() === 'Subject'" class="p-3">
+          <!-- Content -->
+          <div class="card medical-card mt-3">
+            <div class="card-body">
+              <!-- General Questions -->
+
+              <div class="general-questions card p-4">
+                <h5 class="section-title">General Questions <span>(సాధారణ ప్రశ్నలు)</span></h5>
+
+                <div class="row mt-3">
+                  <!-- LEFT SIDE -->
+                  <div class="col-md-6">
+                    <!-- Frequent Infections -->
+                    <div class="question-block">
+                      <label class="main-check">
+                        <input type="checkbox" checked />
+                        <span>Frequent Infections (తరచుగా వచ్చే ఇన్ఫెక్షన్లు)</span>
+                      </label>
+
+                      <div class="sub-options">
+                        <label><input type="checkbox" /> Skin (చర్మం)</label>
+                        <label><input type="checkbox" /> Gum (చిగుళ్లు)</label>
+                        <label><input type="checkbox" /> Vaginal (యోని)</label>
+                      </div>
+                    </div>
+
+                    <!-- Tired or Weak -->
+                    <div class="question-block mt-4">
+                      <label class="main-check">
+                        <input type="checkbox" checked />
+                        <span
+                          >Are you feeling tired or weak? (మీకు అలసట లేదా బలహీనతగా
+                          అనిపిస్తున్నదా?)</span
+                        >
+                      </label>
+
+                      <div class="sub-options">
+                        <label><input type="checkbox" /> Feeling tired (అలసటగా ఉంది)</label>
+                        <label><input type="checkbox" /> Feeling weak (బలహీనంగా ఉంది)</label>
+                        <label><input type="checkbox" /> Both tired and weak</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- RIGHT SIDE -->
+                  <div class="col-md-6">
+                    <!-- Darkened Skin -->
+                    <div class="question-block">
+                      <label class="main-check">
+                        <input type="checkbox" checked />
+                        <span>Darkened skin in folds (చర్మ మడతల్లో నల్లబడం)</span>
+                      </label>
+
+                      <div class="sub-options">
+                        <label><input type="checkbox" /> Neck (చర్మం)</label>
+                        <label><input type="checkbox" /> Armpits (చంక)</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="disease-wrapper">
+                <!-- Disease Strip -->
+                <div class="disease-strip">
+                  <label class="disease-chip active">
+                    <input type="checkbox" checked />
+                    Diabetes (మధుమేహం)
+                  </label>
+
+                  <label class="disease-chip">
+                    <input type="checkbox" />
+                    HTN (అధిక రక్తపోటు)
+                  </label>
+
+                  <label class="disease-chip">
+                    <input type="checkbox" />
+                    Seizures (మూర్చలు)
+                  </label>
+
+                  <label class="disease-chip">
+                    <input type="checkbox" />
+                    Stroke (స్ట్రోక్)
+                  </label>
+
+                  <label class="disease-chip">
+                    <input type="checkbox" />
+                    Asthma (ఆస్తమా)
+                  </label>
+                </div>
+
+                <!-- Diabetes Card -->
+                <div class="disease-card mt-3">
+                  <h5 class="card-title">Diabetes (మధుమేహం)</h5>
+
+                  <!-- Type + Onset -->
+                  <div class="row align-items-center mt-3">
+                    <div class="col-lg-8">
+                      <div class="type-options">
+                        <label>
+                          <input type="radio" name="diabetesType" checked />
+                          Type 1 (టైప్ 1)
+                        </label>
+
+                        <label>
+                          <input type="radio" name="diabetesType" />
+                          Type 2 (టైప్ 2)
+                        </label>
+
+                        <label>
+                          <input type="radio" name="diabetesType" />
+                          Gestational Diabetes
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                      <label class="onset-label">
+                        <input type="checkbox" checked />
+                        Onset Duration (ప్రారంభ కాలం)
+                      </label>
+
+                      <select class="form-select onset-dropdown mt-2">
+                        <option>Select Onset Duration</option>
+                        <option>3 Months</option>
+                        <option>6 Months</option>
+                        <option>1 Year</option>
+                        <option>18 Months</option>
+                        <option>2 Years</option>
+                        <option>3 Years</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Presenting Complaints -->
+                  <div class="mt-4">
+                    <label class="main-check">
+                      <input type="checkbox" checked />
+                      Presenting Complaints (ప్రస్తుత లక్షణాలు)
+                    </label>
+
+                    <div class="complaint-grid mt-3">
+                      <label><input type="checkbox" /> Wounds (గాయాలు)</label>
+                      <label><input type="checkbox" /> Fatigue (అలసట)</label>
+                      <label><input type="checkbox" /> Vision Changes</label>
+                      <label><input type="checkbox" /> Polydipsia</label>
+
+                      <label><input type="checkbox" /> Polyuria</label>
+                      <label><input type="checkbox" /> Polyphagia</label>
+                      <label><input type="checkbox" /> Tingling / Numbness</label>
+                      <label><input type="checkbox" /> Unexplained weight</label>
+
+                      <label><input type="checkbox" /> Taking Medicines?</label>
+                      <label><input type="checkbox" /> Smoking</label>
+                      <label><input type="checkbox" /> Drinking</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Diabetes Section -->
+          <div class="card medical-card mt-3">
+            <div class="card-body">
+              <h5 class="section-title">Diabetes (మధుమేహం)</h5>
+
+              <div class="row align-items-center">
+                <div class="col-md-8">
+                  <div class="d-flex flex-wrap gap-4">
+                    <div class="form-check">
+                      <input type="radio" name="diabetesType" class="form-check-input" />
+                      <label class="form-check-label">Type 1</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input type="radio" name="diabetesType" class="form-check-input" />
+                      <label class="form-check-label">Type 2</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input type="radio" name="diabetesType" class="form-check-input" checked />
+                      <label class="form-check-label">Gestational Diabetes</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <select class="form-select">
+                    <option>Select Onset Duration</option>
+                    <option>3 Months</option>
+                    <option>6 Months</option>
+                    <option>1 Year</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HTN Section -->
+          <div class="card medical-card mt-3">
+            <div class="card-body">
+              <h5 class="section-title">HTN (Hypertension) (అధిక రక్తపోటు)</h5>
+
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" checked />
+                <label class="form-check-label">
+                  Have you experienced any of the following recently?
+                </label>
+              </div>
+
+              <div class="row ps-4">
+                <div class="col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" />
+                    <label class="form-check-label">Headache</label>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" />
+                    <label class="form-check-label">Blurred vision</label>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" />
+                    <label class="form-check-label">Chest pain</label>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" />
+                    <label class="form-check-label">Shortness of breath</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeTab() === 'Objective'" class="p-3">
+          <div class="objective-wrapper">
+            <!-- Vitals Row -->
+            <div class="vitals-bar">
+              <div class="vital-item">
+                <div class="vital-icon bg-weight">⚖</div>
+                <div>
+                  <label>Weight</label>
+                  <div class="input-group">
+                    <input class="form-control" />
+                    <span class="input-group-text">Kg’s</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vital-item">
+                <div class="vital-icon bg-bp">🩺</div>
+                <div>
+                  <label>BP</label>
+                  <div class="input-group">
+                    <input class="form-control" />
+                    <span class="input-group-text">mmHg</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vital-item">
+                <div class="vital-icon bg-pulse">❤️</div>
+                <div>
+                  <label>Pulse</label>
+                  <div class="input-group">
+                    <input class="form-control" />
+                    <span class="input-group-text">/min</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vital-item">
+                <div class="vital-icon bg-temp">🌡</div>
+                <div>
+                  <label>Temp</label>
+                  <div class="input-group">
+                    <input class="form-control" />
+                    <span class="input-group-text">°F</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vital-item">
+                <div class="vital-icon bg-spo2">🫁</div>
+                <div>
+                  <label>SpO2</label>
+                  <div class="input-group">
+                    <input class="form-control" />
+                    <span class="input-group-text">%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lab Table -->
+            <div class="lab-table-wrapper">
+              <table class="table lab-table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Test With Medicine</th>
+                    <th>Clinical Results</th>
+                    <th>Result Difference</th>
+                    <th>Add Multiple</th>
+                    <th>History</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <!-- Row Example -->
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>BP</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>FBS</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>PPBS</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>HBA1C</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>RBS</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>CHL</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>LDL</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>HDL</td>
+
+                    <td>
+                      <input type="text" class="form-control" placeholder="Select" />
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-3">
+                        <label><input type="radio" name="bp" /> Yes</label>
+                        <label><input type="radio" name="bp" /> No</label>
+                      </div>
+                    </td>
+
+                    <td>
+                      <input class="form-control" />
+                    </td>
+
+                    <td>-</td>
+
+                    <td>
+                      <button class="icon-btn add-btn">+</button>
+                    </td>
+
+                    <td>
+                      <div class="d-flex gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="footer-bar">
+              <button class="btn btn-outline-secondary">Cancel</button>
+              <button class="btn btn-save">Save</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeTab() === 'Assessment'" class="p-3">
+          <div class="assessment-wrapper container-fluid">
+            <!-- ===== HTN SECTION ===== -->
+            <div class="disease-section">
+              <h5 class="disease-title">HTN</h5>
+
+              <div class="row g-3">
+                <!-- LEFT TABLE -->
+                <div class="col-lg-7">
+                  <table class="table history-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Test With Medicine</th>
+                        <th>Results</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>10/09/2025</td>
+                        <td>Yes</td>
+                        <td>135/80</td>
+                      </tr>
+                      <tr>
+                        <td>12/09/2025</td>
+                        <td>Yes</td>
+                        <td>145/85</td>
+                      </tr>
+                      <tr>
+                        <td>13/09/2025</td>
+                        <td>No</td>
+                        <td>155/90</td>
+                      </tr>
+                      <tr>
+                        <td>01/10/2025</td>
+                        <td>Yes</td>
+                        <td>120/80</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- RIGHT CHART -->
+                <div class="col-lg-5">
+                  <div class="chart-card">
+                    <canvas id="htnChart"></canvas>
+                  </div>
+                </div>
+              </div>
+
+              <!-- NOTES -->
+              <div class="notes-block mt-4">
+                <label>Notes</label>
+                <textarea class="form-control notes-area"></textarea>
+              </div>
+            </div>
+
+            <!-- ===== DIABETES SECTION ===== -->
+            <div class="disease-section mt-5">
+              <h5 class="disease-title">Diabetes</h5>
+
+              <div class="row g-3">
+                <div class="col-lg-7">
+                  <table class="table history-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Test With Medicine</th>
+                        <th>Results (FBS / PPBS)</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr>
+                        <td>11/09/2025</td>
+                        <td>Yes</td>
+                        <td>125 / 224</td>
+                      </tr>
+                      <tr>
+                        <td>15/09/2025</td>
+                        <td>Yes</td>
+                        <td>99 / 228</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="col-lg-5">
+                  <div class="chart-card">
+                    <canvas id="diabetesChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer-actions">
+              <button class="btn btn-outline-secondary">Cancel</button>
+              <button class="btn btn-save">Save</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeTab() === 'Recommendation'" class="p-3">
+          <div class="rx-wrapper">
+            <div class="table-responsive rx-table-wrapper">
+              <table class="table rx-table">
+                <!-- HEADER -->
+                <thead>
+                  <tr>
+                    <th rowspan="2" class="select-col">Select</th>
+                    <th rowspan="2">Medicine Name</th>
+                    <th rowspan="2">Qty. Available</th>
+                    <th colspan="3" class="text-center">Schedule</th>
+                    <th rowspan="2">No. of Days</th>
+                    <th rowspan="2">Quantity ordered</th>
+                  </tr>
+
+                  <tr class="sub-header">
+                    <th>Morning</th>
+                    <th>Afternoon</th>
+                    <th>Night</th>
+                  </tr>
+                </thead>
+
+                <!-- BODY -->
+                <tbody>
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">T.RABI 20 MG</td>
+                    <td>258410</td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="112" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">A.BENZ 10 MG</td>
+                    <td>258411</td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="112" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">C.CALCIUM 500 MG</td>
+                    <td>258412</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td>28</td>
+                    <td><input class="qty-input" value="28" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">D.DOSTINEX 0.5 MG</td>
+                    <td>258413</td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>28</td>
+                    <td><input class="qty-input" value="56" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">E.ERGO 250 MG</td>
+                    <td>258414</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td>28</td>
+                    <td><input class="qty-input" value="28" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">F.FERROUS 100 MG</td>
+                    <td>258415</td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="112" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">G.GABA 750 MG</td>
+                    <td>258416</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="56" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">H.HYDROXYZINE 25 MG</td>
+                    <td>258417</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="56" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">I.IVERMECTIN 3 MG</td>
+                    <td>258418</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="56" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">J.JOSLE 40 MG</td>
+                    <td>258419</td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="112" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">K.KETOTIFEN 1 MG</td>
+                    <td>258420</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td>28</td>
+                    <td><input class="qty-input" value="28" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">L.LYMPHOM 5 MG</td>
+                    <td>258421</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>28</td>
+                    <td><input class="qty-input" value="28" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">M.METHOTREXATE 2.5 MG</td>
+                    <td>258422</td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td>28</td>
+                    <td><input class="qty-input" value="28" /></td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" /></td>
+                    <td class="med-name">N.NAPROXEN 250 MG</td>
+                    <td>258423</td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td><input class="schedule-input" value="0" /></td>
+                    <td><input class="schedule-input" value="1" /></td>
+                    <td>56</td>
+                    <td><input class="qty-input" value="112" /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="rx-footer">
+              <button class="btn btn-outline-secondary">Cancel</button>
+              <button class="btn btn-save">Save</button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeTab() === 'Summary'" class="p-3">Summary Tab Content</div>
+      </div>
+    </div>
+    <div class="col-lg-4 right-panel">
+      <!-- Medical Condition Card -->
+      <div class="card medical-condition-card">
+        <!-- Header -->
+        <div class="condition-header">
+          <div class="nav-arrow">←</div>
+
+          <div class="condition-title">
+            MEDICAL CONDITION
+            <i class="pi pi-print ms-2"></i>
+          </div>
+
+          <div class="nav-arrow">→</div>
+        </div>
+
+        <!-- Camp Info -->
+        <div class="camp-info">
+          <div class="camp-logo">GBR</div>
+
+          <div class="camp-details">
+            <div>
+              <small>Date</small>
+              <div>12/09/2025</div>
+            </div>
+
+            <div>
+              <small>Camp Name</small>
+              <div>JVV BAPATLA</div>
+            </div>
+
+            <div>
+              <small>Doctor</small>
+              <div>Dr. Ramesh Naidu</div>
+              <small>Neurologist</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagnosis -->
+        <div class="diagnosis-section">
+          <div class="section-title">DIAGNOSIS</div>
+
+          <div class="d-flex flex-wrap gap-2">
+            <span class="diag-chip red">Diabetes</span>
+            <span class="diag-chip red">HTN</span>
+            <span class="diag-chip red">Stroke</span>
+            <span class="diag-chip red">APD</span>
+            <span class="diag-chip red">Asthama</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
