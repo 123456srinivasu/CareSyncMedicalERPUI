@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { TabViewModule } from 'primeng/tabview';
 import { PatientService } from '../../../core/services/patient.service';
+import { Chart, registerables } from 'chart.js';
 
 @Component({
   selector: 'app-soap-note',
@@ -28,6 +29,11 @@ import { PatientService } from '../../../core/services/patient.service';
 export class SoapNoteComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+
+  constructor() {
+    Chart.register(...registerables);
+  }
   private patientService = inject(PatientService);
   private messageService = inject(MessageService);
 
@@ -200,4 +206,44 @@ export class SoapNoteComponent implements OnInit {
   onCancel() {
     this.router.navigate(['/patients']);
   }
+
+  chart: any;
+
+  @ViewChild('myChart') set chartEl(el: ElementRef<HTMLCanvasElement>) {
+    if (el) {
+      if (this.chart) {
+        this.chart.destroy();
+      }
+      this.initChart(el.nativeElement);
+    }
+  }
+
+  initChart(canvas: HTMLCanvasElement) {
+    this.chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+        datasets: [
+          {
+            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
+            borderColor: 'red',
+            fill: false,
+          },
+          {
+            data: [1600, 1700, 1700, 1900, 2000, 2700, 4000, 5000, 6000, 7000],
+            borderColor: 'green',
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+        },
+      },
+    });
+  }
+
+  // ngAfterViewInit removed as it's handled by setter
 }
