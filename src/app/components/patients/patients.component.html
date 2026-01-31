@@ -96,7 +96,34 @@
             icon="pi pi-search"
             placeholder="Search by MR Number / First Name / Surname / Old EnrollmentId"
             inputStyleClass="w-100"
+            [minLength]="1"
           >
+            <ng-template let-patient pTemplate="item">
+              <div class="row align-items-center w-100">
+                <!-- Avatar / Icon Placeholder -->
+                <!-- <div class="col-auto">
+                  <div class="patient-search-avatar">
+                    {{ patient.firstName.charAt(0) }}
+                  </div>
+                </div> -->
+                <div class="col-8">
+                  <div class="fw-bold">{{ patient.firstName }} {{ patient.lastName }}</div>
+                  <div class="small text-muted">
+                    MR: {{ patient.mrNumber }} | Mobile: {{ patient.mobileNumber }}
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="fw-bold">{{ patient.age }} {{ patient.gender }}</div>
+                  <div class="small text-muted">Father Name : {{ patient.fatherName }}</div>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <div class="px-3 py-2 text-muted small bg-light">Search Results</div>
+            </ng-template>
+            <ng-template pTemplate="empty">
+              <div class="px-3 py-2 text-muted small">No patients found.</div>
+            </ng-template>
           </p-autoComplete>
           <i
             *ngIf="loading"
