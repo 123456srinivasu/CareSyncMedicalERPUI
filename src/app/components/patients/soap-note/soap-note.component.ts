@@ -30,7 +30,6 @@ export class SoapNoteComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-
   constructor() {
     Chart.register(...registerables);
   }
@@ -208,6 +207,7 @@ export class SoapNoteComponent implements OnInit {
   }
 
   chart: any;
+  diabetesChart: any;
 
   @ViewChild('myChart') set chartEl(el: ElementRef<HTMLCanvasElement>) {
     if (el) {
@@ -218,20 +218,39 @@ export class SoapNoteComponent implements OnInit {
     }
   }
 
+  @ViewChild('diabetesChart') set diabetesChartEl(el: ElementRef<HTMLCanvasElement>) {
+    if (el) {
+      if (this.diabetesChart) {
+        this.diabetesChart.destroy();
+      }
+      this.initDiabetesChart(el.nativeElement);
+    }
+  }
+
   initChart(canvas: HTMLCanvasElement) {
     this.chart = new Chart(canvas, {
       type: 'line',
       data: {
-        labels: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
+        labels: ['10/09/25', '12/09/25', '14/09/25', '01/10/25'],
         datasets: [
           {
-            data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
-            borderColor: 'red',
+            label: 'Systolic (mmHg)',
+            data: [135, 145, 156, 120],
+            borderColor: '#1f4e79',
+            backgroundColor: '#1f4e79',
+            tension: 0.3,
+            pointRadius: 5,
+            pointHoverRadius: 6,
             fill: false,
           },
           {
-            data: [1600, 1700, 1700, 1900, 2000, 2700, 4000, 5000, 6000, 7000],
-            borderColor: 'green',
+            label: 'Diastolic (mmHg)',
+            data: [80, 85, 90, 80],
+            borderColor: '#e67e22',
+            backgroundColor: '#e67e22',
+            tension: 0.3,
+            pointRadius: 5,
+            pointHoverRadius: 6,
             fill: false,
           },
         ],
@@ -239,11 +258,80 @@ export class SoapNoteComponent implements OnInit {
       options: {
         responsive: true,
         plugins: {
-          legend: { display: false },
+          legend: {
+            position: 'bottom',
+          },
+          tooltip: {
+            enabled: true,
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            grid: {
+              display: true,
+            },
+          },
+          x: {
+            grid: {
+              display: true,
+            },
+          },
         },
       },
     });
   }
 
-  // ngAfterViewInit removed as it's handled by setter
+  initDiabetesChart(canvas: HTMLCanvasElement) {
+    this.diabetesChart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: ['11/09/25', '15/09/2025', '22/09/2025', '25/10/2025', '27/10/2025', '30/10/2025'],
+        datasets: [
+          {
+            label: 'Systolic (mmHg)',
+            data: [125, 99, 145, 120, 130, 85],
+            borderColor: '#1f4e79',
+            backgroundColor: '#1f4e79',
+            tension: 0.3,
+            pointRadius: 5,
+            fill: false,
+          },
+          {
+            label: 'Diastolic (mmHg)',
+            data: [224, 228, 178, 145, 230, 178],
+            borderColor: '#e67e22',
+            backgroundColor: '#e67e22',
+            tension: 0.3,
+            pointRadius: 5,
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          tooltip: {
+            enabled: true,
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            grid: {
+              display: true,
+            },
+          },
+          x: {
+            grid: {
+              display: true,
+            },
+          },
+        },
+      },
+    });
+  }
 }
