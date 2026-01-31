@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
 import { DrawerModule } from 'primeng/drawer';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { TooltipModule } from 'primeng/tooltip';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { PatientService } from '../../core/services/patient.service';
+import { filter } from 'rxjs/operators';
 
 interface SubMenuItem {
   label: string;
@@ -24,6 +28,7 @@ interface MenuItem {
   selector: 'app-navigation',
   standalone: true,
   imports: [
+    AutoCompleteModule,
     CommonModule,
     RouterModule,
     ToolbarModule,
@@ -32,6 +37,7 @@ interface MenuItem {
     DrawerModule,
     TieredMenuModule,
     TooltipModule,
+    FormsModule,
   ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss',
@@ -40,6 +46,15 @@ export class NavigationComponent implements OnInit {
   opened = true;
   collapsed = false;
   expandedMenus: { [key: string]: boolean } = {};
+  loading: boolean = false;
+  isLoading: boolean = false;
+  selectedPatient: any;
+  searchText: string = '';
+  filteredPatients: any[] = [];
+  showSearch: boolean = false;
+
+  private patientService = inject(PatientService);
+  private router = inject(Router);
 
   menuItems: MenuItem[] = [
     // { label: 'Dashboard', icon: 'pi-home', route: '/dashboard' },
@@ -73,9 +88,9 @@ export class NavigationComponent implements OnInit {
     // { label: 'Reports', icon: 'pi-chart-bar', route: '/reports' }
   ];
   userMenuItems = [
-    { label: 'Profile', icon: 'pi pi-user', command: () => {} },
-    { label: 'Settings', icon: 'pi pi-cog', command: () => {} },
-    { label: 'Logout', icon: 'pi pi-sign-out', command: () => {} },
+    { label: 'Profile', icon: 'pi pi-user', command: () => { } },
+    { label: 'Settings', icon: 'pi pi-cog', command: () => { } },
+    { label: 'Logout', icon: 'pi pi-sign-out', command: () => { } },
   ];
 
   ngOnInit(): void {
@@ -83,6 +98,13 @@ export class NavigationComponent implements OnInit {
     if (window.innerWidth < 768) {
       this.opened = false;
     }
+
+    // Subscribe to router events to toggle search visibility
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.showSearch = event.url.includes('patient-soap'); // Adjust logic as needed
+    });
   }
 
   toggleSidenav(): void {
@@ -103,6 +125,41 @@ export class NavigationComponent implements OnInit {
   toggleSubMenu(menuLabel: string): void {
     if (this.collapsed) return;
     this.expandedMenus[menuLabel] = !this.expandedMenus[menuLabel];
+  }
+
+  onPatientSelect(event: any) {
+    const patientData = event.value;
+    this.selectedPatient = patientData;
+
+    // Use optional chaining to safely access propertied and handle potential differences in API response structure
+    const patientId = this.selectedPatient?.tblPatientId || this.selectedPatient?.patient_id;
+
+    if (patientId) {
+      this.router.navigate(['/patient-soap', patientId], {
+        state: { patient: this.selectedPatient }
+      });
+      // Clear search after navigation
+      this.searchText = '';
+    }
+  }
+
+  onSearch($event: any) {
+    if (this.searchText.length < 2) {
+      return;
+    }
+
+    this.loading = true;
+    this.patientService.searchPatientsByMobile(this.searchText).subscribe({
+      next: (data) => {
+        this.filteredPatients = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error searching patients:', err);
+        this.loading = false;
+        this.filteredPatients = [];
+      },
+    });
   }
 
   isSubMenuExpanded(menuLabel: string): boolean {

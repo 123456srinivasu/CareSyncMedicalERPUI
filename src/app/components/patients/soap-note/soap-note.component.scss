@@ -620,7 +620,6 @@ a {
 /* Wrapper */
 .objective-wrapper {
   background: #f6f8fe;
-  border: 2px solid #9aaeff;
   border-radius: 12px;
   padding: 14px;
 }
@@ -710,7 +709,7 @@ a {
 
 .assessment-wrapper {
   background: #f6f8ff;
-  border: 2px solid #9fb2ff;
+  // border: 2px solid #9fb2ff;
   border-radius: 12px;
   padding: 18px;
 }
@@ -1006,4 +1005,7 @@ left: 7px;
   border-radius: 4px;
   position: relative;
   transition: all 0.2s ease;
+}
+#rxTable .schedule-input , #rxTable .qty-input {
+  width: 60px;
 }
