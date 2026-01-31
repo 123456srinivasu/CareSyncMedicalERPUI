@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { getApiUrl, API_CONFIG } from '../constants/api.constants';
+import { getApiUrl, API_CONFIG, getApiLocalUrl } from '../constants/api.constants';
 
 /**
  * Patient interface
@@ -162,6 +162,16 @@ export class PatientService {
     return this.http.get<any[]>(url).pipe(
       catchError((error) => {
         console.error(`Error fetching mandals for district ${districtId}:`, error);
+        throw error;
+      }),
+    );
+  }
+
+  getDashboardSummary(): Observable<any> {
+    const url = `${API_CONFIG.BASE_URL_LOCAL}${API_CONFIG.ENDPOINTS.DASHBOARD.SUMMARY}`;
+    return this.http.get<any>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching dashboard summary:', error);
         throw error;
       }),
     );

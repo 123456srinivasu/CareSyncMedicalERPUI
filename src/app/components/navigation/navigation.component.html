@@ -1,63 +1,40 @@
 <div class="sidenav-container">
-  <p-drawer 
-    [(visible)]="opened" 
-    [modal]="false" 
-    position="left"
-    [style]="{ width: getDrawerWidth() }"
+  <p-drawer [(visible)]="opened" [modal]="false" position="left" [style]="{ width: getDrawerWidth() }"
     [styleClass]="collapsed ? 'sidenav sidenav-collapsed' : 'sidenav'">
     <ng-template pTemplate="header">
       <div class="sidenav-header" [class.collapsed]="collapsed">
         <i class="pi pi-building logo-icon"></i>
         <h2 *ngIf="!collapsed">CareSync</h2>
-        <p-button 
-          [icon]="collapsed ? 'pi pi-angle-right' : 'pi pi-angle-left'"
-          [text]="true" 
-          [rounded]="true"
-          (onClick)="toggleCollapse()"
-          styleClass="collapse-btn"
-          [pTooltip]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-          tooltipPosition="right"></p-button>
+        <p-button [icon]="collapsed ? 'pi pi-angle-right' : 'pi pi-angle-left'" [text]="true" [rounded]="true"
+          (onClick)="toggleCollapse()" styleClass="collapse-btn"
+          [pTooltip]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'" tooltipPosition="right"></p-button>
       </div>
     </ng-template>
     <nav>
       <div *ngFor="let item of menuItems" class="menu-item-wrapper">
         <!-- Menu item with sub-menus -->
-        <div *ngIf="hasSubMenu(item)" 
-             class="menu-item menu-item-parent"
-             [class.collapsed]="collapsed"
-             [class.expanded]="isSubMenuExpanded(item.label)"
-             (click)="toggleSubMenu(item.label)"
-             [pTooltip]="collapsed ? item.label : ''"
-             tooltipPosition="right">
+        <div *ngIf="hasSubMenu(item)" class="menu-item menu-item-parent" [class.collapsed]="collapsed"
+          [class.expanded]="isSubMenuExpanded(item.label)" (click)="toggleSubMenu(item.label)"
+          [pTooltip]="collapsed ? item.label : ''" tooltipPosition="right">
           <i [class]="item.icon"></i>
           <span class="menu-label" *ngIf="!collapsed">{{ item.label }}</span>
-          <i *ngIf="!collapsed" 
-             class="pi pi-chevron-down submenu-arrow"
-             [class.rotated]="isSubMenuExpanded(item.label)"></i>
+          <i *ngIf="!collapsed" class="pi pi-chevron-down submenu-arrow"
+            [class.rotated]="isSubMenuExpanded(item.label)"></i>
         </div>
-        
+
         <!-- Sub-menu items -->
-        <div *ngIf="hasSubMenu(item) && isSubMenuExpanded(item.label) && !collapsed" 
-             class="submenu">
-          <a *ngFor="let subItem of item.items" 
-             [routerLink]="subItem.route" 
-             routerLinkActive="active" 
-             class="menu-item submenu-item"
-             [routerLinkActiveOptions]="{exact: false}">
+        <div *ngIf="hasSubMenu(item) && isSubMenuExpanded(item.label) && !collapsed" class="submenu">
+          <a *ngFor="let subItem of item.items" [routerLink]="subItem.route" routerLinkActive="active"
+            class="menu-item submenu-item" [routerLinkActiveOptions]="{ exact: false }">
             <i class="pi pi-circle-fill submenu-icon"></i>
             <span class="menu-label">{{ subItem.label }}</span>
           </a>
         </div>
 
         <!-- Regular menu item without sub-menus -->
-        <a *ngIf="!hasSubMenu(item)"
-           [routerLink]="item.route" 
-           routerLinkActive="active" 
-           class="menu-item" 
-           [class.collapsed]="collapsed"
-           [routerLinkActiveOptions]="{exact: false}"
-           [pTooltip]="collapsed ? item.label : ''"
-           tooltipPosition="right">
+        <a *ngIf="!hasSubMenu(item)" [routerLink]="item.route" routerLinkActive="active" class="menu-item"
+          [class.collapsed]="collapsed" [routerLinkActiveOptions]="{ exact: false }"
+          [pTooltip]="collapsed ? item.label : ''" tooltipPosition="right">
           <i [class]="item.icon"></i>
           <span class="menu-label" *ngIf="!collapsed">{{ item.label }}</span>
         </a>
@@ -70,18 +47,52 @@
       <div class="p-toolbar-group-start">
         <p-button icon="pi pi-bars" (onClick)="toggleSidenav()" [text]="true" styleClass="menu-button"></p-button>
         <span class="toolbar-title">
-          <img src="assets/images/gbr-logo.svg" height="50"/>
+          <img src="assets/images/gbr-logo.svg" height="50" />
         </span>
+      </div>
+      <div class="position-relative" style="width: 500px" *ngIf="showSearch">
+        <p-autoComplete [(ngModel)]="searchText" [suggestions]="filteredPatients" (completeMethod)="onSearch($event)"
+          (onSelect)="onPatientSelect($event)" field="firstName" styleClass="w-100" icon="pi pi-search"
+          placeholder="Search by MR Number / First Name / Surname / Old EnrollmentId" inputStyleClass="w-100"
+          [minLength]="1">
+          <ng-template let-patient pTemplate="item">
+            <div class="row align-items-center w-100">
+              <!-- Avatar / Icon Placeholder -->
+              <!-- <div class="col-auto">
+                  <div class="patient-search-avatar">
+                    {{ patient.firstName.charAt(0) }}
+                  </div>
+                </div> -->
+              <div class="col-8">
+                <div class="fw-bold">{{ patient.firstName }} {{ patient.lastName }}</div>
+                <div class="small text-muted">
+                  MR: {{ patient.mrNumber }} | Mobile: {{ patient.mobileNumber }}
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="fw-bold">{{ patient.age }} {{ patient.gender }}</div>
+                <div class="small text-muted">Father Name : {{ patient.fatherName }}</div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <div class="px-3 py-2 text-muted small bg-light">Search Results</div>
+          </ng-template>
+          <ng-template pTemplate="empty">
+            <div class="px-3 py-2 text-muted small">No patients found.</div>
+          </ng-template>
+        </p-autoComplete>
+        <i *ngIf="loading" class="pi pi-spin pi-spinner position-absolute"
+          style="right: 10px; top: 30%; transform: translateY(-50%); z-index: 1"></i>
       </div>
       <div class="p-toolbar-group-end">
         <p-button icon="pi pi-user" [text]="true" [rounded]="true" (onClick)="menu.toggle($event)"></p-button>
         <p-tieredMenu #menu [model]="userMenuItems" [popup]="true"></p-tieredMenu>
       </div>
     </p-toolbar>
-    
+
     <div class="main-content">
       <ng-content></ng-content>
     </div>
   </div>
 </div>
-
