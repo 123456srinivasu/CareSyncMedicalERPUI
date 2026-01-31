@@ -111,32 +111,40 @@
                   <div class="col-md-6">
                     <!-- Frequent Infections -->
                     <div class="question-block">
-                      <label class="main-check">
-                        <input type="checkbox" checked />
-                        <span>Frequent Infections (తరచుగా వచ్చే ఇన్ఫెక్షన్లు)</span>
+                      <label class="app-checkbox">
+                        <input type="checkbox" [(ngModel)]="soapData.frequent_infections" />
+                        <span class="checkmark"></span>
+                        Frequent Infections (తరచుగా వచ్చే ఇన్ఫెక్షన్లు)
                       </label>
 
-                      <div class="sub-options">
-                        <label><input type="checkbox" /> Skin (చర్మం)</label>
-                        <label><input type="checkbox" /> Gum (చిగుళ్లు)</label>
-                        <label><input type="checkbox" /> Vaginal (యోని)</label>
-                      </div>
-                    </div>
-
-                    <!-- Tired or Weak -->
-                    <div class="question-block mt-4">
-                      <label class="main-check">
-                        <input type="checkbox" checked />
-                        <span
-                          >Are you feeling tired or weak? (మీకు అలసట లేదా బలహీనతగా
-                          అనిపిస్తున్నదా?)</span
+                      <div class="sub-options" *ngIf="soapData.frequent_infections">
+                        <label class="app-checkboxSmall"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.frequent_infections_skin"
+                            name="frequent_infections_skin"
+                          />
+                          <span class="checkmarkSmall"></span>
+                          Skin (చర్మం)</label
                         >
-                      </label>
-
-                      <div class="sub-options">
-                        <label><input type="checkbox" /> Feeling tired (అలసటగా ఉంది)</label>
-                        <label><input type="checkbox" /> Feeling weak (బలహీనంగా ఉంది)</label>
-                        <label><input type="checkbox" /> Both tired and weak</label>
+                        <label class="app-checkboxSmall"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.frequent_infections_gum"
+                            name="frequent_infections_gum"
+                          />
+                          <span class="checkmarkSmall"></span>
+                          Gum (చిగుళ్లు)</label
+                        >
+                        <label class="app-checkbox"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.frequent_infections_vaginal"
+                            name="frequent_infections_vaginal"
+                          />
+                          <span class="checkmark"></span>
+                          Vaginal (యోని)</label
+                        >
                       </div>
                     </div>
                   </div>
@@ -145,14 +153,83 @@
                   <div class="col-md-6">
                     <!-- Darkened Skin -->
                     <div class="question-block">
-                      <label class="main-check">
-                        <input type="checkbox" checked />
+                      <label class="app-checkbox">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="soapData.darkened_skin"
+                          name="darkened_skin"
+                        />
+                        <span class="checkmark"></span>
                         <span>Darkened skin in folds (చర్మ మడతల్లో నల్లబడం)</span>
                       </label>
 
-                      <div class="sub-options">
-                        <label><input type="checkbox" /> Neck (చర్మం)</label>
-                        <label><input type="checkbox" /> Armpits (చంక)</label>
+                      <div class="sub-options" *ngIf="soapData.darkened_skin">
+                        <label class="app-checkboxSmall"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.darkened_skin_neck"
+                            name="darkened_skin_neck"
+                          />
+                          <span class="checkmarkSmall"></span>
+                          Neck (చర్మం)</label
+                        >
+                        <label class="app-checkboxSmall"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.darkened_skin_armpits"
+                            name="darkened_skin_armpits"
+                          />
+                          <span class="checkmarkSmall"></span>
+                          Armpits (చంక)</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <!-- Tired or Weak -->
+                    <div class="question-block mb-2 mt-2">
+                      <label class="app-checkbox">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="soapData.feeling_tired_weak"
+                          name="feeling_tired_weak"
+                        />
+                        <span class="checkmark"></span>
+                        <span
+                          >Are you feeling tired or weak? (మీకు అలసట లేదా బలహీనతగా
+                          అనిపిస్తున్నదా?)</span
+                        >
+                      </label>
+
+                      <div class="sub-options" *ngIf="soapData.feeling_tired_weak">
+                        <label class="app-checkboxSmall"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.feeling_tired"
+                            name="feeling_tired"
+                          />
+                          <span class="checkmarkSmall"></span>
+                          Feeling tired (అలసటగా ఉంది)</label
+                        >
+                        <label class="app-checkboxSmall"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.feeling_weak"
+                            name="feeling_weak"
+                          />
+                          <span class="checkmarkSmall"></span>
+                          Feeling weak (బలహీనంగా ఉంది)</label
+                        >
+                        <label class="app-checkboxSmall"
+                          ><input
+                            type="checkbox"
+                            [(ngModel)]="soapData.feeling_both"
+                            name="feeling_both"
+                          />
+                          <span class="checkmarkSmall"></span>
+                          Both tired and weak</label
+                        >
                       </div>
                     </div>
                   </div>
@@ -161,28 +238,33 @@
               <div class="disease-wrapper">
                 <!-- Disease Strip -->
                 <div class="disease-strip">
-                  <label class="disease-chip active">
+                  <label class="disease-chip active app-checkbox">
                     <input type="checkbox" checked />
+                    <span class="checkmark"></span>
                     Diabetes (మధుమేహం)
                   </label>
 
-                  <label class="disease-chip">
+                  <label class="disease-chip app-checkbox">
                     <input type="checkbox" />
+                    <span class="checkmark"></span>
                     HTN (అధిక రక్తపోటు)
                   </label>
 
-                  <label class="disease-chip">
+                  <label class="disease-chip app-checkbox">
                     <input type="checkbox" />
+                    <span class="checkmark"></span>
                     Seizures (మూర్చలు)
                   </label>
 
-                  <label class="disease-chip">
+                  <label class="disease-chip app-checkbox">
                     <input type="checkbox" />
+                    <span class="checkmark"></span>
                     Stroke (స్ట్రోక్)
                   </label>
 
-                  <label class="disease-chip">
+                  <label class="disease-chip app-checkbox">
                     <input type="checkbox" />
+                    <span class="checkmark"></span>
                     Asthma (ఆస్తమా)
                   </label>
                 </div>
@@ -232,25 +314,65 @@
 
                   <!-- Presenting Complaints -->
                   <div class="mt-4">
-                    <label class="main-check">
-                      <input type="checkbox" checked />
+                    <label class="main-check app-checkbox">
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="soapData.presenting_complaints"
+                        name="presenting_complaints"
+                      />
+                      <span class="checkmark"></span>
                       Presenting Complaints (ప్రస్తుత లక్షణాలు)
                     </label>
+                    <div
+                      class="complaint-grid mt-3 sub-options"
+                      *ngIf="soapData.presenting_complaints"
+                    >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" /> <span class="checkmarkSmall"></span>Wounds
+                        (గాయాలు)</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" /> <span class="checkmarkSmall"></span>Fatigue
+                        (అలసట)</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" /> <span class="checkmarkSmall"></span>Vision
+                        Changes</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" />
+                        <span class="checkmarkSmall"></span>Polydipsia</label
+                      >
 
-                    <div class="complaint-grid mt-3">
-                      <label><input type="checkbox" /> Wounds (గాయాలు)</label>
-                      <label><input type="checkbox" /> Fatigue (అలసట)</label>
-                      <label><input type="checkbox" /> Vision Changes</label>
-                      <label><input type="checkbox" /> Polydipsia</label>
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" />
+                        <span class="checkmarkSmall"></span>Polyuria</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" />
+                        <span class="checkmarkSmall"></span>Polyphagia</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" /> <span class="checkmarkSmall"></span>Tingling /
+                        Numbness</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" /> <span class="checkmarkSmall"></span>Unexplained
+                        weight</label
+                      >
 
-                      <label><input type="checkbox" /> Polyuria</label>
-                      <label><input type="checkbox" /> Polyphagia</label>
-                      <label><input type="checkbox" /> Tingling / Numbness</label>
-                      <label><input type="checkbox" /> Unexplained weight</label>
-
-                      <label><input type="checkbox" /> Taking Medicines?</label>
-                      <label><input type="checkbox" /> Smoking</label>
-                      <label><input type="checkbox" /> Drinking</label>
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" /> <span class="checkmarkSmall"></span>Taking
+                        Medicines?</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" />
+                        <span class="checkmarkSmall"></span>Smoking</label
+                      >
+                      <label class="app-checkboxSmall"
+                        ><input type="checkbox" />
+                        <span class="checkmarkSmall"></span>Drinking</label
+                      >
                     </div>
                   </div>
                 </div>
@@ -296,13 +418,14 @@
           </div>
 
           <!-- HTN Section -->
-          <div class="card medical-card mt-3">
-            <div class="card-body">
+          <div class="card medical-card mt-3" style="padding: 1rem">
+            <div class="card-body" style="padding-left: 0">
               <h5 class="section-title">HTN (Hypertension) (అధిక రక్తపోటు)</h5>
 
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" checked />
-                <label class="form-check-label">
+              <div class="form-check mb-3" style="padding-left: 0">
+                <label class="app-checkbox">
+                  <input type="checkbox" />
+                  <span class="checkmark"></span>
                   Have you experienced any of the following recently?
                 </label>
               </div>
@@ -310,29 +433,45 @@
               <div class="row ps-4">
                 <div class="col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" />
-                    <label class="form-check-label">Headache</label>
+                    <label class="app-checkboxSmall"
+                      ><input type="checkbox" />
+                      <span class="checkmarkSmall"></span>
+                      Headache
+                    </label>
                   </div>
                 </div>
 
                 <div class="col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" />
-                    <label class="form-check-label">Blurred vision</label>
+                    <label class="app-checkboxSmall"
+                      ><input type="checkbox" />
+                      <span class="checkmarkSmall"></span>
+                      Blurred vision
+                    </label>
                   </div>
                 </div>
 
                 <div class="col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" />
-                    <label class="form-check-label">Chest pain</label>
+                    <label class="app-checkboxSmall"
+                      ><input type="checkbox" />
+                      <span class="checkmarkSmall"></span>
+                      Chest pain
+                    </label>
                   </div>
                 </div>
 
                 <div class="col-md-3">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" />
-                    <label class="form-check-label">Shortness of breath</label>
+                    <label class="app-checkboxSmall"
+                      ><input
+                        type="checkbox"
+                        [(ngModel)]="soapData.frequent_infections_skin"
+                        name="frequent_infections_skin"
+                      />
+                      <span class="checkmarkSmall"></span>
+                      Shortness of breath</label
+                    >
                   </div>
                 </div>
               </div>

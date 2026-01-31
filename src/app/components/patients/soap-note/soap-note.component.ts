@@ -73,6 +73,23 @@ export class SoapNoteComponent implements OnInit {
     medications: '',
     lifestyle: '',
     plan_body: '',
+
+    // Checkbox boolean states
+    frequent_infections: false,
+    frequent_infections_skin: false,
+    frequent_infections_gum: false,
+    frequent_infections_vaginal: false,
+
+    feeling_tired_weak: false,
+    feeling_tired: false,
+    feeling_weak: false,
+    feeling_both: false,
+
+    darkened_skin: false,
+    darkened_skin_neck: false,
+    darkened_skin_armpits: false,
+
+    presenting_complaints: false,
   };
 
   ngOnInit() {
