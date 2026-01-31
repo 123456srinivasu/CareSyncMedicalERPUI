@@ -139,6 +139,22 @@ export class SoapNoteComponent implements OnInit {
     return age;
   }
 
+  calculateDOBToAge(dob?: string | Date): number {
+    if (!dob) return 0;
+    // Handle if dob is just a number (age) or a date string
+    //if (typeof dob === 'number') return dob;
+
+    const today = new Date();
+    const birthDate = new Date(Number(dob), today.getMonth(), today.getDate());
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    console.log('Calculated age from DOB:', age);
+    return age;
+  }
+
   onSubmit(form: NgForm) {
     if (form.valid) {
       console.log('SOAP Form Submitted', this.soapData);
