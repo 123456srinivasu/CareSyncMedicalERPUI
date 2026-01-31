@@ -108,7 +108,7 @@ export class PatientService {
   }
 
   searchPatientsByMobile(mobileNumber: string): Observable<any[]> {
-    const url = getApiLocalUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH(mobileNumber));
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH(mobileNumber));
     return this.http.get<any[]>(url).pipe(
       catchError((error) => {
         console.error(`Error searching patients with mobile number ${mobileNumber}:`, error);
