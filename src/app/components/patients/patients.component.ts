@@ -177,6 +177,7 @@ export class PatientsComponent implements OnInit {
   states: any[] = [];
   districts: any[] = [];
   mandals: any[] = [];
+  dashBoardSummary: any = {};
 
   ngOnInit() {
     /* this.patients = [
@@ -297,6 +298,13 @@ export class PatientsComponent implements OnInit {
     ]; */
     //this.loadPatients();
     this.loadStates();
+
+    this.patientService.getDashboardSummary().subscribe({
+      next: (data) => {
+        this.dashBoardSummary = data;
+      },
+      error: (err) => console.error('Error loading dashboard summary:', err),
+    });
   }
 
   displayPatientDialog: boolean = false;
@@ -550,7 +558,7 @@ export class PatientsComponent implements OnInit {
     const patientId = this.selectedPatient?.tblPatientId || this.selectedPatient?.patient_id;
     if (patientId) {
       this.router.navigate(['/patient-soap', patientId], {
-        state: { patient: this.selectedPatient }
+        state: { patient: this.selectedPatient },
       });
     }
   }

@@ -9,7 +9,7 @@
           </div>
           <div>
             <div class="card-title">Registrations</div>
-            <div class="card-count db-reg-count">120</div>
+            <div class="card-count db-reg-count">{{ dashBoardSummary.patientsCount }}</div>
           </div>
         </div>
       </p-card>
@@ -22,7 +22,7 @@
           </div>
           <div>
             <div class="card-title">Doctors</div>
-            <div class="card-count db-doctors-count">5</div>
+            <div class="card-count db-doctors-count">{{ dashBoardSummary.doctorsCount }}</div>
           </div>
         </div>
       </p-card>
@@ -35,7 +35,7 @@
           </div>
           <div>
             <div class="card-title">Pharmacy</div>
-            <div class="card-count db-pharmacy-count">6</div>
+            <div class="card-count db-pharmacy-count">{{ dashBoardSummary.medicinesCount }}</div>
           </div>
         </div>
       </p-card>
@@ -61,7 +61,7 @@
           </div>
           <div>
             <div class="card-title">Insulin</div>
-            <div class="card-count db-insulin-count">12</div>
+            <div class="card-count db-insulin-count">{{ dashBoardSummary.illnessCount }}</div>
           </div>
         </div>
       </p-card>

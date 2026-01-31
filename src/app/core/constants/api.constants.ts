@@ -90,6 +90,10 @@ export const API_CONFIG = {
       SEARCH_BY_FIELDS: (mrNumber: string) =>
         `/patient-registration/search/by-fields?mrNumber=${mrNumber}`,
     },
+    DASHBOARD: {
+      BASE: '/dashboard',
+      SUMMARY: '/dashboard/summary',
+    },
   },
 } as const;
 

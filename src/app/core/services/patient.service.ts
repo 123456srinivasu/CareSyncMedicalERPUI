@@ -166,4 +166,14 @@ export class PatientService {
       }),
     );
   }
+
+  getDashboardSummary(): Observable<any> {
+    const url = `${API_CONFIG.BASE_URL_LOCAL}${API_CONFIG.ENDPOINTS.DASHBOARD.SUMMARY}`;
+    return this.http.get<any>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching dashboard summary:', error);
+        throw error;
+      }),
+    );
+  }
 }
