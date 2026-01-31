@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { getApiUrl, API_CONFIG } from '../constants/api.constants';
+import { getApiUrl, API_CONFIG, getApiLocalUrl } from '../constants/api.constants';
 
 /**
  * Patient interface
@@ -108,7 +108,7 @@ export class PatientService {
   }
 
   searchPatientsByMobile(mobileNumber: string): Observable<any[]> {
-    const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH(mobileNumber));
+    const url = getApiLocalUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH(mobileNumber));
     return this.http.get<any[]>(url).pipe(
       catchError((error) => {
         console.error(`Error searching patients with mobile number ${mobileNumber}:`, error);

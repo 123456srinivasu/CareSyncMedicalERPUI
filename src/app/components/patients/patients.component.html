@@ -85,21 +85,31 @@
   <p-card class="hidden">
     <div class="search-section">
       <div class="d-flex align-items-center w-50 gap-2 position-relative">
-        <input
-          pInputText
-          type="text"
-          class="p-inputtext-sm flex-grow-1"
-          placeholder="MR Number / First Name / Surname / Old EnrollmentId"
-          [(ngModel)]="searchText"
-          (keyup.enter)="onSearch()"
-          style="margin-bottom: 0"
-        />
+        <div class="position-relative w-100">
+          <p-autoComplete
+            [(ngModel)]="searchText"
+            [suggestions]="filteredPatients"
+            (completeMethod)="onSearch($event)"
+            (onSelect)="onPatientSelect($event)"
+            field="firstName"
+            styleClass="w-100"
+            icon="pi pi-search"
+            placeholder="Search by MR Number / First Name / Surname / Old EnrollmentId"
+            inputStyleClass="w-100"
+          >
+          </p-autoComplete>
+          <i
+            *ngIf="loading"
+            class="pi pi-spin pi-spinner position-absolute"
+            style="right: 10px; top: 30%; transform: translateY(-50%); z-index: 1"
+          ></i>
+        </div>
 
         <button
           pButton
           type="button"
           icon="pi pi-search"
-          (click)="onSearch()"
+          (click)="onSearch($event)"
           class="add-new-patinet-search"
         ></button>
       </div>

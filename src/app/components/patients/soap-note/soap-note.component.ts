@@ -76,11 +76,22 @@ export class SoapNoteComponent implements OnInit {
   };
 
   ngOnInit() {
+    const state = history.state;
+    if (state?.patient) {
+      this.patient = state.patient.value || state.patient;
+      console.log('Patient loaded from state:', this.patient);
+    }
+
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.patientId = +id;
-        this.loadPatient(this.patientId);
+
+        // Only load if we don't have the patient data or if the ID doesn't match
+        const currentPatientId = this.patient?.tblPatientId || this.patient?.patient_id;
+        if (!this.patient || currentPatientId !== this.patientId) {
+          this.loadPatient(this.patientId);
+        }
       } else {
         this.messageService.add({
           severity: 'error',
@@ -101,13 +112,14 @@ export class SoapNoteComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading patient', err);
+        // If we have patient data from state (even if partial), we might want to keep it or show error.
+        // For now, standard error handling.
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Failed to load patient data.',
+          detail: 'Failed to load full patient data.',
         });
         this.loading = false;
-        // In a real app, maybe redirect back or show a dedicated error state
       },
     });
   }
