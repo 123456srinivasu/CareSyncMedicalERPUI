@@ -1,0 +1,1011 @@
+.soap-page-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+  }
+}
+
+/* Patient Summary Card Styles */
+.patinet-details-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  gap: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.avatar-section {
+    flex-shrink: 0;
+}
+
+.patient-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.patinet-full-details {
+  flex-grow: 1;
+  
+  .patinet-id {
+    color: #111827;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .patinet-other-details {
+    color: #6b7280;
+    font-size: 14px;
+  }
+}
+
+.br-l {
+  border-left: 1px solid #e5e7eb;
+  padding-left: 24px;
+  
+  @media (max-width: 768px) {
+      border-left: none;
+      padding-left: 0;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 16px;
+      width: 100%;
+  }
+}
+
+.vitals-set {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.vitals-head {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #2563eb;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vitals-item {
+  margin-bottom: 6px;
+  color: #374151;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  border-radius: 100px;
+  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+}
+
+.vitals-label {
+  font-weight: 600;
+  margin-right: 6px;
+  color: #4b5563;
+}
+
+.diagnosis-item {
+  margin-bottom: 6px;
+  color: #dbeafe;
+  background-color: #1e40af; /* Darker blue for contrast */
+  color: white;
+  border: 1px solid #1e3a8a;
+  font-size: 13px;
+  border-radius: 100px;
+  padding: 4px 10px;
+  margin-right: 4px;
+}
+
+/* SOAP Form Styles */
+.soap-container {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.soap-header {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 12px;
+  color: #111827;
+}
+
+.soap-section {
+  margin-bottom: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden; /* For header radiuses */
+}
+
+.soap-title {
+  background: #f8fafc;
+  padding: 12px 16px;
+  font-weight: 700;
+  color: #0f172a;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #3b82f6;
+    margin-right: 10px;
+    border-radius: 2px;
+  }
+}
+
+.soap-body {
+  padding: 20px;
+}
+
+.form-label {
+  color: #374151;
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Input Overrides */
+input.form-control, textarea.form-control {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 10px;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+  &:focus {
+    border-color: #3b82f6;
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+  }
+  
+  &.is-invalid {
+    border-color: #dc2626;
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.25);
+    }
+  }
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s;
+  
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+  
+  &:hover:not(:disabled) {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+}
+
+.btn-secondary {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border-color: #d1d5db;
+  
+  &:hover:not(:disabled) {
+    background-color: #e5e7eb;
+    border-color: #9ca3af;
+  }
+}
+
+.btn-success {
+  background-color: #10b981;
+  color: white;
+  border-color: #10b981;
+  
+  &:hover:not(:disabled) {
+    background-color: #059669;
+    border-color: #059669;
+  }
+}
+
+.text-danger {
+  color: #dc2626;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc2626;
+}
+
+
+// New styles can be added below as needed 
+
+/* Wrapper */
+.medical-wrapper {
+  background: #f4f6fb;
+  min-height: 100vh;
+}
+
+/* Tabs */
+.medical-tabs .p-tabview-nav {
+  border: none;
+  background: transparent;
+}
+
+.tab-header {
+  text-align: center;
+  padding: 10px 20px;
+}
+
+.active-tab {
+  background: #152a6a;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.tab-header .title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Cards */
+.medical-card {
+  border-radius: 14px;
+  // border: 1px solid #dfe3f3;
+  // box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+/* Section Titles */
+.section-title {
+  color: #6b46c1;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+
+.telugu {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* Disease Strip */
+.disease-strip {
+  background: #eef1fb;
+  padding: 14px;
+  border-radius: 12px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.disease-chip {
+  padding: 10px 16px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e2e6f3;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.disease-chip:hover {
+  transform: translateY(-1px);
+}
+
+.disease-chip.active {
+  background: #7c3aed;
+  color: white;
+  border: none;
+}
+
+/* Checkbox polish */
+.form-check-input {
+  width: 18px;
+  height: 18px;
+}
+
+/* Header Card */
+.patient-header {
+  border-radius: 14px;
+  border: 1px solid #e4e8f4;
+  background: #f6f8fd;
+}
+
+/* Avatar */
+.patient-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #d9deea;
+}
+
+/* Patient Text */
+.patient-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1b2559;
+}
+
+.patient-sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Section Title */
+.section-title-small {
+  font-weight: 600;
+  color: #3b5ccc;
+  font-size: 14px;
+}
+
+/* Vital Chips */
+.vital-chip {
+  background: #eef1f7;
+  border: 1px solid #e1e5f2;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Diagnosis Chips */
+.diag-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.diag-chip.red {
+  color: #e53935;
+  border-color: #e53935;
+  background: #fff5f5;
+}
+
+/* Allergy Chips */
+.status-chip {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-chip.yes {
+  background: #ffe5e5;
+  color: #e53935;
+}
+
+.status-chip.no {
+  background: #e6f6ec;
+  color: #1b8f4d;
+}
+/* Layout */
+.medical-layout {
+  background: #f3f6fd;
+  min-height: 100vh;
+}
+
+.left-panel {
+  background: white;
+  padding: 10px;
+}
+
+.right-panel {
+  background: #f6f8fe;
+  padding: 14px;
+}
+
+/* Spiral Divider */
+.spiral-divider {
+  justify-content: center;
+  position: relative;
+}
+
+.spiral-line {
+  width: 40px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    #d6dbea,
+    #d6dbea 6px,
+    white 6px,
+    white 14px
+  );
+  border-left: 2px solid #cfd6ea;
+  border-right: 2px solid #cfd6ea;
+}
+
+/* Medical Condition Card */
+.medical-condition-card {
+  border-radius: 14px;
+  border: 1px solid #dce2f5;
+  background: white;
+  overflow: hidden;
+}
+
+/* Header */
+.condition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border-bottom: 1px solid #e6ebfa;
+}
+
+.condition-title {
+  font-weight: 700;
+  color: #3b5ccc;
+  letter-spacing: 0.5px;
+}
+
+.nav-arrow {
+  font-size: 20px;
+  color: #8892b0;
+  cursor: pointer;
+}
+
+/* Camp Info */
+.camp-info {
+  display: flex;
+  gap: 16px;
+  padding: 14px;
+  border-bottom: 1px solid #eef2fb;
+}
+
+.camp-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camp-details {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.camp-details small {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* Diagnosis */
+.diagnosis-section {
+  padding: 16px;
+}
+
+.section-title {
+  font-weight: 600;
+  color: #3b5ccc;
+  margin-bottom: 10px;
+}
+
+/* Diagnosis Chips */
+.diag-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  background: #fff5f5;
+}
+
+
+:host {
+    display: block;
+    padding: 1rem;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: white;
+    padding: 1.5rem;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #ddd;
+        border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+.nav {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+    background-image: linear-gradient(to right, #1f2a6b 0%, #0c1a52 100%);
+    background-color: #8a9aac;
+    color: #fff;
+}
+ol, ul {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.nav:before, .nav:after {
+    content: " ";
+    display: table;
+}
+.nav-tabs>li {
+    float: left;
+    margin-bottom: -1px;
+    cursor: pointer;
+}
+.nav>li {
+    position: relative;
+    display: block;
+}
+.nav-tabs>li {
+    margin-right: 2px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+}
+.nav>li {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+}
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+.nav-tabs>li.active, .nav-tabs>li.active>:focus, .nav-tabs>li.active>:hover {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    // border: 1px solid #ddd;
+    border-bottom-color: transparent;
+    font-weight: bold;
+}
+
+/* Wrapper */
+.objective-wrapper {
+  background: #f6f8fe;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+/* Vitals Bar */
+.vitals-bar {
+  display: flex;
+  gap: 30px;
+  padding: 12px;
+  border-bottom: 1px solid #e5e9f7;
+  flex-wrap: wrap;
+}
+
+.vital-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.vital-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: white;
+}
+
+.bg-weight { background: #4fa6b7; }
+.bg-bp { background: #5c8df6; }
+.bg-pulse { background: #e74c3c; }
+.bg-temp { background: #8e44ad; }
+.bg-spo2 { background: #27ae60; }
+
+/* Table */
+.lab-table-wrapper {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.lab-table thead {
+  background: #eef2ff;
+}
+
+.lab-table th {
+  font-weight: 600;
+  padding: 14px;
+}
+
+.lab-table td {
+  padding: 14px;
+  vertical-align: middle;
+}
+
+/* Buttons */
+.icon-btn {
+  border: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.add-btn {
+  background: #4caf50;
+  color: white;
+  font-size: 20px;
+}
+
+/* Footer */
+.footer-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+  padding-top: 16px;
+}
+
+.btn-save {
+  background: #d81b60;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 24px;
+}
+
+
+
+.assessment-wrapper {
+  background: #f6f8ff;
+  // border: 2px solid #9fb2ff;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+/* Section */
+.disease-section {
+  background: transparent;
+}
+
+/* Title */
+.disease-title {
+  color: #3b5ccc;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* Table */
+.history-table {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.history-table thead {
+  background: #f0f3ff;
+}
+
+.history-table th {
+  padding: 14px;
+  font-weight: 600;
+}
+
+.history-table td {
+  padding: 14px;
+}
+
+/* Chart */
+.chart-card {
+  background: white;
+  border-radius: 10px;
+  padding: 14px;
+  height: 240px;
+}
+
+/* Notes */
+.notes-block label {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.notes-area {
+  height: 120px;
+  border-radius: 10px;
+}
+
+/* Footer */
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.btn-save {
+  background: #d81b60;
+  color: white;
+  padding: 8px 26px;
+  border-radius: 10px;
+}
+
+
+
+.summary-wrapper {
+  background: #f6f8ff;
+  border: 2px solid #9fb2ff;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+/* Section */
+.summary-section {
+  border-bottom: 1px solid #e3e8ff;
+  padding: 18px 0;
+}
+
+/* Titles */
+.section-title {
+  color: #3f5ec9;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+/* Chips */
+.chip-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.chip.red {
+  border: 1px solid #ff4d4f;
+  color: #ff4d4f;
+  background: #fff1f1;
+}
+
+.chip.green {
+  border: 1px solid #4caf50;
+  color: #4caf50;
+  background: #effaf0;
+}
+
+/* Vitals */
+.vitals-summary {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.vital-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.vital-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.bg-blue { background:#4fa6b7; }
+.bg-lightblue { background:#5c8df6; }
+.bg-red { background:#e74c3c; }
+.bg-purple { background:#8e44ad; }
+.bg-green { background:#27ae60; }
+
+.vital-label { color:#777; font-size:14px; }
+.vital-value { font-weight:700; font-size:18px; }
+
+.red-text { color:#e53935; }
+.green-text { color:#4caf50; }
+
+/* Allergy */
+.badge-yes {
+  background:#ffe5e5;
+  color:#e53935;
+  padding:4px 12px;
+  border-radius:16px;
+  margin:0 16px 0 6px;
+}
+
+.badge-no {
+  background:#e8f5e9;
+  color:#2e7d32;
+  padding:4px 12px;
+  border-radius:16px;
+  margin:0 16px 0 6px;
+}
+
+/* Medication */
+.medication-table thead {
+  background:#eef2ff;
+}
+
+.new-badge {
+  background:#66c6de;
+  color:white;
+  padding:6px 14px;
+  border-radius:18px;
+}
+
+
+.vital-icon {
+  width: 60px;
+    height: 30px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-top: 25px;
+}
+
+.weight-icon { background:#59b3c6; }
+.bp-icon { background:#5c8df6; }
+.pulse-icon { background:#e74c3c; }
+.temp-icon { background:#6c63ff; }
+.spo2-icon { background:#27ae60; }
+
+.vital-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #666;
+}
+.input-group-text-soap{
+  position: absolute;
+    right: 5px;
+    top: 8px;
+}
+
+.app-checkbox , .app-checkboxSmall{
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  gap: 8px;
+  user-select: none;
+}
+
+.app-checkbox input , .app-checkboxSmall input {
+  display: none; /* hide default checkbox */
+}
+
+.checkmark {
+    width: 25px;
+    height: 25px;
+  border: 2px solid #6c757d;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Checked state */
+.app-checkbox input:checked + .checkmark  , .app-checkboxSmall input:checked + .checkmarkSmall {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+
+
+/* Tick mark */
+.checkmark::after {
+  content: "";
+  position: absolute;
+left: 7px;
+    top: 1px;
+    width: 8px;
+    height: 14px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.checkmarkSmall::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+    top: 1px;
+    width: 8px;
+    height: 14px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.app-checkbox input:checked + .checkmark::after {
+  opacity: 1;
+}
+
+.app-checkboxSmall input:checked + .checkmark {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+.checkmarkSmall::after {
+  content: "";
+  position: absolute;
+left: 7px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+.checkmarkSmall {
+    width: 22px;
+    height: 22px;
+  border: 2px solid #6c757d;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+#rxTable .schedule-input , #rxTable .qty-input {
+  width: 60px;
+}

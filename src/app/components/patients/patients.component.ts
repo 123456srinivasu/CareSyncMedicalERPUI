@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -11,7 +12,7 @@ import { PatientService } from '../../core/services/patient.service';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { LocationsService } from '../../core/services/locations.service';
-
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ToastModule } from 'primeng/toast';
 
 interface Patient {
@@ -58,6 +59,7 @@ interface PatientRecord {
   selector: 'app-patients',
   standalone: true,
   imports: [
+    AutoCompleteModule,
     CommonModule,
     FormsModule,
     TableModule,
@@ -65,10 +67,12 @@ interface PatientRecord {
     InputTextModule,
     TagModule,
     CardModule,
+    CardModule,
     DialogModule,
     DialogModule,
     ToastModule,
     ConfirmDialogModule,
+    RouterModule,
   ],
   templateUrl: './patients.component.html',
   styleUrl: './patients.component.scss',
@@ -84,10 +88,13 @@ export class PatientsComponent implements OnInit {
   private readonly locationsService = inject(LocationsService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly router = inject(Router);
 
   // Table-specific data for the new PrimeNG table
   patientTableData: PatientRecord[] = [];
   loading: boolean = false;
+  isLoading: boolean = false;
+  selectedPatient: any;
 
   @ViewChild('newUserForm') newUserForm!: NgForm;
 
@@ -170,6 +177,7 @@ export class PatientsComponent implements OnInit {
   states: any[] = [];
   districts: any[] = [];
   mandals: any[] = [];
+  dashBoardSummary: any = {};
 
   ngOnInit() {
     /* this.patients = [
@@ -290,6 +298,13 @@ export class PatientsComponent implements OnInit {
     ]; */
     //this.loadPatients();
     this.loadStates();
+
+    this.patientService.getDashboardSummary().subscribe({
+      next: (data) => {
+        this.dashBoardSummary = data;
+      },
+      error: (err) => console.error('Error loading dashboard summary:', err),
+    });
   }
 
   displayPatientDialog: boolean = false;
@@ -505,7 +520,10 @@ export class PatientsComponent implements OnInit {
     });
   }
 
-  onSearch() {
+  onSearch($event: any) {
+    if (this.searchText.length < 2) {
+      return;
+    }
     if (!this.searchText) {
       this.loadPatients();
       return;
@@ -517,7 +535,9 @@ export class PatientsComponent implements OnInit {
         this.patientTableData = this.mapToPatientRecords(data);
         if (this.patientTableData.length > 0) {
           this.soapPatientData = this.patientTableData[0];
+          //this.filteredPatients = data[0].firstName ? data : [];
           this.filteredPatients = data;
+          this.loading = false;
         }
         this.loading = false;
       },
@@ -527,6 +547,20 @@ export class PatientsComponent implements OnInit {
         this.patientTableData = [];
       },
     });
+  }
+
+  onPatientSelect(event: any) {
+    // PrimeNG emits an object { originalEvent, value }
+    const patientData = event.value;
+    this.selectedPatient = patientData;
+    console.log('Selected Patient:', this.selectedPatient);
+
+    const patientId = this.selectedPatient?.tblPatientId || this.selectedPatient?.patient_id;
+    if (patientId) {
+      this.router.navigate(['/patient-soap', patientId], {
+        state: { patient: this.selectedPatient },
+      });
+    }
   }
 
   private mapToPatientRecords(data: any[]): PatientRecord[] {
@@ -648,7 +682,6 @@ export class PatientsComponent implements OnInit {
     return age;
   }
 
-  
   onReset(form: any) {
     form.resetForm();
     this.onClearForm();

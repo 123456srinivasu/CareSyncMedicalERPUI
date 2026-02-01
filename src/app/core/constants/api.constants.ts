@@ -6,7 +6,7 @@
 export const API_CONFIG = {
   // Base API Configuration
   BASE_URL: 'http://65.20.80.83:8081',
-  //BASE_URL: 'http://localhost:8081',
+  BASE_URL_LOCAL: 'http://localhost:8081',
   API_PREFIX: '/api',
 
   // API Endpoints
@@ -90,6 +90,10 @@ export const API_CONFIG = {
       SEARCH_BY_FIELDS: (mrNumber: string) =>
         `/patient-registration/search/by-fields?mrNumber=${mrNumber}`,
     },
+    DASHBOARD: {
+      BASE: '/dashboard',
+      SUMMARY: '/dashboard/summary',
+    },
   },
 } as const;
 
@@ -100,4 +104,8 @@ export const API_CONFIG = {
  */
 export function getApiUrl(endpoint: string): string {
   return `${API_CONFIG.BASE_URL}${API_CONFIG.API_PREFIX}${endpoint}`;
+}
+
+export function getApiLocalUrl(endpoint: string): string {
+  return `${API_CONFIG.BASE_URL_LOCAL}${API_CONFIG.API_PREFIX}${endpoint}`;
 }
