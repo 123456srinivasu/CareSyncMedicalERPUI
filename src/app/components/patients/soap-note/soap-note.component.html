@@ -1194,100 +1194,115 @@
             <span class="chip red">Asthama</span>
           </div>
         </div>
+        <div
+          class="ObjectiveSection"
+          id="objectiveSection"
+          *ngIf="
+            activeTab() === 'Objective' ||
+            activeTab() === 'Assessment' ||
+            activeTab() === 'Plan' ||
+            activeTab() === 'Summary'
+          "
+        >
+          <!-- VITALS SUMMARY -->
+          <div class="summary-section">
+            <h5 class="section-title">VITALS SUMMARY</h5>
 
-        <!-- VITALS SUMMARY -->
-        <div class="summary-section">
-          <h5 class="section-title">VITALS SUMMARY</h5>
+            <div class="vitals-summary">
+              <div class="vital-box">
+                <div class="vital-icon bg-blue">⚖</div>
+                <div>
+                  <div class="vital-label">Weight</div>
+                  <div class="vital-value">75</div>
+                </div>
+              </div>
 
-          <div class="vitals-summary">
-            <div class="vital-box">
-              <div class="vital-icon bg-blue">⚖</div>
-              <div>
-                <div class="vital-label">Weight</div>
-                <div class="vital-value">75</div>
+              <div class="vital-box">
+                <div class="vital-icon bg-lightblue">🩺</div>
+                <div>
+                  <div class="vital-label">BP</div>
+                  <div class="vital-value red-text">135/90</div>
+                </div>
+              </div>
+
+              <div class="vital-box">
+                <div class="vital-icon bg-red">❤</div>
+                <div>
+                  <div class="vital-label">Pulse</div>
+                  <div class="vital-value green-text">80</div>
+                </div>
+              </div>
+
+              <div class="vital-box">
+                <div class="vital-icon bg-purple">🌡</div>
+                <div>
+                  <div class="vital-label">Temp</div>
+                  <div class="vital-value green-text">98.6°F</div>
+                </div>
+              </div>
+
+              <div class="vital-box">
+                <div class="vital-icon bg-green">🫁</div>
+                <div>
+                  <div class="vital-label">SpO2</div>
+                  <div class="vital-value green-text">99%</div>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div class="vital-box">
-              <div class="vital-icon bg-lightblue">🩺</div>
-              <div>
-                <div class="vital-label">BP</div>
-                <div class="vital-value red-text">135/90</div>
-              </div>
+          <!-- ALLERGIES -->
+          <div class="summary-section">
+            <h5 class="section-title">ALLERGIES</h5>
+
+            <div class="allergy-row">
+              Drug <span class="badge-yes">Yes</span> Food
+              <span class="badge-no">No</span> Environment <span class="badge-no">No</span>
             </div>
 
-            <div class="vital-box">
-              <div class="vital-icon bg-red">❤</div>
-              <div>
-                <div class="vital-label">Pulse</div>
-                <div class="vital-value green-text">80</div>
-              </div>
-            </div>
+            <div class="allergy-note">Penicillin, Amoxicillin, Sulfa drugs</div>
+          </div>
 
-            <div class="vital-box">
-              <div class="vital-icon bg-purple">🌡</div>
-              <div>
-                <div class="vital-label">Temp</div>
-                <div class="vital-value green-text">98.6°F</div>
-              </div>
-            </div>
+          <!-- TEST RESULTS -->
+          <div class="summary-section">
+            <h5 class="section-title">TEST RESULTS</h5>
 
-            <div class="vital-box">
-              <div class="vital-icon bg-green">🫁</div>
+            <div class="result-block">
               <div>
-                <div class="vital-label">SpO2</div>
-                <div class="vital-value green-text">99%</div>
+                <strong>Diabetes</strong>
+                <div class="chip-row">
+                  <span class="chip red">HBA1C: 8</span>
+                  <span class="chip red">FBS: 142</span>
+                  <span class="chip green">PLBS: 170</span>
+                </div>
+              </div>
+
+              <div>
+                <strong>HTN</strong>
+                <div class="chip-row">
+                  <span class="chip red">140/85</span>
+                </div>
+              </div>
+
+              <div>
+                <strong>Stroke</strong>
+                <div class="chip-row">
+                  <span class="chip red">LT</span>
+                  <span class="chip red">Onset: 1hr</span>
+                  <span class="chip green">2D Echo</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- ALLERGIES -->
-        <div class="summary-section">
-          <h5 class="section-title">ALLERGIES</h5>
-
-          <div class="allergy-row">
-            Drug <span class="badge-yes">Yes</span> Food
-            <span class="badge-no">No</span> Environment <span class="badge-no">No</span>
-          </div>
-
-          <div class="allergy-note">Penicillin, Amoxicillin, Sulfa drugs</div>
-        </div>
-
-        <!-- TEST RESULTS -->
-        <div class="summary-section">
-          <h5 class="section-title">TEST RESULTS</h5>
-
-          <div class="result-block">
-            <div>
-              <strong>Diabetes</strong>
-              <div class="chip-row">
-                <span class="chip red">HBA1C: 8</span>
-                <span class="chip red">FBS: 142</span>
-                <span class="chip green">PLBS: 170</span>
-              </div>
-            </div>
-
-            <div>
-              <strong>HTN</strong>
-              <div class="chip-row">
-                <span class="chip red">140/85</span>
-              </div>
-            </div>
-
-            <div>
-              <strong>Stroke</strong>
-              <div class="chip-row">
-                <span class="chip red">LT</span>
-                <span class="chip red">Onset: 1hr</span>
-                <span class="chip green">2D Echo</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- MEDICATION TABLE -->
-        <div class="summary-section">
+        <div
+          class="summary-section"
+          id="objectiveSection"
+          *ngIf="
+            activeTab() === 'Assessment' || activeTab() === 'Plan' || activeTab() === 'Summary'
+          "
+        >
           <h5 class="section-title">MEDICATION</h5>
 
           <table class="table medication-table">
