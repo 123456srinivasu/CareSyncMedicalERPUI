@@ -6,14 +6,18 @@
         <div class="col-lg-4 d-flex align-items-center border-end">
           <div class="patient-avatar"></div>
           <div>
-            <div class="patient-name">
-              {{ patient.mrNumber }} | {{ patient.firstName }} {{ patient.lastName }} |
-              {{ patient.gender }} |
-              {{ patient.age.toString().length > 2 ? calculateDOBToAge(patient.age) : patient.age }}
-            </div>
-            <div class="patient-sub">
-              {{ patient.fatherName }} | {{ patient.patientAddressesList[0].city }}
-            </div>
+            @if (patient) {
+              <div class="patient-name">
+                {{ patient.mrNumber }} | {{ patient.firstName }} {{ patient.lastName }} |
+                {{ patient.gender }} |
+                {{
+                  patient.age.toString().length > 2 ? calculateDOBToAge(patient.age) : patient.age
+                }}
+              </div>
+              <div class="patient-sub">
+                {{ patient.fatherName }} | {{ patient.patientAddressesList[0].city }}
+              </div>
+            }
           </div>
         </div>
 
