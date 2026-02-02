@@ -541,7 +541,7 @@ textarea {
 
 /* Diagnosis Chips */
 .diag-chip {
-  padding: 5px 12px;
+  padding: 1px 8px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
@@ -619,9 +619,9 @@ a {
 
 /* Wrapper */
 .objective-wrapper {
-  background: #f6f8fe;
+  background: #fff;
   border-radius: 12px;
-  padding: 14px;
+  padding: 0px;
 }
 
 /* Vitals Bar */
@@ -708,7 +708,7 @@ a {
 
 
 .assessment-wrapper {
-  background: #f6f8ff;
+  background: #fff;
   // border: 2px solid #9fb2ff;
   border-radius: 12px;
   padding: 18px;
@@ -810,9 +810,10 @@ a {
 }
 
 .chip {
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-weight: 600;
+padding: 1px 8px;
+    border-radius: 20px;
+    font-weight: normal;
+    font-size: 12px;
 }
 
 .chip.red {
@@ -829,9 +830,9 @@ a {
 
 /* Vitals */
 .vitals-summary {
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
+display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .vital-box {
@@ -857,7 +858,9 @@ a {
 .bg-green { background:#27ae60; }
 
 .vital-label { color:#777; font-size:14px; }
-.vital-value { font-weight:700; font-size:18px; }
+.vital-value { font-weight: 500;
+    font-size: 12px;
+    line-height: 13px; }
 
 .red-text { color:#e53935; }
 .green-text { color:#4caf50; }
@@ -893,14 +896,16 @@ a {
 
 
 .vital-icon {
-  width: 60px;
-    height: 30px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin-top: 25px;
+width: 22px;
+    height: 23px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: 0;
+    line-height: 0;
+    font-size: 14px;
 }
 
 .weight-icon { background:#59b3c6; }
@@ -910,9 +915,9 @@ a {
 .spo2-icon { background:#27ae60; }
 
 .vital-label {
-  font-weight: 600;
-  font-size: 14px;
-  color: #666;
+font-weight: normal;
+    font-size: 14px;
+    color: #666;
 }
 .input-group-text-soap{
   position: absolute;

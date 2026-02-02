@@ -487,9 +487,9 @@
             <div class="container-fluid">
               <div class="row g-3">
                 <!-- Weight -->
-                <div class="col">
+                <div class="col mt-0">
                   <div class="vital-box d-flex align-items-center gap-2">
-                    <div class="vital-icon weight-icon">⚖</div>
+                    <div class="vital-icon weight-icon mt-4">⚖</div>
                     <div>
                       <label class="vital-label">Weight</label>
                       <div class="input-group">
@@ -501,9 +501,9 @@
                 </div>
 
                 <!-- BP -->
-                <div class="col">
+                <div class="col mt-0">
                   <div class="vital-box d-flex align-items-center gap-2">
-                    <div class="vital-icon bp-icon">🩺</div>
+                    <div class="vital-icon bp-icon mt-4">🩺</div>
                     <div>
                       <label class="vital-label">BP</label>
                       <div class="input-group">
@@ -515,9 +515,9 @@
                 </div>
 
                 <!-- Pulse -->
-                <div class="col">
+                <div class="col mt-0">
                   <div class="vital-box d-flex align-items-center gap-2">
-                    <div class="vital-icon pulse-icon">❤</div>
+                    <div class="vital-icon pulse-icon mt-4">❤</div>
                     <div>
                       <label class="vital-label">Pulse</label>
                       <div class="input-group">
@@ -529,9 +529,9 @@
                 </div>
 
                 <!-- Temp -->
-                <div class="col">
+                <div class="col mt-0">
                   <div class="vital-box d-flex align-items-center gap-2">
-                    <div class="vital-icon temp-icon">🌡</div>
+                    <div class="vital-icon temp-icon mt-4">🌡</div>
                     <div>
                       <label class="vital-label">Temp</label>
                       <div class="input-group">
@@ -543,9 +543,9 @@
                 </div>
 
                 <!-- SpO2 -->
-                <div class="col">
+                <div class="col mt-0">
                   <div class="vital-box d-flex align-items-center gap-2">
-                    <div class="vital-icon spo2-icon">🫁</div>
+                    <div class="vital-icon spo2-icon mt-4">🫁</div>
                     <div>
                       <label class="vital-label">SpO2</label>
                       <div class="input-group">
@@ -1183,7 +1183,7 @@
       <!-- New code start -->
       <div class="summary-wrapper container-fluid mt-3">
         <!-- DIAGNOSIS -->
-        <div class="summary-section">
+        <div class="summary-section" style="padding-top: 0">
           <h5 class="section-title">DIAGNOSIS</h5>
 
           <div class="chip-row">
@@ -1302,6 +1302,7 @@
           *ngIf="
             activeTab() === 'Assessment' || activeTab() === 'Plan' || activeTab() === 'Summary'
           "
+          style="overflow-x: auto"
         >
           <h5 class="section-title">MEDICATION</h5>
 
