@@ -45,6 +45,8 @@ export class SoapNoteComponent implements OnInit {
   patientId: number | null = null;
   patient: any = null;
   loading: boolean = false;
+  questionnaire: any = null;
+  questionnaireLoading: boolean = false;
 
   // SOAP Form Data
   soapData: any = {
@@ -104,6 +106,9 @@ export class SoapNoteComponent implements OnInit {
       console.log('Patient loaded from state:', this.patient);
     }
 
+    // Load questionnaire on page load
+    this.loadQuestionnaire();
+
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
@@ -142,6 +147,26 @@ export class SoapNoteComponent implements OnInit {
           detail: 'Failed to load full patient data.',
         });
         this.loading = false;
+      },
+    });
+  }
+
+  loadQuestionnaire() {
+    this.questionnaireLoading = true;
+    this.patientService.getCampQuestions().subscribe({
+      next: (data) => {
+        this.questionnaire = data;
+        console.log('Questionnaire loaded:', this.questionnaire);
+        this.questionnaireLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading questionnaire', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load questionnaire data.',
+        });
+        this.questionnaireLoading = false;
       },
     });
   }

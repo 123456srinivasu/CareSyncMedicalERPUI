@@ -176,4 +176,18 @@ export class PatientService {
       }),
     );
   }
+
+  /**
+   * Get camp questions
+   * @returns Observable of camp questions data
+   */
+  getCampQuestions(): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_QUESTIONS.BASE);
+    return this.http.get<any>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching camp questions:', error);
+        throw error;
+      }),
+    );
+  }
 }
