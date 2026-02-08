@@ -541,7 +541,7 @@ textarea {
 
 /* Diagnosis Chips */
 .diag-chip {
-  padding: 5px 12px;
+  padding: 1px 8px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 500;
@@ -619,9 +619,9 @@ a {
 
 /* Wrapper */
 .objective-wrapper {
-  background: #f6f8fe;
+  background: #fff;
   border-radius: 12px;
-  padding: 14px;
+  padding: 0px;
 }
 
 /* Vitals Bar */
@@ -708,7 +708,7 @@ a {
 
 
 .assessment-wrapper {
-  background: #f6f8ff;
+  background: #fff;
   // border: 2px solid #9fb2ff;
   border-radius: 12px;
   padding: 18px;
@@ -810,9 +810,10 @@ a {
 }
 
 .chip {
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-weight: 600;
+padding: 1px 8px;
+    border-radius: 20px;
+    font-weight: normal;
+    font-size: 12px;
 }
 
 .chip.red {
@@ -829,9 +830,9 @@ a {
 
 /* Vitals */
 .vitals-summary {
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
+display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .vital-box {
@@ -857,7 +858,9 @@ a {
 .bg-green { background:#27ae60; }
 
 .vital-label { color:#777; font-size:14px; }
-.vital-value { font-weight:700; font-size:18px; }
+.vital-value { font-weight: 500;
+    font-size: 12px;
+    line-height: 13px; }
 
 .red-text { color:#e53935; }
 .green-text { color:#4caf50; }
@@ -893,14 +896,16 @@ a {
 
 
 .vital-icon {
-  width: 60px;
-    height: 30px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin-top: 25px;
+width: 22px;
+    height: 23px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-top: 0;
+    line-height: 0;
+    font-size: 14px;
 }
 
 .weight-icon { background:#59b3c6; }
@@ -910,9 +915,9 @@ a {
 .spo2-icon { background:#27ae60; }
 
 .vital-label {
-  font-weight: 600;
-  font-size: 14px;
-  color: #666;
+font-weight: normal;
+    font-size: 14px;
+    color: #666;
 }
 .input-group-text-soap{
   position: absolute;
@@ -1008,4 +1013,232 @@ left: 7px;
 }
 #rxTable .schedule-input , #rxTable .qty-input {
   width: 60px;
+}
+
+/* ===================================
+   Dynamic Questionnaire Styles
+   =================================== */
+
+.questionnaire-container {
+  max-width: 100%;
+}
+
+.question-card {
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &.active {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+
+    .question-number {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    .question-text {
+      color: #1e40af;
+      font-weight: 600;
+    }
+  }
+
+  &.readonly {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    opacity: 0.8;
+
+    .question-number {
+      background: #9ca3af;
+      color: white;
+    }
+
+    .question-text {
+      color: #6b7280;
+    }
+
+    .options-container {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+  }
+}
+
+.question-number {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+}
+
+.question-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+.options-container {
+  // padding-left: 53px;
+
+  @media (max-width: 768px) {
+    padding-left: 0;
+  }
+
+  .form-check {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+
+    .form-check-label {
+      font-size: 15px;
+      color: #374151;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 0;
+    }
+  }
+
+  // PrimeNG component overrides
+  ::ng-deep {
+    .p-checkbox {
+      .p-checkbox-box {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #d1d5db;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #3b82f6;
+        }
+
+        &.p-highlight {
+          background: #3b82f6;
+          border-color: #3b82f6;
+        }
+
+        .p-checkbox-icon {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .p-radiobutton {
+      .p-radiobutton-box {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #d1d5db;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #3b82f6;
+        }
+
+        &.p-highlight {
+          border-color: #3b82f6;
+          background: white;
+
+          .p-radiobutton-icon {
+            background-color: #3b82f6;
+            width: 10px;
+            height: 10px;
+          }
+        }
+      }
+    }
+
+    .p-inputtext,
+    .p-inputtextarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.2s ease;
+
+      &:enabled:hover {
+        border-color: #d1d5db;
+      }
+
+      &:enabled:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      &:disabled {
+        background-color: #f9fafb;
+        color: #9ca3af;
+        cursor: not-allowed;
+      }
+    }
+
+    .p-inputtextarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+}
+
+/* Loading State */
+.pi-spinner {
+  color: #3b82f6;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .question-card {
+    padding: 16px;
+  }
+
+  .question-number {
+    min-width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .question-text {
+    font-size: 15px;
+  }
+
+  .options-container {
+    .form-check-label {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .question-card {
+    padding: 12px;
+
+    .d-flex.align-items-start {
+      flex-direction: column;
+      gap: 12px !important;
+    }
+
+    .question-number {
+      align-self: flex-start;
+    }
+  }
 }

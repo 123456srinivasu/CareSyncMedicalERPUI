@@ -1,14 +1,51 @@
 import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { TabViewModule } from 'primeng/tabview';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextarea } from 'primeng/inputtextarea';
 import { PatientService } from '../../../core/services/patient.service';
 import { Chart, registerables } from 'chart.js';
+
+// TypeScript Interfaces
+interface QuestionOption {
+  optionId: number;
+  optionText: string;
+  nextQuestionId: number | null;
+}
+
+interface Question {
+  questionId: number;
+  questionText: string;
+  questionType: string;
+  options?: QuestionOption[];
+}
+
+interface QuestionAnswer {
+  questionId: number;
+  selectedOptions?: number[];
+  textValue?: string;
+}
+
+// Payload interfaces for submission
+interface AnswerPayloadItem {
+  questionId: number;
+  optionId: number | null;
+  answerText: string | null;
+}
+
+interface QuestionnaireSubmissionPayload {
+  campId: number;
+  patientId: number;
+  answers: AnswerPayloadItem[];
+}
 
 @Component({
   selector: 'app-soap-note',
@@ -16,11 +53,15 @@ import { Chart, registerables } from 'chart.js';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ButtonModule,
-    CardModule,
     CardModule,
     ToastModule,
     TabViewModule,
+    CheckboxModule,
+    RadioButtonModule,
+    InputTextModule,
+    InputTextarea,
   ],
   templateUrl: './soap-note.component.html',
   styleUrl: './soap-note.component.scss',
@@ -43,8 +84,15 @@ export class SoapNoteComponent implements OnInit {
   }
 
   patientId: number | null = null;
+  campId: number = 101; // TODO: Get from route params or service
   patient: any = null;
   loading: boolean = false;
+  questionnaire: Question[] = [];
+  questionnaireLoading: boolean = false;
+  questionnaireForm!: FormGroup;
+  visibleQuestions: Set<number> = new Set();
+  answeredQuestions: Set<number> = new Set();
+  currentQuestionIndex: number = 0;
 
   // SOAP Form Data
   soapData: any = {
@@ -104,6 +152,9 @@ export class SoapNoteComponent implements OnInit {
       console.log('Patient loaded from state:', this.patient);
     }
 
+    // Load questionnaire on page load
+    this.loadQuestionnaire();
+
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
@@ -144,6 +195,138 @@ export class SoapNoteComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  loadQuestionnaire() {
+    this.questionnaireLoading = true;
+    this.patientService.getCampQuestions().subscribe({
+      next: (data: Question[]) => {
+        this.questionnaire = data;
+        console.log('Questionnaire loaded:', this.questionnaire);
+        this.initializeQuestionnaireForm();
+        this.updateVisibleQuestions();
+        this.questionnaireLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading questionnaire', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load questionnaire data.',
+        });
+        this.questionnaireLoading = false;
+      },
+    });
+  }
+
+  /**
+   * Initialize the reactive form for questionnaire
+   */
+  initializeQuestionnaireForm() {
+    const formControls: { [key: string]: FormControl | FormArray<any> } = {};
+
+    this.questionnaire.forEach((question) => {
+      const normalizedType = this.normalizeQuestionType(question.questionType);
+
+      if (normalizedType === 'MCQ') {
+        // For MCQ, use FormArray to store multiple selected option IDs
+        formControls[`question_${question.questionId}`] = new FormArray<any>([]);
+      } else if (normalizedType === 'SCQ') {
+        // For SCQ, use FormControl to store single option ID
+        formControls[`question_${question.questionId}`] = new FormControl(null);
+      } else if (normalizedType === 'TEXT') {
+        // For TEXT, use FormControl to store text value
+        formControls[`question_${question.questionId}`] = new FormControl('');
+      }
+    });
+
+    this.questionnaireForm = new FormGroup(formControls);
+  }
+
+  /**
+   * Normalize question type by trimming whitespace and converting to uppercase
+   */
+  normalizeQuestionType(type: string): string {
+    return type.trim().toUpperCase();
+  }
+
+  /**
+   * Update visible questions - shows all questions at once
+   */
+  updateVisibleQuestions() {
+    this.visibleQuestions.clear();
+
+    if (this.questionnaire.length === 0) return;
+
+    // Show all questions
+    this.questionnaire.forEach(question => {
+      this.visibleQuestions.add(question.questionId);
+    });
+  }
+
+  /**
+   * Handle answer change for any question
+   */
+  onAnswerChange(questionId: number) {
+    this.updateVisibleQuestions();
+  }
+
+  /**
+   * Check if a question should be readonly
+   * Always returns false - users can change answers anytime
+   */
+  isQuestionReadonly(questionId: number): boolean {
+    return false;
+  }
+
+  /**
+   * Check if this is the last visible question
+   */
+  isLastVisibleQuestion(questionId: number): boolean {
+    const visibleArray = Array.from(this.visibleQuestions);
+    return visibleArray[visibleArray.length - 1] === questionId;
+  }
+
+  /**
+   * Get visible questions in order
+   */
+  getVisibleQuestionsInOrder(): Question[] {
+    return this.questionnaire.filter(q => this.visibleQuestions.has(q.questionId));
+  }
+
+  /**
+   * Handle MCQ checkbox change
+   */
+  onMCQChange(questionId: number, optionId: number, checked: boolean) {
+    const formArray = this.questionnaireForm.get(`question_${questionId}`) as FormArray;
+
+    if (checked) {
+      formArray.push(new FormControl(optionId));
+    } else {
+      const index = formArray.controls.findIndex(ctrl => ctrl.value === optionId);
+      if (index >= 0) {
+        formArray.removeAt(index);
+      }
+    }
+
+    this.onAnswerChange(questionId);
+  }
+
+  /**
+   * Check if an MCQ option is selected
+   */
+  isMCQOptionSelected(questionId: number, optionId: number): boolean {
+    const formArray = this.questionnaireForm?.get(
+      `question_${questionId}`,
+    ) as FormArray<any>;
+    return formArray ? formArray.value.includes(optionId) : false;
+  }
+
+  /**
+   * Get FormControl for a question (helper for template type safety)
+   */
+  getQuestionFormControl(questionId: number): FormControl {
+    return this.questionnaireForm.get(`question_${questionId}`) as FormControl;
   }
 
   calculateAge(dob?: string | Date): number {
@@ -333,5 +516,121 @@ export class SoapNoteComponent implements OnInit {
         },
       },
     });
+  }
+
+  /**
+   * Prepare questionnaire data for submission
+   * Transforms form data into the required database payload format
+   */
+  prepareQuestionnairePayload(): QuestionnaireSubmissionPayload {
+    const answers: AnswerPayloadItem[] = [];
+
+    // Iterate through all questions in the questionnaire
+    this.questionnaire.forEach((question) => {
+      const formControlName = `question_${question.questionId}`;
+      const formValue = this.questionnaireForm?.get(formControlName)?.value;
+      const normalizedType = this.normalizeQuestionType(question.questionType);
+
+      // Skip if no answer provided
+      if (!formValue || (Array.isArray(formValue) && formValue.length === 0) || formValue === '') {
+        return; // Continue to next question
+      }
+
+      if (normalizedType === 'MCQ') {
+        // MCQ: Create one answer object per selected option
+        const selectedOptions = formValue as number[];
+        selectedOptions.forEach((optionId) => {
+          answers.push({
+            questionId: question.questionId,
+            optionId: optionId,
+            answerText: null,
+          });
+        });
+      } else if (normalizedType === 'SCQ') {
+        // SCQ: Create one answer object with selected optionId
+        answers.push({
+          questionId: question.questionId,
+          optionId: formValue as number,
+          answerText: null,
+        });
+      } else if (normalizedType === 'TEXT') {
+        // TEXT: Create one answer object with answerText and optionId = null
+        answers.push({
+          questionId: question.questionId,
+          optionId: null,
+          answerText: formValue as string,
+        });
+      }
+    });
+
+    return {
+      campId: this.campId,
+      patientId: this.patientId!,
+      answers: answers,
+    };
+  }
+
+  /**
+   * Save questionnaire answers
+   */
+  onSaveSubjective() {
+    if (!this.patientId) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Patient ID is missing',
+      });
+      return;
+    }
+
+    // Prepare the payload
+    const payload = this.prepareQuestionnairePayload();
+
+    // Log the payload for debugging
+    console.log('Questionnaire Submission Payload:', JSON.stringify(payload, null, 2));
+
+    // TODO: Call the API service to submit the data
+    // this.patientService.submitQuestionnaireAnswers(payload).subscribe({
+    //   next: (response) => {
+    //     this.messageService.add({
+    //       severity: 'success',
+    //       summary: 'Success',
+    //       detail: 'Questionnaire answers saved successfully!',
+    //     });
+    //   },
+    //   error: (error) => {
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'Error',
+    //       detail: 'Failed to save questionnaire answers',
+    //     });
+    //     console.error('Error saving questionnaire:', error);
+    //   }
+    // });
+
+    // For now, show success message
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: `Questionnaire saved with ${payload.answers.length} answers. Check console for payload.`,
+    });
+  }
+
+  /**
+   * Cancel questionnaire and reset form
+   */
+  onCancelSubjective() {
+    if (confirm('Are you sure you want to cancel? All unsaved changes will be lost.')) {
+      this.questionnaireForm.reset();
+      this.visibleQuestions.clear();
+      this.answeredQuestions.clear();
+      this.updateVisibleQuestions();
+
+      this.messageService.add({
+        severity: 'info',
+        summary: 'Cancelled',
+        detail: 'Questionnaire has been reset',
+      });
+    }
   }
 }

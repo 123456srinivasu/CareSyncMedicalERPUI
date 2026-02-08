@@ -94,6 +94,9 @@ export const API_CONFIG = {
       BASE: '/dashboard',
       SUMMARY: '/dashboard/summary',
     },
+    CAMP_QUESTIONS: {
+      BASE: '/camp-questions',
+    },
   },
 } as const;
 
