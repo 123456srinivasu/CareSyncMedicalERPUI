@@ -1,0 +1,37 @@
+{
+    "tblPatientId": 12,
+    "mrNumber": "MR2026002",
+    "firstName": "adff",
+    "lastName": "dszxcdsf",
+    "fatherName": "dfsdf",
+    "age": 1922,
+    "weight": 11.0,
+    "mobileNumber": "4444444444",
+    "gender": "Male",
+    "bloodGroup": "A+",
+    "maritalStatus": "Married",
+    "patientAddressesList": [
+        {
+            "addressId": 20,
+            "addressLine": "sadasd",
+            "city": "sadad",
+            "stateId": 1,
+            "districtId": 1,
+            "mandalId": 761,
+            "postalCode": "",
+            "villageName": "sadad",
+            "state": {
+                "id": 1,
+                "name": "Andhra Pradesh"
+            },
+            "district": {
+                "id": 1,
+                "name": "Alluri Sitharama Raju"
+            },
+            "mandal": {
+                "id": 761,
+                "name": "Ananthagiri"
+            }
+        }
+    ]
+}

@@ -1,6 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm, ReactiveFormsModule, FormGroup, FormControl, FormArray } from '@angular/forms';
+import {
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  FormArray,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -149,7 +156,7 @@ export class SoapNoteComponent implements OnInit {
     const state = history.state;
     if (state?.patient) {
       this.patient = state.patient.value || state.patient;
-      console.log('Patient loaded from state:', this.patient);
+      // console.log('Patient loaded from state:', this.patient);
     }
 
     // Load questionnaire on page load
@@ -202,7 +209,7 @@ export class SoapNoteComponent implements OnInit {
     this.patientService.getCampQuestions().subscribe({
       next: (data: Question[]) => {
         this.questionnaire = data;
-        console.log('Questionnaire loaded:', this.questionnaire);
+        // console.log('Questionnaire loaded:', this.questionnaire);
         this.initializeQuestionnaireForm();
         this.updateVisibleQuestions();
         this.questionnaireLoading = false;
@@ -259,7 +266,7 @@ export class SoapNoteComponent implements OnInit {
     if (this.questionnaire.length === 0) return;
 
     // Show all questions
-    this.questionnaire.forEach(question => {
+    this.questionnaire.forEach((question) => {
       this.visibleQuestions.add(question.questionId);
     });
   }
@@ -291,7 +298,7 @@ export class SoapNoteComponent implements OnInit {
    * Get visible questions in order
    */
   getVisibleQuestionsInOrder(): Question[] {
-    return this.questionnaire.filter(q => this.visibleQuestions.has(q.questionId));
+    return this.questionnaire.filter((q) => this.visibleQuestions.has(q.questionId));
   }
 
   /**
@@ -303,7 +310,7 @@ export class SoapNoteComponent implements OnInit {
     if (checked) {
       formArray.push(new FormControl(optionId));
     } else {
-      const index = formArray.controls.findIndex(ctrl => ctrl.value === optionId);
+      const index = formArray.controls.findIndex((ctrl) => ctrl.value === optionId);
       if (index >= 0) {
         formArray.removeAt(index);
       }
@@ -316,9 +323,7 @@ export class SoapNoteComponent implements OnInit {
    * Check if an MCQ option is selected
    */
   isMCQOptionSelected(questionId: number, optionId: number): boolean {
-    const formArray = this.questionnaireForm?.get(
-      `question_${questionId}`,
-    ) as FormArray<any>;
+    const formArray = this.questionnaireForm?.get(`question_${questionId}`) as FormArray<any>;
     return formArray ? formArray.value.includes(optionId) : false;
   }
 
@@ -356,13 +361,13 @@ export class SoapNoteComponent implements OnInit {
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    console.log('Calculated age from DOB:', age);
+    // console.log('Calculated age from DOB:', age);
     return age;
   }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      console.log('SOAP Form Submitted', this.soapData);
+      // console.log('SOAP Form Submitted', this.soapData);
       // Here you would typically call a service to save the SOAP note
       // this.patientService.saveSoapNote(this.patientId, this.soapData).subscribe(...)
 
@@ -587,7 +592,7 @@ export class SoapNoteComponent implements OnInit {
     const payload = this.prepareQuestionnairePayload();
 
     // Log the payload for debugging
-    console.log('Questionnaire Submission Payload:', JSON.stringify(payload, null, 2));
+    // console.log('Questionnaire Submission Payload:', JSON.stringify(payload, null, 2));
 
     // TODO: Call the API service to submit the data
     // this.patientService.submitQuestionnaireAnswers(payload).subscribe({

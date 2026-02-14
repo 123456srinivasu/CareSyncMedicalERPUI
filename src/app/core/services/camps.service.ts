@@ -68,7 +68,7 @@ export interface CampMedicineStockSummary {
  * Service for managing camp-related API operations
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CampsService {
   private readonly http = inject(HttpClient);
@@ -80,11 +80,11 @@ export class CampsService {
    */
   getAllCamps(params?: any): Observable<any[]> {
     let url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.BASE);
-    
+
     // Add query parameters if provided
     if (params) {
       const queryParams = new URLSearchParams();
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         if (params[key] !== null && params[key] !== undefined) {
           queryParams.append(key, params[key].toString());
         }
@@ -94,7 +94,7 @@ export class CampsService {
         url += `?${queryString}`;
       }
     }
-    
+
     // Use responseType: 'text' to handle responses with circular references
     return this.http.get(url, { responseType: 'text' }).pipe(
       map((responseText: string) => {
@@ -120,7 +120,7 @@ export class CampsService {
           throw new Error('Failed to parse response');
         }
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching camps:', error);
         // If error has text property, try to parse it
         if (error.error && error.error.text) {
@@ -145,7 +145,7 @@ export class CampsService {
           }
         }
         throw error;
-      })
+      }),
     );
   }
 
@@ -153,83 +153,80 @@ export class CampsService {
    * Get all active camps
    * @returns Observable of Camp array
    */
-  getActiveCamps(params?: any): Observable<any[]> { 
+  getActiveCamps(params?: any): Observable<any[]> {
     let url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.ACTIVE);
-       // Add query parameters if provided
-       if (params) {
-        const queryParams = new URLSearchParams();
-        Object.keys(params).forEach(key => {
-          if (params[key] !== null && params[key] !== undefined) {
-            queryParams.append(key, params[key].toString());
-          }
-        });
-        const queryString = queryParams.toString();
-        if (queryString) {
-          url += `?${queryString}`;
+    // Add query parameters if provided
+    if (params) {
+      const queryParams = new URLSearchParams();
+      Object.keys(params).forEach((key) => {
+        if (params[key] !== null && params[key] !== undefined) {
+          queryParams.append(key, params[key].toString());
         }
+      });
+      const queryString = queryParams.toString();
+      if (queryString) {
+        url += `?${queryString}`;
       }
-      return this.http.get(url, { responseType: 'text' }).pipe(
-        map((responseText: string) => {
+    }
+    return this.http.get(url, { responseType: 'text' }).pipe(
+      map((responseText: string) => {
+        try {
+          // Parse JSON manually
+          const parsed = JSON.parse(responseText);
+          // Remove circular references by cleaning up campAddresses
+          if (Array.isArray(parsed)) {
+            return parsed.map((camp: any) => {
+              if (camp.campAddresses && Array.isArray(camp.campAddresses)) {
+                camp.campAddresses = camp.campAddresses.map((addr: any) => {
+                  // Remove the nested camp object to break circular reference
+                  const { camp, ...addressData } = addr;
+                  return addressData;
+                });
+              }
+              return camp;
+            });
+          }
+          return parsed;
+        } catch (parseError) {
+          console.error('Error parsing response text:', parseError);
+          throw new Error('Failed to parse response');
+        }
+      }),
+      catchError((error) => {
+        console.error('Error fetching camps:', error);
+        // If error has text property, try to parse it
+        if (error.error && error.error.text) {
           try {
-            // Parse JSON manually
-            const parsed = JSON.parse(responseText);
-            // Remove circular references by cleaning up campAddresses
+            const parsed = JSON.parse(error.error.text);
+            // Clean circular references
             if (Array.isArray(parsed)) {
-              return parsed.map((camp: any) => {
+              const cleaned = parsed.map((camp: any) => {
                 if (camp.campAddresses && Array.isArray(camp.campAddresses)) {
                   camp.campAddresses = camp.campAddresses.map((addr: any) => {
-                    // Remove the nested camp object to break circular reference
                     const { camp, ...addressData } = addr;
                     return addressData;
                   });
                 }
                 return camp;
               });
+              return of(cleaned);
             }
-            return parsed;
+            return of(parsed);
           } catch (parseError) {
-            console.error('Error parsing response text:', parseError);
-            throw new Error('Failed to parse response');
+            console.error('Error parsing error response text:', parseError);
           }
-        }),
-        catchError(error => {
-          console.error('Error fetching camps:', error);
-          // If error has text property, try to parse it
-          if (error.error && error.error.text) {
-            try {
-              const parsed = JSON.parse(error.error.text);
-              // Clean circular references
-              if (Array.isArray(parsed)) {
-                const cleaned = parsed.map((camp: any) => {
-                  if (camp.campAddresses && Array.isArray(camp.campAddresses)) {
-                    camp.campAddresses = camp.campAddresses.map((addr: any) => {
-                      const { camp, ...addressData } = addr;
-                      return addressData;
-                    });
-                  }
-                  return camp;
-                });
-                return of(cleaned);
-              }
-              return of(parsed);
-            } catch (parseError) {
-              console.error('Error parsing error response text:', parseError);
-            }
-          }
-          throw error;
-        })
-      );
-      
-      
-    
+        }
+        throw error;
+      }),
+    );
+
     // return this.http.get<Camp[]>(url).pipe(
     //   catchError(error => {
     //     console.error('Error fetching active camps:', error);
     //     throw error;
     //   })
     // );
-  
-}
+  }
 
   /**
    * Get camp by ID
@@ -239,10 +236,10 @@ export class CampsService {
   getCampById(campId: number): Observable<Camp> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.BY_ID(campId));
     return this.http.get<Camp>(url).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error fetching camp ${campId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -254,10 +251,10 @@ export class CampsService {
   getCampMedicineStockSummary(campId: number): Observable<CampMedicineStockSummary[]> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_MEDICINE_STOCK_SUMMARY.BY_CAMP(campId));
     return this.http.get<CampMedicineStockSummary[]>(url).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error fetching camp medicine stock summary for camp ${campId}:`, error);
         throw error;
-      })
+      }),
     );
   }
   /**
@@ -269,10 +266,10 @@ export class CampsService {
   addCampMedicineStock(campId: number, payload: any): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_MEDICINE_STOCK.ADD(campId));
     return this.http.post<any>(url, payload).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error adding camp medicine stock:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -284,10 +281,10 @@ export class CampsService {
   createCamp(payload: any): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMPS.CREATE);
     return this.http.post<any>(url, payload).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error creating camp:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -296,13 +293,24 @@ export class CampsService {
    * @returns Observable of State array
    */
   getStates(): Observable<any[]> {
-    const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
-    return this.http.get<any[]>(url).pipe(
-      catchError(error => {
-        console.error('Error fetching states:', error);
-        throw error;
-      })
-    );
+    if (!API_CONFIG.useMockData) {
+      // Return mock data from JSON file
+      return this.http.get<any[]>('/JSONAPI/states.json').pipe(
+        catchError((error) => {
+          console.error('Error fetching states from mock data:', error);
+          throw error;
+        }),
+      );
+    } else {
+      // Return data from server
+      const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
+      return this.http.get<any[]>(url).pipe(
+        catchError((error) => {
+          console.error('Error fetching states from server:', error);
+          throw error;
+        }),
+      );
+    }
   }
 
   /**
@@ -313,10 +321,10 @@ export class CampsService {
   getDistrictsByState(stateLookupId: number): Observable<any[]> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.DISTRICTS.BY_STATE(stateLookupId));
     return this.http.get<any[]>(url).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching districts:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -328,10 +336,10 @@ export class CampsService {
   getMandalsByDistrict(districtLookupId: number): Observable<any[]> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.MANDALS.BY_DISTRICT(districtLookupId));
     return this.http.get<any[]>(url).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching mandals:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -343,11 +351,11 @@ export class CampsService {
    */
   getUsersByRole(role: string, params?: any): Observable<any[]> {
     let url = getApiUrl(API_CONFIG.ENDPOINTS.USERS.BY_ROLE(role));
-    
+
     // Add query parameters if provided
     if (params) {
       const queryParams = new URLSearchParams();
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         if (params[key] !== null && params[key] !== undefined) {
           queryParams.append(key, params[key].toString());
         }
@@ -357,12 +365,12 @@ export class CampsService {
         url += `?${queryString}`;
       }
     }
-    
+
     return this.http.get<any[]>(url).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error fetching users by role ${role}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -374,10 +382,10 @@ export class CampsService {
   getCampRunPlanning(campId: number): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.PLANNING(campId));
     return this.http.get<any>(url).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error fetching camp run planning for camp ${campId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -388,10 +396,10 @@ export class CampsService {
   saveCampRunPlanning(payload: any): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.SAVE_PLANNING);
     return this.http.post<any>(url, payload).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error saving camp run planning:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -403,10 +411,10 @@ export class CampsService {
   startCampRun(campId: number, campRunId: number): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.START(campId, campRunId));
     return this.http.post<any>(url, {}).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error starting camp run ${campRunId} for camp ${campId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -418,10 +426,10 @@ export class CampsService {
   stopCampRun(campId: number, campRunId: number): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_RUNS.STOP(campId, campRunId));
     return this.http.post<any>(url, {}).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error stopping camp run ${campRunId} for camp ${campId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -431,10 +439,10 @@ export class CampsService {
   createCampPurchaseOrder(payload: any): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.BASE);
     return this.http.post<any>(url, payload).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error creating camp purchase order:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -447,7 +455,7 @@ export class CampsService {
     let httpParams = new HttpParams().set('supplierId', supplierId.toString());
 
     if (params) {
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         if (params[key] !== undefined && params[key] !== null) {
           httpParams = httpParams.set(key, params[key].toString());
         }
@@ -455,10 +463,10 @@ export class CampsService {
     }
 
     return this.http.get<any>(url, { params: httpParams }).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error fetching camp purchase orders for supplier ${supplierId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -468,10 +476,10 @@ export class CampsService {
   getCampPurchaseOrderLines(purchaseOrderId: number): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.ORDER_LINES(purchaseOrderId));
     return this.http.get<any>(url).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error fetching order lines for purchase order ${purchaseOrderId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -481,10 +489,10 @@ export class CampsService {
   reviewCampPurchaseOrder(purchaseOrderId: number, payload: any): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.REVIEW(purchaseOrderId));
     return this.http.put<any>(url, payload).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error(`Error reviewing purchase order ${purchaseOrderId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -495,18 +503,17 @@ export class CampsService {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_PURCHASE_ORDERS.BASE);
     let httpParams = new HttpParams();
     if (params) {
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         if (params[key] !== undefined && params[key] !== null) {
           httpParams = httpParams.set(key, params[key].toString());
         }
       });
     }
     return this.http.get<any>(url, { params: httpParams }).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching camp purchase orders:', error);
         throw error;
-      })
+      }),
     );
   }
 }
-

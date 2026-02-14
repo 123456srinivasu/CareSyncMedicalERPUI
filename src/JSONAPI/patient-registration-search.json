@@ -1,0 +1,182 @@
+[
+    {
+        "tblPatientId": 26,
+        "mrNumber": "MR2026000",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 99.0,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientImage": "",
+        "patientAddressesList": [
+            {
+                "addressId": 14,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 761,
+                "postalCode": "500001",
+                "villageName": "Hyderabad",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 761,
+                    "name": "Ananthagiri"
+                }
+            }
+        ],
+        "patientCamps": []
+    },
+    {
+        "tblPatientId": 42,
+        "mrNumber": "MR2026016",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 75.5,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientImage": null,
+        "patientAddressesList": [
+            {
+                "addressId": 23,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 862,
+                "postalCode": "500001",
+                "villageName": null,
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 862,
+                    "name": "Kavali"
+                }
+            }
+        ],
+        "patientCamps": []
+    },
+    {
+        "tblPatientId": 43,
+        "mrNumber": "MR2026017",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 75.5,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientImage": null,
+        "patientAddressesList": [
+            {
+                "addressId": 24,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 862,
+                "postalCode": "500001",
+                "villageName": null,
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 862,
+                    "name": "Kavali"
+                }
+            }
+        ],
+        "patientCamps": [
+            {
+                "id": 1,
+                "patientId": 43,
+                "campId": 2,
+                "campDate": null,
+                "createBy": null,
+                "createDate": "2026-01-17T00:00:00",
+                "updateBy": null,
+                "updateDate": null,
+                "status": true
+            }
+        ]
+    },
+    {
+        "tblPatientId": 44,
+        "mrNumber": "MR2026018",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 75.5,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientImage": null,
+        "patientAddressesList": [
+            {
+                "addressId": 25,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 862,
+                "postalCode": "500001",
+                "villageName": null,
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 862,
+                    "name": "Kavali"
+                }
+            }
+        ],
+        "patientCamps": [
+            {
+                "id": 2,
+                "patientId": 44,
+                "campId": 2,
+                "campDate": null,
+                "createBy": null,
+                "createDate": "2026-01-17T00:00:00",
+                "updateBy": null,
+                "updateDate": null,
+                "status": true
+            }
+        ]
+    }
+]

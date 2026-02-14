@@ -109,12 +109,31 @@ export class PatientService {
 
   searchPatientsByMobile(mobileNumber: string): Observable<any[]> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH(mobileNumber));
-    return this.http.get<any[]>(url).pipe(
-      catchError((error) => {
-        console.error(`Error searching patients with mobile number ${mobileNumber}:`, error);
-        throw error;
-      }),
-    );
+    // return this.http.get<any[]>(url).pipe(
+    //   catchError((error) => {
+    //     console.error(`Error searching patients with mobile number ${mobileNumber}:`, error);
+    //     throw error;
+    //   }),
+    // );
+
+    if (API_CONFIG.useMockData) {
+      // Return mock data from JSON file
+      return this.http.get<any[]>('/JSONAPI/patient-search-autocomplete.json').pipe(
+        catchError((error) => {
+          console.error('Error fetching patient details from mock data:', error);
+          throw error;
+        }),
+      );
+    } else {
+      // Return data from server
+      const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.SEARCH(mobileNumber));
+      return this.http.get<any[]>(url).pipe(
+        catchError((error) => {
+          console.error(`Error searching patients with mobile number ${mobileNumber}:`, error);
+          throw error;
+        }),
+      );
+    }
   }
 
   searchPatientsByName(name: string): Observable<any[]> {
@@ -169,12 +188,30 @@ export class PatientService {
 
   getDashboardSummary(): Observable<any> {
     const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.DASHBOARD.SUMMARY}`;
-    return this.http.get<any>(url).pipe(
-      catchError((error) => {
-        console.error('Error fetching dashboard summary:', error);
-        throw error;
-      }),
-    );
+    if (API_CONFIG.useMockData) {
+      // Return mock data from JSON file
+      return this.http.get<any[]>('/JSONAPI/dashboardsummary.json').pipe(
+        catchError((error) => {
+          console.error('Error fetching dashboard summary from mock data:', error);
+          throw error;
+        }),
+      );
+    } else {
+      // Return data from server
+      const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
+      return this.http.get<any[]>(url).pipe(
+        catchError((error) => {
+          console.error('Error fetching states from server:', error);
+          throw error;
+        }),
+      );
+    }
+    // return this.http.get<any>(url).pipe(
+    //   catchError((error) => {
+    //     console.error('Error fetching dashboard summary:', error);
+    //     throw error;
+    //   }),
+    // );
   }
 
   /**
@@ -183,11 +220,30 @@ export class PatientService {
    */
   getCampQuestions(): Observable<any> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_QUESTIONS.BASE);
-    return this.http.get<any>(url).pipe(
-      catchError((error) => {
-        console.error('Error fetching camp questions:', error);
-        throw error;
-      }),
-    );
+    // return this.http.get<any>(url).pipe(
+    //   catchError((error) => {
+    //     console.error('Error fetching camp questions:', error);
+    //     throw error;
+    //   }),
+    // );
+
+    if (API_CONFIG.useMockData) {
+      // Return mock data from JSON file
+      return this.http.get<any[]>('/JSONAPI/camp-questions.json').pipe(
+        catchError((error) => {
+          console.error('Error fetching camp questions from mock data:', error);
+          throw error;
+        }),
+      );
+    } else {
+      // Return data from server
+      const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_QUESTIONS.BASE);
+      return this.http.get<any[]>(url).pipe(
+        catchError((error) => {
+          console.error('Error fetching camp questions from server:', error);
+          throw error;
+        }),
+      );
+    }
   }
 }

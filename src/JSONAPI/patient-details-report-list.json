@@ -1,0 +1,1038 @@
+[
+    {
+        "tblPatientId": 12,
+        "mrNumber": "MR2026002",
+        "firstName": "adff",
+        "lastName": "dszxcdsf",
+        "fatherName": "dfsdf",
+        "age": 1922,
+        "weight": 11.0,
+        "mobileNumber": "4444444444",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 20,
+                "addressLine": "sadasd",
+                "city": "sadad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 761,
+                "postalCode": "",
+                "villageName": "sadad",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 761,
+                    "name": "Ananthagiri"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 13,
+        "mrNumber": "MR2026003",
+        "firstName": "dsfsdf",
+        "lastName": "dfdsf",
+        "fatherName": "sdfdsf",
+        "age": 22,
+        "weight": 22.0,
+        "mobileNumber": "9969976866",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 4,
+                "addressLine": "",
+                "city": "",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 761,
+                "postalCode": "",
+                "villageName": "",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 761,
+                    "name": "Ananthagiri"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 15,
+        "mrNumber": "MR2026004",
+        "firstName": "asdasd",
+        "lastName": "sdasd",
+        "fatherName": "asdsad",
+        "age": 22,
+        "weight": 22.0,
+        "mobileNumber": "4444444444",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 5,
+                "addressLine": "dsfsdfs",
+                "city": "adsadfdsf",
+                "stateId": 1,
+                "districtId": 13,
+                "mandalId": 838,
+                "postalCode": "",
+                "villageName": "adsadfdsf",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 13,
+                    "name": "Kurnool"
+                },
+                "mandal": {
+                    "id": 838,
+                    "name": "Adoni"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 18,
+        "mrNumber": "MR2026005",
+        "firstName": "ww",
+        "lastName": "ww",
+        "fatherName": "ww",
+        "age": 11,
+        "weight": 11.0,
+        "mobileNumber": "4444444444",
+        "gender": "Male",
+        "bloodGroup": "A-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 6,
+                "addressLine": "dddd",
+                "city": "wer",
+                "stateId": 1,
+                "districtId": 15,
+                "mandalId": 846,
+                "postalCode": "",
+                "villageName": "wer",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 15,
+                    "name": "NTR"
+                },
+                "mandal": {
+                    "id": 846,
+                    "name": "Ibrahimpatnam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 19,
+        "mrNumber": "MR2026006",
+        "firstName": "sadasd",
+        "lastName": "sd",
+        "fatherName": "sadasd",
+        "age": 11,
+        "weight": 11.0,
+        "mobileNumber": "2222222222",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 7,
+                "addressLine": "",
+                "city": "2222",
+                "stateId": 1,
+                "districtId": 16,
+                "mandalId": 850,
+                "postalCode": "",
+                "villageName": "2222",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 16,
+                    "name": "Palnadu"
+                },
+                "mandal": {
+                    "id": 850,
+                    "name": "Narasaraopet"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 20,
+        "mrNumber": "MR2026007",
+        "firstName": "wqeqwe",
+        "lastName": "wqeqwe",
+        "fatherName": "qweqwe",
+        "age": 22,
+        "weight": 22.0,
+        "mobileNumber": "2222222222",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 8,
+                "addressLine": "wqewqe",
+                "city": "ewqeqwe",
+                "stateId": 1,
+                "districtId": 13,
+                "mandalId": 839,
+                "postalCode": "",
+                "villageName": "ewqeqwe",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 13,
+                    "name": "Kurnool"
+                },
+                "mandal": {
+                    "id": 839,
+                    "name": "Kallur"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 21,
+        "mrNumber": "MR2026008",
+        "firstName": "sdfsdf",
+        "lastName": "saddsf",
+        "fatherName": "fsdfdsf",
+        "age": 11,
+        "weight": 222.0,
+        "mobileNumber": "8888888888",
+        "gender": "Male",
+        "bloodGroup": "A-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 17,
+                "addressLine": "fdsfdsf",
+                "city": "asdsdf",
+                "stateId": 1,
+                "districtId": 15,
+                "mandalId": 847,
+                "postalCode": "2344444",
+                "villageName": "asdsdf",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 15,
+                    "name": "NTR"
+                },
+                "mandal": {
+                    "id": 847,
+                    "name": "Mylavaram"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 22,
+        "mrNumber": "MR2026009",
+        "firstName": "sdfdsf",
+        "lastName": "sadsfd",
+        "fatherName": "sdfdsf",
+        "age": 44,
+        "weight": 44.0,
+        "mobileNumber": "9963376899",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 10,
+                "addressLine": "erewr",
+                "city": "dqwe",
+                "stateId": 1,
+                "districtId": 15,
+                "mandalId": 846,
+                "postalCode": "ewrewr",
+                "villageName": "dqwe",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 15,
+                    "name": "NTR"
+                },
+                "mandal": {
+                    "id": 846,
+                    "name": "Ibrahimpatnam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 23,
+        "mrNumber": "MR2026010",
+        "firstName": "ewrewr",
+        "lastName": "rewrew",
+        "fatherName": "ewrewrwr",
+        "age": 44,
+        "weight": 66.0,
+        "mobileNumber": "6666666666",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 11,
+                "addressLine": "",
+                "city": "",
+                "stateId": 1,
+                "districtId": 2,
+                "mandalId": 782,
+                "postalCode": null,
+                "villageName": "",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 2,
+                    "name": "Anakapalli"
+                },
+                "mandal": {
+                    "id": 782,
+                    "name": "Anakapalli"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 24,
+        "mrNumber": "MR2026011",
+        "firstName": "sadasd",
+        "lastName": "sasda",
+        "fatherName": "sadasd",
+        "age": 11,
+        "weight": 75.0,
+        "mobileNumber": "9966666666",
+        "gender": "Male",
+        "bloodGroup": "O-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 12,
+                "addressLine": "",
+                "city": "",
+                "stateId": 1,
+                "districtId": 15,
+                "mandalId": 846,
+                "postalCode": null,
+                "villageName": "",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 15,
+                    "name": "NTR"
+                },
+                "mandal": {
+                    "id": 846,
+                    "name": "Ibrahimpatnam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 25,
+        "mrNumber": "MR2026012",
+        "firstName": "sadasd",
+        "lastName": "sasda",
+        "fatherName": "sadasd",
+        "age": 11,
+        "weight": 88.0,
+        "mobileNumber": "9966666666",
+        "gender": "Male",
+        "bloodGroup": "O-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 13,
+                "addressLine": "",
+                "city": "",
+                "stateId": 1,
+                "districtId": 15,
+                "mandalId": 846,
+                "postalCode": "",
+                "villageName": "",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 15,
+                    "name": "NTR"
+                },
+                "mandal": {
+                    "id": 846,
+                    "name": "Ibrahimpatnam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 26,
+        "mrNumber": "MR2026000",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 99.0,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientAddressesList": [
+            {
+                "addressId": 14,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 761,
+                "postalCode": "500001",
+                "villageName": "Hyderabad",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 761,
+                    "name": "Ananthagiri"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 27,
+        "mrNumber": "MR2026001",
+        "firstName": "N",
+        "lastName": "Srini",
+        "fatherName": "Krishna",
+        "age": 55,
+        "weight": 44.0,
+        "mobileNumber": "8888888888",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 16,
+                "addressLine": "",
+                "city": "",
+                "stateId": 1,
+                "districtId": 13,
+                "mandalId": 838,
+                "postalCode": null,
+                "villageName": "",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 13,
+                    "name": "Kurnool"
+                },
+                "mandal": {
+                    "id": 838,
+                    "name": "Adoni"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 41,
+        "mrNumber": "MR2026015",
+        "firstName": "sdfsdfsdf",
+        "lastName": "dcAJbkld",
+        "fatherName": "sdfsdfsf",
+        "age": 1982,
+        "weight": 444.0,
+        "mobileNumber": "7777777777",
+        "gender": "Male",
+        "bloodGroup": "A-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 22,
+                "addressLine": "sdfsdf",
+                "city": "sdfsdf",
+                "stateId": 1,
+                "districtId": 11,
+                "mandalId": 829,
+                "postalCode": "sdfsf",
+                "villageName": "sdfsdf",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 11,
+                    "name": "Kakinada"
+                },
+                "mandal": {
+                    "id": 829,
+                    "name": "Gollaprolu"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 42,
+        "mrNumber": "MR2026016",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 75.5,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientAddressesList": [
+            {
+                "addressId": 23,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 862,
+                "postalCode": "500001",
+                "villageName": null,
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 862,
+                    "name": "Kavali"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 43,
+        "mrNumber": "MR2026017",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 75.5,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientAddressesList": [
+            {
+                "addressId": 24,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 862,
+                "postalCode": "500001",
+                "villageName": null,
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 862,
+                    "name": "Kavali"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 44,
+        "mrNumber": "MR2026018",
+        "firstName": "John",
+        "lastName": "Doe",
+        "fatherName": "Richard Doe",
+        "age": 30,
+        "weight": 75.5,
+        "mobileNumber": "9876543210",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Single",
+        "patientAddressesList": [
+            {
+                "addressId": 25,
+                "addressLine": "123 Main St",
+                "city": "Hyderabad",
+                "stateId": 1,
+                "districtId": 1,
+                "mandalId": 862,
+                "postalCode": "500001",
+                "villageName": null,
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 1,
+                    "name": "Alluri Sitharama Raju"
+                },
+                "mandal": {
+                    "id": 862,
+                    "name": "Kavali"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 47,
+        "mrNumber": "MR2026019",
+        "firstName": "test",
+        "lastName": "test",
+        "fatherName": "test",
+        "age": 2015,
+        "weight": 44.0,
+        "mobileNumber": "9963376888",
+        "gender": "Male",
+        "bloodGroup": "A-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 26,
+                "addressLine": "test",
+                "city": "test",
+                "stateId": 1,
+                "districtId": 16,
+                "mandalId": 850,
+                "postalCode": "11111111",
+                "villageName": "test",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 16,
+                    "name": "Palnadu"
+                },
+                "mandal": {
+                    "id": 850,
+                    "name": "Narasaraopet"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 50,
+        "mrNumber": "MR2026020",
+        "firstName": "Dandigam",
+        "lastName": "Venkatesh",
+        "fatherName": "Dandigam",
+        "age": 1991,
+        "weight": 72.0,
+        "mobileNumber": "1234567898",
+        "gender": "Male",
+        "bloodGroup": "O+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 27,
+                "addressLine": "HYd",
+                "city": "Hyg",
+                "stateId": 1,
+                "districtId": 23,
+                "mandalId": 876,
+                "postalCode": "23423423",
+                "villageName": "Hyg",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 23,
+                    "name": "Visakhapatnam"
+                },
+                "mandal": {
+                    "id": 876,
+                    "name": "Bheemunipatnam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 55,
+        "mrNumber": "MR2026021",
+        "firstName": "Mythili",
+        "lastName": "Dintyala",
+        "fatherName": "Mythilli",
+        "age": 1996,
+        "weight": 30.0,
+        "mobileNumber": "1234567891",
+        "gender": "Other",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 28,
+                "addressLine": "Hyd",
+                "city": "Hyd",
+                "stateId": 1,
+                "districtId": 23,
+                "mandalId": 876,
+                "postalCode": "34242",
+                "villageName": "Hyd",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 23,
+                    "name": "Visakhapatnam"
+                },
+                "mandal": {
+                    "id": 876,
+                    "name": "Bheemunipatnam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 56,
+        "mrNumber": "MR2026022",
+        "firstName": "Mythili",
+        "lastName": "Dintyala",
+        "fatherName": "Mythilli",
+        "age": 1996,
+        "weight": 30.0,
+        "mobileNumber": "1234567891",
+        "gender": "Female",
+        "bloodGroup": "",
+        "maritalStatus": "",
+        "patientAddressesList": [
+            {
+                "addressId": 29,
+                "addressLine": "Hyd",
+                "city": "Hyd",
+                "stateId": 1,
+                "districtId": 13,
+                "mandalId": 838,
+                "postalCode": "34242",
+                "villageName": "Hyd",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 13,
+                    "name": "Kurnool"
+                },
+                "mandal": {
+                    "id": 838,
+                    "name": "Adoni"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 59,
+        "mrNumber": "MR2026023",
+        "firstName": "Mythili",
+        "lastName": "Dintyala",
+        "fatherName": null,
+        "age": 1996,
+        "weight": null,
+        "mobileNumber": "9999999999",
+        "gender": "Male",
+        "bloodGroup": "",
+        "maritalStatus": "",
+        "patientAddressesList": [
+            {
+                "addressId": 30,
+                "addressLine": "hyd",
+                "city": "OPD",
+                "stateId": 1,
+                "districtId": 17,
+                "mandalId": 853,
+                "postalCode": null,
+                "villageName": "OPD",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 17,
+                    "name": "Parvathipuram Manyam"
+                },
+                "mandal": {
+                    "id": 853,
+                    "name": "Kurupam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 63,
+        "mrNumber": "MR2026024",
+        "firstName": "Mythili",
+        "lastName": "Dintyala",
+        "fatherName": null,
+        "age": 1996,
+        "weight": null,
+        "mobileNumber": "9999999999",
+        "gender": "Female",
+        "bloodGroup": "",
+        "maritalStatus": "",
+        "patientAddressesList": [
+            {
+                "addressId": 31,
+                "addressLine": "Markapuram",
+                "city": "Chennampalli",
+                "stateId": 1,
+                "districtId": 17,
+                "mandalId": 853,
+                "postalCode": "2734389",
+                "villageName": "Chennampalli",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 17,
+                    "name": "Parvathipuram Manyam"
+                },
+                "mandal": {
+                    "id": 853,
+                    "name": "Kurupam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 65,
+        "mrNumber": "MR2026025",
+        "firstName": "test",
+        "lastName": "test",
+        "fatherName": "test",
+        "age": 1982,
+        "weight": 55.0,
+        "mobileNumber": "9999999999",
+        "gender": "Male",
+        "bloodGroup": "B-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 32,
+                "addressLine": "VIJ",
+                "city": "HYD",
+                "stateId": 1,
+                "districtId": 3,
+                "mandalId": 794,
+                "postalCode": null,
+                "villageName": "HYD",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 3,
+                    "name": "Anantapur"
+                },
+                "mandal": {
+                    "id": 794,
+                    "name": "Kudair"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 68,
+        "mrNumber": "MR2026026",
+        "firstName": "test",
+        "lastName": "test",
+        "fatherName": "test",
+        "age": 2015,
+        "weight": 11.0,
+        "mobileNumber": "1111111111",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 33,
+                "addressLine": "dddd",
+                "city": "dddd",
+                "stateId": 1,
+                "districtId": 5,
+                "mandalId": 892,
+                "postalCode": null,
+                "villageName": "dddd",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 5,
+                    "name": "Bapatla"
+                },
+                "mandal": {
+                    "id": 892,
+                    "name": "Chirala"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 69,
+        "mrNumber": "MR2026027",
+        "firstName": "test",
+        "lastName": "test",
+        "fatherName": "test",
+        "age": 2015,
+        "weight": 11.0,
+        "mobileNumber": "9963333334",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 34,
+                "addressLine": "ddddddd",
+                "city": "ddddddd",
+                "stateId": 1,
+                "districtId": 15,
+                "mandalId": 846,
+                "postalCode": null,
+                "villageName": "ddddddd",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 15,
+                    "name": "NTR"
+                },
+                "mandal": {
+                    "id": 846,
+                    "name": "Ibrahimpatnam"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 70,
+        "mrNumber": "MR2026028",
+        "firstName": "sasdsadsa",
+        "lastName": "test",
+        "fatherName": "asdsadsad",
+        "age": 2000,
+        "weight": 22.0,
+        "mobileNumber": "9999999999",
+        "gender": "Male",
+        "bloodGroup": "A+",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 35,
+                "addressLine": "qwe",
+                "city": "qwe",
+                "stateId": 1,
+                "districtId": 16,
+                "mandalId": 850,
+                "postalCode": null,
+                "villageName": "qwe",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 16,
+                    "name": "Palnadu"
+                },
+                "mandal": {
+                    "id": 850,
+                    "name": "Narasaraopet"
+                }
+            }
+        ]
+    },
+    {
+        "tblPatientId": 71,
+        "mrNumber": "MR2026029",
+        "firstName": "sadsada",
+        "lastName": "sadsad",
+        "fatherName": "sadsadsad",
+        "age": 2000,
+        "weight": 11.0,
+        "mobileNumber": "1111111111",
+        "gender": "Female",
+        "bloodGroup": "A-",
+        "maritalStatus": "Married",
+        "patientAddressesList": [
+            {
+                "addressId": 36,
+                "addressLine": "@@@@",
+                "city": "dddd",
+                "stateId": 1,
+                "districtId": 17,
+                "mandalId": 853,
+                "postalCode": null,
+                "villageName": "dddd",
+                "state": {
+                    "id": 1,
+                    "name": "Andhra Pradesh"
+                },
+                "district": {
+                    "id": 17,
+                    "name": "Parvathipuram Manyam"
+                },
+                "mandal": {
+                    "id": 853,
+                    "name": "Kurupam"
+                }
+            }
+        ]
+    }
+]

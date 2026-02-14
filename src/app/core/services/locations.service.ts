@@ -15,12 +15,31 @@ export class LocationsService {
    */
   getStates(): Observable<any[]> {
     const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
-    return this.http.get<any[]>(url).pipe(
-      catchError((error) => {
-        console.error('Error fetching states:', error);
-        throw error;
-      })
-    );
+    // return this.http.get<any[]>(url).pipe(
+    //   catchError((error) => {
+    //     console.error('Error fetching states:', error);
+    //     throw error;
+    //   })
+    // );
+
+    if (API_CONFIG.useMockData) {
+      // Return mock data from JSON file
+      return this.http.get<any[]>('/JSONAPI/states.json').pipe(
+        catchError((error) => {
+          console.error('Error fetching states from mock data:', error);
+          throw error;
+        }),
+      );
+    } else {
+      // Return data from server
+      const url = getApiUrl(API_CONFIG.ENDPOINTS.STATES.BASE);
+      return this.http.get<any[]>(url).pipe(
+        catchError((error) => {
+          console.error('Error fetching states from server:', error);
+          throw error;
+        }),
+      );
+    }
   }
 
   /**
@@ -34,7 +53,7 @@ export class LocationsService {
       catchError((error) => {
         console.error(`Error fetching state with id ${id}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -48,7 +67,7 @@ export class LocationsService {
       catchError((error) => {
         console.error('Error fetching districts:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -63,7 +82,7 @@ export class LocationsService {
       catchError((error) => {
         console.error(`Error fetching districts for state ${stateId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -77,7 +96,7 @@ export class LocationsService {
       catchError((error) => {
         console.error('Error fetching mandals:', error);
         throw error;
-      })
+      }),
     );
   }
 
@@ -92,7 +111,7 @@ export class LocationsService {
       catchError((error) => {
         console.error(`Error fetching mandals for district ${districtId}:`, error);
         throw error;
-      })
+      }),
     );
   }
 }

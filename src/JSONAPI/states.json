@@ -1,0 +1,12 @@
+[
+    {
+        "stateLookupId": 1,
+        "stateName": "Andhra Pradesh",
+        "stateCd": "AP"
+    },
+    {
+        "stateLookupId": 44,
+        "stateName": "Telangana",
+        "stateCd": "TG"
+    }
+]
