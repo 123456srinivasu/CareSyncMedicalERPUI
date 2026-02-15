@@ -32,6 +32,8 @@ interface Question {
   questionId: number;
   questionText: string;
   questionType: string;
+  questionsCategory?: string;
+  defaultDisplay?: string;
   options?: QuestionOption[];
 }
 
@@ -258,18 +260,70 @@ export class SoapNoteComponent implements OnInit {
   }
 
   /**
-   * Update visible questions - shows all questions at once
+   * Update visible questions - shows questions based on defaultDisplay and nextQuestionId
    */
   updateVisibleQuestions() {
     this.visibleQuestions.clear();
 
     if (this.questionnaire.length === 0) return;
 
-    // Show all questions
+    // First, show all questions with defaultDisplay: "show"
     this.questionnaire.forEach((question) => {
-      this.visibleQuestions.add(question.questionId);
+      if (question.defaultDisplay === 'show') {
+        this.visibleQuestions.add(question.questionId);
+      }
+    });
+
+    // Then, show questions referenced by nextQuestionId from selected options
+    this.questionnaire.forEach((question) => {
+      const formControlName = `question_${question.questionId}`;
+      const formValue = this.questionnaireForm?.get(formControlName)?.value;
+      const normalizedType = this.normalizeQuestionType(question.questionType);
+
+      if (!formValue || (Array.isArray(formValue) && formValue.length === 0)) {
+        return; // Skip if no answer
+      }
+
+      // For SCQ (Single Choice Questions)
+      if (normalizedType === 'SCQ') {
+        const selectedOptionId = formValue as number;
+        const selectedOption = question.options?.find(
+          (opt) => opt.optionId === selectedOptionId
+        );
+        if (selectedOption?.nextQuestionId) {
+          this.visibleQuestions.add(selectedOption.nextQuestionId);
+        }
+      }
+
+      // For MCQ (Multiple Choice Questions)
+      if (normalizedType === 'MCQ') {
+        const selectedOptions = formValue as number[];
+        selectedOptions.forEach((optionId) => {
+          const selectedOption = question.options?.find(
+            (opt) => opt.optionId === optionId
+          );
+          if (selectedOption?.nextQuestionId) {
+            this.visibleQuestions.add(selectedOption.nextQuestionId);
+          }
+        });
+      }
+
+      // For TEXT (Text Input Questions)
+      if (normalizedType === 'TEXT') {
+        const textValue = formValue as string;
+        // If user has entered text, check if any option has nextQuestionId
+        if (textValue && textValue.trim() !== '') {
+          question.options?.forEach((option) => {
+            if (option.nextQuestionId) {
+              this.visibleQuestions.add(option.nextQuestionId);
+            }
+          });
+        }
+      }
     });
   }
+
+
 
   /**
    * Handle answer change for any question
