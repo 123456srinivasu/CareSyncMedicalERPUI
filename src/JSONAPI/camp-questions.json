@@ -1,1495 +1,1495 @@
 [
-  {
-    "questionId": 1,
-    "questionText": "Frequent Infections",
-    "questionType": "MCQ",
-    "questionsCategory": "generalquestions",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 3,
-        "optionText": "Vaginal",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 1,
-        "optionText": "Skin",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 2,
-        "optionText": "Gum",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 2,
-    "questionText": "Darkened Skin in Folds",
-    "questionType": "MCQ",
-    "questionsCategory": "generalquestions",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 4,
-        "optionText": "Neck",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 5,
-        "optionText": "Armpits",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 3,
-    "questionText": "Feeling Tired or Weak",
-    "questionType": "MCQ",
-    "questionsCategory": "generalquestions",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 8,
-        "optionText": "Both",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 6,
-        "optionText": "Feeling Tired",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 7,
-        "optionText": "Feeling Weak",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 4,
-    "questionText": "Do you have Diabetes?",
-    "questionType": "SCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 11,
-        "optionText": "Gestational",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 12,
-        "optionText": "Prediabetes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 10,
-        "optionText": "Type 2",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 185,
-        "optionText": "No",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 9,
-        "optionText": "Type 1",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 5,
-    "questionText": "Onset Duration of Diabetes",
-    "questionType": "TEXT",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 19,
-        "optionText": "More than 3 Years",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 18,
-        "optionText": "3 Years",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 13,
-        "optionText": "3 Months",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 17,
-        "optionText": "2 Years",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 14,
-        "optionText": "6 Months",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 15,
-        "optionText": "1 Year",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 16,
-        "optionText": "18 Months",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 6,
-    "questionText": "Presenting Complaints",
-    "questionType": "MCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 24,
-        "optionText": "Polyuria",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 25,
-        "optionText": "Polyphagia",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 21,
-        "optionText": "Fatigue",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 23,
-        "optionText": "Polydipsia",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 20,
-        "optionText": "Wounds",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 22,
-        "optionText": "Vision Changes",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 7,
-    "questionText": "Tingling Numbness",
-    "questionType": "MCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 26,
-        "optionText": "Hands",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 27,
-        "optionText": "Feet",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 8,
-    "questionText": "Taking Medicines for Diabetes",
-    "questionType": "TEXT",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 28,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 9,
-    "questionText": "Smoking Habit",
-    "questionType": "SCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 29,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 30,
-        "optionText": "No",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 10,
-    "questionText": "Drinking Alcohol",
-    "questionType": "SCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 32,
-        "optionText": "No",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 31,
-        "optionText": "yes",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 11,
-    "questionText": "Reason for Visit",
-    "questionType": "MCQ",
-    "questionsCategory": "generalquestions",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 33,
-        "optionText": "Routine Checkup",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 34,
-        "optionText": "High BP",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 35,
-        "optionText": "Headache",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 37,
-        "optionText": "Other",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 36,
-        "optionText": "Dizziness",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 12,
-    "questionText": "Specify Other Reason",
-    "questionType": "TEXT",
-    "questionsCategory": "generalquestions",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 38,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 13,
-    "questionText": "Recent Symptoms",
-    "questionType": "MCQ",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 42,
-        "optionText": "Shortness of Breath",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 41,
-        "optionText": "Chest Pain",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 40,
-        "optionText": "Blurred Vision",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 39,
-        "optionText": "Headache",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 14,
-    "questionText": "Monitor BP at Home",
-    "questionType": "SCQ",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 44,
-        "optionText": "No",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 43,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 15,
-    "questionText": "BP Value",
-    "questionType": "TEXT",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 45,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 16,
-    "questionText": "Leg Swelling or Weight Gain",
-    "questionType": "SCQ",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 46,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 47,
-        "optionText": "No",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 17,
-    "questionText": "Details of Swelling/Weight",
-    "questionType": "TEXT",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 48,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 18,
-    "questionText": "Palpitations",
-    "questionType": "SCQ",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 49,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 50,
-        "optionText": "No",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 19,
-    "questionText": "BP Episodes",
-    "questionType": "MCQ",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 51,
-        "optionText": "Low",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 52,
-        "optionText": "High",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 20,
-    "questionText": "Exercise Regularly",
-    "questionType": "SCQ",
-    "questionsCategory": "htn",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 53,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 54,
-        "optionText": "No",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 21,
-    "questionText": "When did you first experience a seizure?",
-    "questionType": "SCQ",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 55,
-        "optionText": "Date & Time",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 56,
-        "optionText": "Not sure",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 22,
-    "questionText": "Number of seizure episodes",
-    "questionType": "SCQ",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 59,
-        "optionText": "More than 5 episodes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 58,
-        "optionText": "2–5 episodes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 57,
-        "optionText": "Single episode",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 23,
-    "questionText": "Seizure Frequency",
-    "questionType": "SCQ",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 61,
-        "optionText": "Weekly",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 62,
-        "optionText": "Monthly",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 60,
-        "optionText": "Daily",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 24,
-    "questionText": "Activity Before Seizure",
-    "questionType": "MCQ",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 67,
-        "optionText": "Stress",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 65,
-        "optionText": "Watching TV / Mobile",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 68,
-        "optionText": "Unknown",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 64,
-        "optionText": "Working",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 66,
-        "optionText": "Physical activity",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 63,
-        "optionText": "Sleeping",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 25,
-    "questionText": "Family History of Seizures",
-    "questionType": "SCQ",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 71,
-        "optionText": "Not sure",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 69,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 70,
-        "optionText": "No",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 26,
-    "questionText": "Observed Movements",
-    "questionType": "MCQ",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 74,
-        "optionText": "Jerking",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 75,
-        "optionText": "Eye Rolling",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 73,
-        "optionText": "Body Stiffness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 72,
-        "optionText": "Arm/Leg Shaking",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 27,
-    "questionText": "During Seizure",
-    "questionType": "MCQ",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 79,
-        "optionText": "Bowel Loss",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 77,
-        "optionText": "Frothing",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 76,
-        "optionText": "Tongue Bite",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 78,
-        "optionText": "Bladder Loss",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 28,
-    "questionText": "Seizure Duration",
-    "questionType": "TEXT",
-    "questionsCategory": "asthma",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 80,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 29,
-    "questionText": "Post Ictal State",
-    "questionType": "TEXT",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 81,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 30,
-    "questionText": "Aura Details",
-    "questionType": "TEXT",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 82,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 31,
-    "questionText": "Diagnosed Epilepsy",
-    "questionType": "SCQ",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 84,
-        "optionText": "No",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 83,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 32,
-    "questionText": "On Medication for Seizures",
-    "questionType": "SCQ",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 85,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 86,
-        "optionText": "No",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 33,
-    "questionText": "Past Hospitalization for Seizures",
-    "questionType": "SCQ",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 88,
-        "optionText": "No",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 87,
-        "optionText": "Yes",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 34,
-    "questionText": "Stroke Symptom Onset",
-    "questionType": "TEXT",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 89,
-        "optionText": "Sudden",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 91,
-        "optionText": "Unknown",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 92,
-        "optionText": "Date & Time",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 90,
-        "optionText": "Gradual",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 35,
-    "questionText": "First Stroke Symptoms",
-    "questionType": "MCQ",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 95,
-        "optionText": "Vision Changes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 98,
-        "optionText": "Severe Headache",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 93,
-        "optionText": "Limb Weakness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 96,
-        "optionText": "Loss of Balance",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 97,
-        "optionText": "Facial Drooping",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 94,
-        "optionText": "Speech Difficulty",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 99,
-        "optionText": "Other",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 36,
-    "questionText": "Specify Other Stroke Symptom",
-    "questionType": "TEXT",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 100,
-        "optionText": "TEXT",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 37,
-    "questionText": "Past Neurological Events",
-    "questionType": "MCQ",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 102,
-        "optionText": "None",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 101,
-        "optionText": "TIA",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 38,
-    "questionText": "Presenting Stroke Symptoms",
-    "questionType": "MCQ",
-    "questionsCategory": "stroke",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 104,
-        "optionText": "Arm Weakness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 106,
-        "optionText": "One Sided Weakness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 103,
-        "optionText": "Facial Weakness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 111,
-        "optionText": "Dizziness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 112,
-        "optionText": "Walking Difficulty",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 108,
-        "optionText": "Understanding Difficulty",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 113,
-        "optionText": "Severe Headache Onset",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 110,
-        "optionText": "Double Vision",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 105,
-        "optionText": "Leg Weakness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 109,
-        "optionText": "Vision Loss",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 107,
-        "optionText": "Slurred Speech",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 39,
-    "questionText": "Current Medications",
-    "questionType": "MCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 116,
-        "optionText": "Lipid Lowering",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 115,
-        "optionText": "Antidiabetics",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 114,
-        "optionText": "Antihypertensives",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 117,
-        "optionText": "Antiplatelets",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 118,
-        "optionText": "Anticoagulants",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 40,
-    "questionText": "Associated Complications",
-    "questionType": "MCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 120,
-        "optionText": "Bladder Incontinence",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 122,
-        "optionText": "Memory Loss",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 125,
-        "optionText": "Post Stroke Seizures",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 121,
-        "optionText": "Bowel Incontinence",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 119,
-        "optionText": "Dysphagia",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 124,
-        "optionText": "Behavioral Changes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 123,
-        "optionText": "Confusion",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 41,
-    "questionText": "ADL Difficulty",
-    "questionType": "MCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 130,
-        "optionText": "Toileting",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 126,
-        "optionText": "Eating",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 129,
-        "optionText": "Bathing",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 127,
-        "optionText": "Dressing",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 128,
-        "optionText": "Walking",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 42,
-    "questionText": "When did you first experience breathing problems or wheezing?",
-    "questionType": "SCQ\t",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 133,
-        "optionText": "5 years ago",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 131,
-        "optionText": "1 year",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 132,
-        "optionText": "1–5 years",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 134,
-        "optionText": "Since childhood",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 43,
-    "questionText": "Frequency of asthma attacks",
-    "questionType": "SCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 136,
-        "optionText": "Weekly",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 137,
-        "optionText": "Monthly",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 138,
-        "optionText": "Occasional",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 135,
-        "optionText": "Daily",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 44,
-    "questionText": "Symptoms Time Pattern or Symptoms occur mostly",
-    "questionType": "SCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 139,
-        "optionText": "Daytime",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 140,
-        "optionText": "Nighttime",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 141,
-        "optionText": "Both",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 45,
-    "questionText": "Past Emergency Care for Asthma",
-    "questionType": "SCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 142,
-        "optionText": "No",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 145,
-        "optionText": "ICU admission",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 143,
-        "optionText": "ER visit",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 144,
-        "optionText": "Hospital admission",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 46,
-    "questionText": "Family History of Asthma",
-    "questionType": "MCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 147,
-        "optionText": "Allergies",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 146,
-        "optionText": "Asthma",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 149,
-        "optionText": "None",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 148,
-        "optionText": "Other respiratory illness",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 47,
-    "questionText": "Asthma Presenting Symptoms",
-    "questionType": "MCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 153,
-        "optionText": "Frequent Cough",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 157,
-        "optionText": "Dust Symptoms",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 151,
-        "optionText": "Wheezing",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 158,
-        "optionText": "Night Breathing Difficulty",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 150,
-        "optionText": "Shortness of Breath",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 156,
-        "optionText": "Cold Air Symptoms",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 155,
-        "optionText": "Exercise Symptoms",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 152,
-        "optionText": "Chest Tightness",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 154,
-        "optionText": "Night Cough",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 48,
-    "questionText": "Asthma Triggers",
-    "questionType": "MCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 161,
-        "optionText": "Pollen",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 165,
-        "optionText": "Strong Smells",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 164,
-        "optionText": "Exercise",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 162,
-        "optionText": "Pets",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 166,
-        "optionText": "Infections",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 160,
-        "optionText": "Smoke",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 163,
-        "optionText": "Cold Air",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 159,
-        "optionText": "Dust",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 49,
-    "questionText": "Seasonal Worsening",
-    "questionType": "MCQ",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 167,
-        "optionText": "Winter",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 168,
-        "optionText": "Monsoon",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 169,
-        "optionText": "Summer",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 170,
-        "optionText": "None",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 50,
-    "questionText": "Smoking Status in Asthma",
-    "questionType": "TEXT",
-    "questionsCategory": "seizures",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 174,
-        "optionText": "Passive (second-hand) smoke exposure",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 173,
-        "optionText": "Ex-smoker",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 172,
-        "optionText": "Current smoker",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 171,
-        "optionText": "Non-smoker",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 51,
-    "questionText": "Occupational Exposure",
-    "questionType": "TEXT",
-    "questionsCategory": "asthama",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 177,
-        "optionText": "Fumes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 178,
-        "optionText": "None",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 175,
-        "optionText": "Dust",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 176,
-        "optionText": "Chemicals",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 52,
-    "questionText": "Rescue Inhaler Use",
-    "questionType": "TEXT",
-    "questionsCategory": "asthama",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 179,
-        "optionText": "Daily",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 181,
-        "optionText": "2 times/week, Rarely",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 180,
-        "optionText": "2–3 times/week",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 53,
-    "questionText": "Relief After Inhaler",
-    "questionType": "TEXT",
-    "questionsCategory": "asthama",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 184,
-        "optionText": "No relief",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 183,
-        "optionText": "Partial relief",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 182,
-        "optionText": "Complete relief",
-        "nextQuestionId": null
-      }
-    ]
-  },
-  {
-    "questionId": 54,
-    "questionText": "Do you have Diabetes?",
-    "questionType": "SCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "show",
-    "options": [
-      {
-        "optionId": 187,
-        "optionText": "No",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 186,
-        "optionText": "Yes",
-        "nextQuestionId": 55
-      }
-    ]
-  },
-  {
-    "questionId": 55,
-    "questionText": "How many years have Diabetes?",
-    "questionType": "SCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "hide",
-    "options": [
-      {
-        "optionId": 189,
-        "optionText": "1–5 years",
-        "nextQuestionId": 58
-      },
-      {
-        "optionId": 191,
-        "optionText": "Since childhood",
-        "nextQuestionId": 58
-      },
-      {
-        "optionId": 190,
-        "optionText": "More than 5 years",
-        "nextQuestionId": 58
-      },
-      {
-        "optionId": 188,
-        "optionText": "1 Year",
-        "nextQuestionId": 58
-      }
-    ]
-  },
-  {
-    "questionId": 58,
-    "questionText": "Are you useing Diabetes medication?",
-    "questionType": "TEXT",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "hide",
-    "options": [
-      {
-        "optionId": 192,
-        "optionText": "TEXT",
-        "nextQuestionId": 59
-      }
-    ]
-  },
-  {
-    "questionId": 59,
-    "questionText": "Diabetes stage level?",
-    "questionType": "SCQ",
-    "questionsCategory": "diabetes",
-    "defaultDisplay": "hide",
-    "options": [
-      {
-        "optionId": 194,
-        "optionText": "Early",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 195,
-        "optionText": "Moderate",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 193,
-        "optionText": "Prediabetes",
-        "nextQuestionId": null
-      },
-      {
-        "optionId": 196,
-        "optionText": "Advanced",
-        "nextQuestionId": null
-      }
-    ]
-  }
+    {
+        "questionId": 1,
+        "questionText": "Frequent Infections",
+        "questionType": "MCQ",
+        "questionsCategory": "generalquestions",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 3,
+                "optionText": "Vaginal",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 1,
+                "optionText": "Skin",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 2,
+                "optionText": "Gum",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 2,
+        "questionText": "Darkened Skin in Folds",
+        "questionType": "MCQ",
+        "questionsCategory": "generalquestions",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 4,
+                "optionText": "Neck",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 5,
+                "optionText": "Armpits",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 3,
+        "questionText": "Feeling Tired or Weak",
+        "questionType": "MCQ",
+        "questionsCategory": "generalquestions",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 8,
+                "optionText": "Both",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 6,
+                "optionText": "Feeling Tired",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 7,
+                "optionText": "Feeling Weak",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 4,
+        "questionText": "Do you have Diabetes?",
+        "questionType": "SCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 11,
+                "optionText": "Gestational",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 12,
+                "optionText": "Prediabetes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 10,
+                "optionText": "Type 2",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 185,
+                "optionText": "No",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 9,
+                "optionText": "Type 1",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 5,
+        "questionText": "Onset Duration of Diabetes",
+        "questionType": "TEXT",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 19,
+                "optionText": "More than 3 Years",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 18,
+                "optionText": "3 Years",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 13,
+                "optionText": "3 Months",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 17,
+                "optionText": "2 Years",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 14,
+                "optionText": "6 Months",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 15,
+                "optionText": "1 Year",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 16,
+                "optionText": "18 Months",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 6,
+        "questionText": "Presenting Complaints",
+        "questionType": "MCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 24,
+                "optionText": "Polyuria",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 25,
+                "optionText": "Polyphagia",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 21,
+                "optionText": "Fatigue",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 23,
+                "optionText": "Polydipsia",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 20,
+                "optionText": "Wounds",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 22,
+                "optionText": "Vision Changes",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 7,
+        "questionText": "Tingling Numbness",
+        "questionType": "MCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 26,
+                "optionText": "Hands",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 27,
+                "optionText": "Feet",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 8,
+        "questionText": "Taking Medicines for Diabetes",
+        "questionType": "TEXT",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 28,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 9,
+        "questionText": "Smoking Habit",
+        "questionType": "SCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 29,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 30,
+                "optionText": "No",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 10,
+        "questionText": "Drinking Alcohol",
+        "questionType": "SCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 32,
+                "optionText": "No",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 31,
+                "optionText": "yes",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 11,
+        "questionText": "Reason for Visit",
+        "questionType": "MCQ",
+        "questionsCategory": "generalquestions",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 33,
+                "optionText": "Routine Checkup",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 34,
+                "optionText": "High BP",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 35,
+                "optionText": "Headache",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 37,
+                "optionText": "Other",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 36,
+                "optionText": "Dizziness",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 12,
+        "questionText": "Specify Other Reason",
+        "questionType": "TEXT",
+        "questionsCategory": "generalquestions",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 38,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 13,
+        "questionText": "Recent Symptoms",
+        "questionType": "MCQ",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 42,
+                "optionText": "Shortness of Breath",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 41,
+                "optionText": "Chest Pain",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 40,
+                "optionText": "Blurred Vision",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 39,
+                "optionText": "Headache",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 14,
+        "questionText": "Monitor BP at Home",
+        "questionType": "SCQ",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 44,
+                "optionText": "No",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 43,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 15,
+        "questionText": "BP Value",
+        "questionType": "TEXT",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 45,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 16,
+        "questionText": "Leg Swelling or Weight Gain",
+        "questionType": "SCQ",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 46,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 47,
+                "optionText": "No",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 17,
+        "questionText": "Details of Swelling/Weight",
+        "questionType": "TEXT",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 48,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 18,
+        "questionText": "Palpitations",
+        "questionType": "SCQ",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 49,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 50,
+                "optionText": "No",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 19,
+        "questionText": "BP Episodes",
+        "questionType": "MCQ",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 51,
+                "optionText": "Low",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 52,
+                "optionText": "High",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 20,
+        "questionText": "Exercise Regularly",
+        "questionType": "SCQ",
+        "questionsCategory": "htn",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 53,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 54,
+                "optionText": "No",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 21,
+        "questionText": "When did you first experience a seizure?",
+        "questionType": "SCQ",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 55,
+                "optionText": "Date & Time",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 56,
+                "optionText": "Not sure",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 22,
+        "questionText": "Number of seizure episodes",
+        "questionType": "SCQ",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 59,
+                "optionText": "More than 5 episodes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 58,
+                "optionText": "2–5 episodes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 57,
+                "optionText": "Single episode",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 23,
+        "questionText": "Seizure Frequency",
+        "questionType": "SCQ",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 61,
+                "optionText": "Weekly",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 62,
+                "optionText": "Monthly",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 60,
+                "optionText": "Daily",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 24,
+        "questionText": "Activity Before Seizure",
+        "questionType": "MCQ",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 67,
+                "optionText": "Stress",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 65,
+                "optionText": "Watching TV / Mobile",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 68,
+                "optionText": "Unknown",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 64,
+                "optionText": "Working",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 66,
+                "optionText": "Physical activity",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 63,
+                "optionText": "Sleeping",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 25,
+        "questionText": "Family History of Seizures",
+        "questionType": "SCQ",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 71,
+                "optionText": "Not sure",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 69,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 70,
+                "optionText": "No",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 26,
+        "questionText": "Observed Movements",
+        "questionType": "MCQ",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 74,
+                "optionText": "Jerking",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 75,
+                "optionText": "Eye Rolling",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 73,
+                "optionText": "Body Stiffness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 72,
+                "optionText": "Arm/Leg Shaking",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 27,
+        "questionText": "During Seizure",
+        "questionType": "MCQ",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 79,
+                "optionText": "Bowel Loss",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 77,
+                "optionText": "Frothing",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 76,
+                "optionText": "Tongue Bite",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 78,
+                "optionText": "Bladder Loss",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 28,
+        "questionText": "Seizure Duration",
+        "questionType": "TEXT",
+        "questionsCategory": "asthma",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 80,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 29,
+        "questionText": "Post Ictal State",
+        "questionType": "TEXT",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 81,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 30,
+        "questionText": "Aura Details",
+        "questionType": "TEXT",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 82,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 31,
+        "questionText": "Diagnosed Epilepsy",
+        "questionType": "SCQ",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 84,
+                "optionText": "No",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 83,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 32,
+        "questionText": "On Medication for Seizures",
+        "questionType": "SCQ",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 85,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 86,
+                "optionText": "No",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 33,
+        "questionText": "Past Hospitalization for Seizures",
+        "questionType": "SCQ",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 88,
+                "optionText": "No",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 87,
+                "optionText": "Yes",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 34,
+        "questionText": "Stroke Symptom Onset",
+        "questionType": "TEXT",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 89,
+                "optionText": "Sudden",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 91,
+                "optionText": "Unknown",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 92,
+                "optionText": "Date & Time",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 90,
+                "optionText": "Gradual",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 35,
+        "questionText": "First Stroke Symptoms",
+        "questionType": "MCQ",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 95,
+                "optionText": "Vision Changes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 98,
+                "optionText": "Severe Headache",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 93,
+                "optionText": "Limb Weakness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 96,
+                "optionText": "Loss of Balance",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 97,
+                "optionText": "Facial Drooping",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 94,
+                "optionText": "Speech Difficulty",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 99,
+                "optionText": "Other",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 36,
+        "questionText": "Specify Other Stroke Symptom",
+        "questionType": "TEXT",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 100,
+                "optionText": "TEXT",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 37,
+        "questionText": "Past Neurological Events",
+        "questionType": "MCQ",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 102,
+                "optionText": "None",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 101,
+                "optionText": "TIA",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 38,
+        "questionText": "Presenting Stroke Symptoms",
+        "questionType": "MCQ",
+        "questionsCategory": "stroke",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 104,
+                "optionText": "Arm Weakness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 106,
+                "optionText": "One Sided Weakness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 103,
+                "optionText": "Facial Weakness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 111,
+                "optionText": "Dizziness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 112,
+                "optionText": "Walking Difficulty",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 108,
+                "optionText": "Understanding Difficulty",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 113,
+                "optionText": "Severe Headache Onset",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 110,
+                "optionText": "Double Vision",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 105,
+                "optionText": "Leg Weakness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 109,
+                "optionText": "Vision Loss",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 107,
+                "optionText": "Slurred Speech",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 39,
+        "questionText": "Current Medications",
+        "questionType": "MCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 116,
+                "optionText": "Lipid Lowering",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 115,
+                "optionText": "Antidiabetics",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 114,
+                "optionText": "Antihypertensives",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 117,
+                "optionText": "Antiplatelets",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 118,
+                "optionText": "Anticoagulants",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 40,
+        "questionText": "Associated Complications",
+        "questionType": "MCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 120,
+                "optionText": "Bladder Incontinence",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 122,
+                "optionText": "Memory Loss",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 125,
+                "optionText": "Post Stroke Seizures",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 121,
+                "optionText": "Bowel Incontinence",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 119,
+                "optionText": "Dysphagia",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 124,
+                "optionText": "Behavioral Changes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 123,
+                "optionText": "Confusion",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 41,
+        "questionText": "ADL Difficulty",
+        "questionType": "MCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 130,
+                "optionText": "Toileting",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 126,
+                "optionText": "Eating",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 129,
+                "optionText": "Bathing",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 127,
+                "optionText": "Dressing",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 128,
+                "optionText": "Walking",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 42,
+        "questionText": "When did you first experience breathing problems or wheezing?",
+        "questionType": "SCQ\t",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 133,
+                "optionText": "5 years ago",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 131,
+                "optionText": "1 year",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 132,
+                "optionText": "1–5 years",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 134,
+                "optionText": "Since childhood",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 43,
+        "questionText": "Frequency of asthma attacks",
+        "questionType": "SCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 136,
+                "optionText": "Weekly",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 137,
+                "optionText": "Monthly",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 138,
+                "optionText": "Occasional",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 135,
+                "optionText": "Daily",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 44,
+        "questionText": "Symptoms Time Pattern or Symptoms occur mostly",
+        "questionType": "SCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 139,
+                "optionText": "Daytime",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 140,
+                "optionText": "Nighttime",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 141,
+                "optionText": "Both",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 45,
+        "questionText": "Past Emergency Care for Asthma",
+        "questionType": "SCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 142,
+                "optionText": "No",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 145,
+                "optionText": "ICU admission",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 143,
+                "optionText": "ER visit",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 144,
+                "optionText": "Hospital admission",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 46,
+        "questionText": "Family History of Asthma",
+        "questionType": "MCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 147,
+                "optionText": "Allergies",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 146,
+                "optionText": "Asthma",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 149,
+                "optionText": "None",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 148,
+                "optionText": "Other respiratory illness",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 47,
+        "questionText": "Asthma Presenting Symptoms",
+        "questionType": "MCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 153,
+                "optionText": "Frequent Cough",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 157,
+                "optionText": "Dust Symptoms",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 151,
+                "optionText": "Wheezing",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 158,
+                "optionText": "Night Breathing Difficulty",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 150,
+                "optionText": "Shortness of Breath",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 156,
+                "optionText": "Cold Air Symptoms",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 155,
+                "optionText": "Exercise Symptoms",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 152,
+                "optionText": "Chest Tightness",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 154,
+                "optionText": "Night Cough",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 48,
+        "questionText": "Asthma Triggers",
+        "questionType": "MCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 161,
+                "optionText": "Pollen",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 165,
+                "optionText": "Strong Smells",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 164,
+                "optionText": "Exercise",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 162,
+                "optionText": "Pets",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 166,
+                "optionText": "Infections",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 160,
+                "optionText": "Smoke",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 163,
+                "optionText": "Cold Air",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 159,
+                "optionText": "Dust",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 49,
+        "questionText": "Seasonal Worsening",
+        "questionType": "MCQ",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 167,
+                "optionText": "Winter",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 168,
+                "optionText": "Monsoon",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 169,
+                "optionText": "Summer",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 170,
+                "optionText": "None",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 50,
+        "questionText": "Smoking Status in Asthma",
+        "questionType": "TEXT",
+        "questionsCategory": "seizures",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 174,
+                "optionText": "Passive (second-hand) smoke exposure",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 173,
+                "optionText": "Ex-smoker",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 172,
+                "optionText": "Current smoker",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 171,
+                "optionText": "Non-smoker",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 51,
+        "questionText": "Occupational Exposure",
+        "questionType": "TEXT",
+        "questionsCategory": "asthama",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 177,
+                "optionText": "Fumes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 178,
+                "optionText": "None",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 175,
+                "optionText": "Dust",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 176,
+                "optionText": "Chemicals",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 52,
+        "questionText": "Rescue Inhaler Use",
+        "questionType": "TEXT",
+        "questionsCategory": "asthama",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 179,
+                "optionText": "Daily",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 181,
+                "optionText": "2 times/week, Rarely",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 180,
+                "optionText": "2–3 times/week",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 53,
+        "questionText": "Relief After Inhaler",
+        "questionType": "TEXT",
+        "questionsCategory": "asthama",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 184,
+                "optionText": "No relief",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 183,
+                "optionText": "Partial relief",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 182,
+                "optionText": "Complete relief",
+                "nextQuestionId": null
+            }
+        ]
+    },
+    {
+        "questionId": 54,
+        "questionText": "Do you have Diabetes?",
+        "questionType": "SCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "show",
+        "options": [
+            {
+                "optionId": 187,
+                "optionText": "No",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 186,
+                "optionText": "Yes",
+                "nextQuestionId": 55
+            }
+        ]
+    },
+    {
+        "questionId": 55,
+        "questionText": "How many years have Diabetes?",
+        "questionType": "SCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "hide",
+        "options": [
+            {
+                "optionId": 189,
+                "optionText": "1–5 years",
+                "nextQuestionId": 58
+            },
+            {
+                "optionId": 191,
+                "optionText": "Since childhood",
+                "nextQuestionId": 58
+            },
+            {
+                "optionId": 190,
+                "optionText": "More than 5 years",
+                "nextQuestionId": 58
+            },
+            {
+                "optionId": 188,
+                "optionText": "1 Year",
+                "nextQuestionId": 58
+            }
+        ]
+    },
+    {
+        "questionId": 58,
+        "questionText": "Are you useing Diabetes medication?",
+        "questionType": "TEXT",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "hide",
+        "options": [
+            {
+                "optionId": 192,
+                "optionText": "TEXT",
+                "nextQuestionId": 59
+            }
+        ]
+    },
+    {
+        "questionId": 59,
+        "questionText": "Diabetes stage level?",
+        "questionType": "SCQ",
+        "questionsCategory": "diabetes",
+        "defaultDisplay": "hide",
+        "options": [
+            {
+                "optionId": 194,
+                "optionText": "Early",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 195,
+                "optionText": "Moderate",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 193,
+                "optionText": "Prediabetes",
+                "nextQuestionId": null
+            },
+            {
+                "optionId": 196,
+                "optionText": "Advanced",
+                "nextQuestionId": null
+            }
+        ]
+    }
 ]

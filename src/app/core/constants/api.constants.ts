@@ -5,10 +5,13 @@
 
 export const API_CONFIG = {
   // Base API Configuration
-  BASE_URL: 'http://localhost:8081',
-  BASE_URL_LOCAL: 'http://localhost:8081',
+  // BASE_URL: 'http://localhost:8081',
+  // BASE_URL_LOCAL: 'http://localhost:8081',
+   BASE_URL: 'http://65.20.80.83:8081',
+  BASE_URL_LOCAL: 'http://65.20.80.83:8081',
+  
   API_PREFIX: '/api',
-  useMockData: true,
+  useMockData: false,
 
   // API Endpoints
   ENDPOINTS: {
@@ -90,6 +93,8 @@ export const API_CONFIG = {
       SEARCH_BY_NAME: (name: string) => `/patient-registration/search/by-name?name=${name}`,
       SEARCH_BY_FIELDS: (mrNumber: string) =>
         `/patient-registration/search/by-fields?mrNumber=${mrNumber}`,
+      VITALS: `/vitals`,
+      LABS: `/labs`
     },
     DASHBOARD: {
       BASE: '/dashboard',
@@ -97,6 +102,8 @@ export const API_CONFIG = {
     },
     CAMP_QUESTIONS: {
       BASE: '/camp-questions',
+      ANSWERS: '/camp-patient-answers',
+      SAVELABSVITALS: 'patient-records/save-lab-tests-and-vitals'
     },
   },
 } as const;

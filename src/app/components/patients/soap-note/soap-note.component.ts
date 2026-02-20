@@ -1,14 +1,16 @@
-import { Component, ElementRef, OnInit, ViewChild, inject, signal } from '@angular/core';
+// soap-note.component.ts
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
-  NgForm,
   ReactiveFormsModule,
   FormGroup,
   FormControl,
   FormArray,
+  AbstractControl,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
@@ -18,10 +20,10 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextarea } from 'primeng/inputtextarea';
-import { PatientService } from '../../../core/services/patient.service';
-import { Chart, registerables } from 'chart.js';
 
-// TypeScript Interfaces
+import { PatientService } from '../../../core/services/patient.service';
+
+// ===== Interfaces =====
 interface QuestionOption {
   optionId: number;
   optionText: string;
@@ -32,18 +34,11 @@ interface Question {
   questionId: number;
   questionText: string;
   questionType: string;
-  questionsCategory?: string;
-  defaultDisplay?: string;
-  options?: QuestionOption[];
+  questionsCategory: string;
+  defaultDisplay: 'show' | 'hide';
+  options: QuestionOption[];
 }
 
-interface QuestionAnswer {
-  questionId: number;
-  selectedOptions?: number[];
-  textValue?: string;
-}
-
-// Payload interfaces for submission
 interface AnswerPayloadItem {
   questionId: number;
   optionId: number | null;
@@ -52,8 +47,68 @@ interface AnswerPayloadItem {
 
 interface QuestionnaireSubmissionPayload {
   campId: number;
-  patientId: number;
+  patientId: any;
   answers: AnswerPayloadItem[];
+}
+
+interface Vital {
+  vitalId: number;
+  vitalName: string;
+  referenceRange: string;
+  description: string;
+  isActive: boolean;
+  value?: string | number;
+
+  // UI helpers
+  icon?: string;
+  iconClass?: string;
+  unit?: string;
+}
+
+interface LabTest {
+  id: number | null;
+  labTestName: string | null;
+  description: string | null;
+  isActive: boolean | null;
+}
+
+interface VitalSaveItem {
+  vitalLookupId: number;
+  measurementType: string;
+  vitalValue: string;
+}
+
+interface LabTestSaveItem {
+  labTestLookupId: number;
+  labTestDate: string;
+  testWithMedicineS: string;
+  testResultValue: string;
+  testResultUnit: string;
+  referenceValue: string;
+  remark: string;
+}
+
+interface ObjectiveSavePayload {
+  patientId: number;
+  patientVisitId: number;
+  labTests: LabTestSaveItem[];
+  vitals: VitalSaveItem[];
+}
+
+// ===== Labs UI Model =====
+interface LabEntryRow {
+  labTestDate: string;
+  testWithMedicineS: 'Yes' | 'No' | '';
+  testResultValue: string;
+  testResultUnit: string;
+  referenceValue: string;
+  remark: string;
+}
+
+interface LabGroup {
+  labTestLookupId: number;
+  labTestName: string;
+  entries: LabEntryRow[];
 }
 
 @Component({
@@ -79,617 +134,487 @@ interface QuestionnaireSubmissionPayload {
 export class SoapNoteComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-
-  constructor() {
-    Chart.register(...registerables);
-  }
   private patientService = inject(PatientService);
   private messageService = inject(MessageService);
 
+  // Tabs
   activeTab = signal<string>('Subject');
-
   setActiveTab(tab: string) {
     this.activeTab.set(tab);
+    if (tab === 'Objective') this.loadObjectiveDataOnce();
   }
 
   patientId: number | null = null;
-  campId: number = 101; // TODO: Get from route params or service
+  campId: number = 1;
   patient: any = null;
-  loading: boolean = false;
+
+  // Questionnaire
   questionnaire: Question[] = [];
-  questionnaireLoading: boolean = false;
+  questionnaireLoading = false;
   questionnaireForm!: FormGroup;
+
   visibleQuestions: Set<number> = new Set();
-  answeredQuestions: Set<number> = new Set();
-  currentQuestionIndex: number = 0;
+  private questionMap = new Map<number, Question>();
+  expandedQuestionMap: Record<number, boolean> = {};
 
-  // SOAP Form Data
-  soapData: any = {
-    chief_complaint: '',
-    hpi: '',
-    pmh: '',
-    family_social: '',
-    soap_body_subjective: '',
+  // Objective
+  vitalsLoading = false;
+  labsLoading = false;
+  vitalsList: Vital[] = [];
+  labsList: LabTest[] = [];
+  labGroups: LabGroup[] = [];
 
-    bp: '',
-    test_hr: null,
-    rr: null,
-    temp: '',
-    spo2: '',
-
-    general_appearance: '',
-    heent: '',
-    neck: '',
-    cardio: '',
-    respiratory: '',
-    other_exam: '',
-
-    diagnostic_tests: '',
-    soap_body_objective: '',
-
-    assessment_body: '',
-    primary_dx: '',
-    diff_dx: '',
-    justification: '',
-
-    medications: '',
-    lifestyle: '',
-    plan_body: '',
-
-    // Checkbox boolean states
-    frequent_infections: false,
-    frequent_infections_skin: false,
-    frequent_infections_gum: false,
-    frequent_infections_vaginal: false,
-
-    feeling_tired_weak: false,
-    feeling_tired: false,
-    feeling_weak: false,
-    feeling_both: false,
-
-    darkened_skin: false,
-    darkened_skin_neck: false,
-    darkened_skin_armpits: false,
-
-    presenting_complaints: false,
-  };
+  private objectiveLoaded = false;
+  private readonly DEFAULT_LABS_COUNT = 10;
 
   ngOnInit() {
     const state = history.state;
     if (state?.patient) {
       this.patient = state.patient.value || state.patient;
-      // console.log('Patient loaded from state:', this.patient);
     }
-
-    // Load questionnaire on page load
-    this.loadQuestionnaire();
 
     this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
-      if (id) {
-        this.patientId = +id;
-
-        // Only load if we don't have the patient data or if the ID doesn't match
-        const currentPatientId = this.patient?.tblPatientId || this.patient?.patient_id;
-        if (!this.patient || currentPatientId !== this.patientId) {
-          this.loadPatient(this.patientId);
-        }
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Invalid Patient ID',
-        });
-        this.router.navigate(['/patients']);
-      }
+      if (id) this.patientId = +id;
     });
+
+    this.loadQuestionnaire();
   }
 
-  loadPatient(id: number) {
-    this.loading = true;
-    this.patientService.getPatientById(id).subscribe({
-      next: (data) => {
-        this.patient = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error loading patient', err);
-        // If we have patient data from state (even if partial), we might want to keep it or show error.
-        // For now, standard error handling.
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load full patient data.',
-        });
-        this.loading = false;
-      },
-    });
-  }
-
+  // ===================== Questionnaire Load =====================
   loadQuestionnaire() {
     this.questionnaireLoading = true;
+
     this.patientService.getCampQuestions().subscribe({
       next: (data: Question[]) => {
-        this.questionnaire = data;
-        // console.log('Questionnaire loaded:', this.questionnaire);
+        this.questionnaire = data || [];
+        this.buildQuestionMap();
         this.initializeQuestionnaireForm();
-        this.updateVisibleQuestions();
+        this.initDefaultVisibleQuestions();
         this.questionnaireLoading = false;
       },
       error: (err) => {
-        console.error('Error loading questionnaire', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to load questionnaire data.',
-        });
+        console.error(err);
         this.questionnaireLoading = false;
       },
     });
   }
 
-  /**
-   * Initialize the reactive form for questionnaire
-   */
-  initializeQuestionnaireForm() {
-    const formControls: { [key: string]: FormControl | FormArray<any> } = {};
-
-    this.questionnaire.forEach((question) => {
-      const normalizedType = this.normalizeQuestionType(question.questionType);
-
-      if (normalizedType === 'MCQ') {
-        // For MCQ, use FormArray to store multiple selected option IDs
-        formControls[`question_${question.questionId}`] = new FormArray<any>([]);
-      } else if (normalizedType === 'SCQ') {
-        // For SCQ, use FormControl to store single option ID
-        formControls[`question_${question.questionId}`] = new FormControl(null);
-      } else if (normalizedType === 'TEXT') {
-        // For TEXT, use FormControl to store text value
-        formControls[`question_${question.questionId}`] = new FormControl('');
-      }
-    });
-
-    this.questionnaireForm = new FormGroup(formControls);
+  private buildQuestionMap() {
+    this.questionMap.clear();
+    for (const q of this.questionnaire) this.questionMap.set(q.questionId, q);
   }
 
-  /**
-   * Normalize question type by trimming whitespace and converting to uppercase
-   */
-  normalizeQuestionType(type: string): string {
-    return type.trim().toUpperCase();
-  }
-
-  /**
-   * Update visible questions - shows questions based on defaultDisplay and nextQuestionId
-   */
-  updateVisibleQuestions() {
+  private initDefaultVisibleQuestions() {
     this.visibleQuestions.clear();
-
-    if (this.questionnaire.length === 0) return;
-
-    // First, show all questions with defaultDisplay: "show"
-    this.questionnaire.forEach((question) => {
-      if (question.defaultDisplay === 'show') {
-        this.visibleQuestions.add(question.questionId);
-      }
-    });
-
-    // Then, show questions referenced by nextQuestionId from selected options
-    this.questionnaire.forEach((question) => {
-      const formControlName = `question_${question.questionId}`;
-      const formValue = this.questionnaireForm?.get(formControlName)?.value;
-      const normalizedType = this.normalizeQuestionType(question.questionType);
-
-      if (!formValue || (Array.isArray(formValue) && formValue.length === 0)) {
-        return; // Skip if no answer
-      }
-
-      // For SCQ (Single Choice Questions)
-      if (normalizedType === 'SCQ') {
-        const selectedOptionId = formValue as number;
-        const selectedOption = question.options?.find(
-          (opt) => opt.optionId === selectedOptionId
-        );
-        if (selectedOption?.nextQuestionId) {
-          this.visibleQuestions.add(selectedOption.nextQuestionId);
-        }
-      }
-
-      // For MCQ (Multiple Choice Questions)
-      if (normalizedType === 'MCQ') {
-        const selectedOptions = formValue as number[];
-        selectedOptions.forEach((optionId) => {
-          const selectedOption = question.options?.find(
-            (opt) => opt.optionId === optionId
-          );
-          if (selectedOption?.nextQuestionId) {
-            this.visibleQuestions.add(selectedOption.nextQuestionId);
-          }
-        });
-      }
-
-      // For TEXT (Text Input Questions)
-      if (normalizedType === 'TEXT') {
-        const textValue = formValue as string;
-        // If user has entered text, check if any option has nextQuestionId
-        if (textValue && textValue.trim() !== '') {
-          question.options?.forEach((option) => {
-            if (option.nextQuestionId) {
-              this.visibleQuestions.add(option.nextQuestionId);
-            }
-          });
-        }
-      }
-    });
+    for (const q of this.questionnaire) {
+      if (q.defaultDisplay === 'show') this.visibleQuestions.add(q.questionId);
+    }
   }
 
+  initializeQuestionnaireForm() {
+    const controls: Record<string, AbstractControl> = {};
 
+    for (const q of this.questionnaire) {
+      const t = this.normalizeQuestionType(q.questionType);
 
-  /**
-   * Handle answer change for any question
-   */
-  onAnswerChange(questionId: number) {
-    this.updateVisibleQuestions();
+      if (t === 'MCQ') controls[`question_${q.questionId}`] = new FormArray<FormControl<number>>([]);
+      if (t === 'SCQ') controls[`question_${q.questionId}`] = new FormControl<number | null>(null);
+      if (t === 'TEXT') controls[`question_${q.questionId}`] = new FormControl<string>('');
+    }
+
+    this.questionnaireForm = new FormGroup(controls);
   }
 
-  /**
-   * Check if a question should be readonly
-   * Always returns false - users can change answers anytime
-   */
-  isQuestionReadonly(questionId: number): boolean {
-    return false;
+  normalizeQuestionType(type: string): string {
+    return (type || '').trim().toUpperCase();
   }
 
-  /**
-   * Check if this is the last visible question
-   */
-  isLastVisibleQuestion(questionId: number): boolean {
-    const visibleArray = Array.from(this.visibleQuestions);
-    return visibleArray[visibleArray.length - 1] === questionId;
+  // ===================== Expand/Collapse =====================
+  isQuestionExpanded(questionId: number): boolean {
+    return !!this.expandedQuestionMap[questionId];
   }
 
-  /**
-   * Get visible questions in order
-   */
+  toggleQuestion(questionId: number, checked: boolean) {
+    this.expandedQuestionMap[questionId] = checked;
+  }
+
+  // ===================== Category Helpers =====================
   getVisibleQuestionsInOrder(): Question[] {
     return this.questionnaire.filter((q) => this.visibleQuestions.has(q.questionId));
   }
 
-  /**
-   * Handle MCQ checkbox change
-   */
-  onMCQChange(questionId: number, optionId: number, checked: boolean) {
-    const formArray = this.questionnaireForm.get(`question_${questionId}`) as FormArray;
+  getVisibleQuestionsByCategory(category: string): Question[] {
+    return this.getVisibleQuestionsInOrder().filter((q) => q.questionsCategory === category);
+  }
 
-    if (checked) {
-      formArray.push(new FormControl(optionId));
-    } else {
-      const index = formArray.controls.findIndex((ctrl) => ctrl.value === optionId);
-      if (index >= 0) {
-        formArray.removeAt(index);
+  getNonGeneralCategoriesInOrder(): string[] {
+    const set = new Set<string>();
+    for (const q of this.questionnaire) {
+      if (this.visibleQuestions.has(q.questionId) && q.questionsCategory !== 'generalquestions') {
+        set.add(q.questionsCategory);
       }
     }
-
-    this.onAnswerChange(questionId);
+    return [...set];
   }
 
-  /**
-   * Check if an MCQ option is selected
-   */
-  isMCQOptionSelected(questionId: number, optionId: number): boolean {
-    const formArray = this.questionnaireForm?.get(`question_${questionId}`) as FormArray<any>;
-    return formArray ? formArray.value.includes(optionId) : false;
-  }
-
-  /**
-   * Get FormControl for a question (helper for template type safety)
-   */
+  // ===================== Form Helpers =====================
   getQuestionFormControl(questionId: number): FormControl {
     return this.questionnaireForm.get(`question_${questionId}`) as FormControl;
   }
 
-  calculateAge(dob?: string | Date): number {
-    if (!dob) return 0;
-    // Handle if dob is just a number (age) or a date string
-    if (typeof dob === 'number') return dob;
-
-    const today = new Date();
-    const birthDate = new Date(dob);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
+  isQuestionReadonly(_questionId: number): boolean {
+    return false;
   }
 
-  calculateDOBToAge(dob?: string | Date): number {
-    if (!dob) return 0;
-    // Handle if dob is just a number (age) or a date string
-    //if (typeof dob === 'number') return dob;
+  // ===================== Branching =====================
+  onMCQChange(questionId: number, optionId: number, checked: boolean) {
+    const formArray = this.questionnaireForm.get(`question_${questionId}`) as FormArray<FormControl<number>>;
 
-    const today = new Date();
-    const birthDate = new Date(Number(dob), today.getMonth(), today.getDate());
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    // console.log('Calculated age from DOB:', age);
-    return age;
-  }
-
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      // console.log('SOAP Form Submitted', this.soapData);
-      // Here you would typically call a service to save the SOAP note
-      // this.patientService.saveSoapNote(this.patientId, this.soapData).subscribe(...)
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'SOAP data submitted successfully!',
-      });
-      // Optional: Redirect back or clear form
-      // this.router.navigate(['/patients']);
+    if (checked) {
+      // formArray.push(new FormControl<number>(optionId));
     } else {
-      Object.keys(form.controls).forEach((key) => {
-        form.controls[key].markAsTouched();
-      });
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Warning',
-        detail: 'Please fill all required fields.',
-      });
+      const idx = formArray.controls.findIndex((c) => c.value === optionId);
+      if (idx >= 0) formArray.removeAt(idx);
     }
+
+    const q = this.questionMap.get(questionId);
+    const opt = q?.options?.find((o) => o.optionId === optionId);
+    const nextId = opt?.nextQuestionId;
+
+    if (!nextId) return;
+    if (checked) this.showBranch(nextId);
+    else this.hideBranch(nextId);
   }
 
-  onCancel() {
-    this.router.navigate(['/patients']);
+  isMCQOptionSelected(questionId: number, optionId: number): boolean {
+    const arr = this.questionnaireForm.get(`question_${questionId}`) as FormArray<FormControl<number>>;
+    return (arr?.value || []).includes(optionId);
   }
 
-  chart: any;
-  diabetesChart: any;
+  onSCQSelect(questionId: number) {
+    const q = this.questionMap.get(questionId);
+    if (!q) return;
 
-  @ViewChild('myChart') set chartEl(el: ElementRef<HTMLCanvasElement>) {
-    if (el) {
-      if (this.chart) {
-        this.chart.destroy();
+    // hide all children first
+    for (const opt of q.options || []) {
+      if (opt.nextQuestionId) this.hideBranch(opt.nextQuestionId);
+    }
+
+    const selected = this.getQuestionFormControl(questionId).value as number | null;
+    if (!selected) return;
+
+    const selectedOpt = q.options.find((o) => o.optionId === selected);
+    if (selectedOpt?.nextQuestionId) this.showBranch(selectedOpt.nextQuestionId);
+  }
+
+  private showBranch(questionId: number) {
+    const q = this.questionMap.get(questionId);
+    if (!q) return;
+    this.visibleQuestions.add(questionId);
+    this.expandedQuestionMap[questionId] = true;
+    this.applyBranchingForQuestion(questionId);
+  }
+
+  private applyBranchingForQuestion(questionId: number) {
+    const q = this.questionMap.get(questionId);
+    if (!q) return;
+
+    const type = this.normalizeQuestionType(q.questionType);
+    const ctrl = this.questionnaireForm.get(`question_${questionId}`);
+    if (!ctrl) return;
+
+    if (type === 'SCQ') {
+      const selected = ctrl.value as number | null;
+      if (!selected) return;
+      const opt = q.options?.find((o) => o.optionId === selected);
+      if (opt?.nextQuestionId) this.showBranch(opt.nextQuestionId);
+    }
+
+    if (type === 'MCQ') {
+      const selectedList = (ctrl.value as number[]) || [];
+      for (const optionId of selectedList) {
+        const opt = q.options?.find((o) => o.optionId === optionId);
+        if (opt?.nextQuestionId) this.showBranch(opt.nextQuestionId);
       }
-      this.initChart(el.nativeElement);
     }
   }
 
-  @ViewChild('diabetesChart') set diabetesChartEl(el: ElementRef<HTMLCanvasElement>) {
-    if (el) {
-      if (this.diabetesChart) {
-        this.diabetesChart.destroy();
-      }
-      this.initDiabetesChart(el.nativeElement);
+  hideBranch(questionId: number) {
+    const q = this.questionMap.get(questionId);
+    if (!q) return;
+
+    this.visibleQuestions.delete(questionId);
+    this.expandedQuestionMap[questionId] = false;
+
+    const ctrl = this.questionnaireForm.get(`question_${questionId}`);
+    if (ctrl instanceof FormArray) ctrl.clear();
+    else ctrl?.reset();
+
+    for (const opt of q.options || []) {
+      if (opt.nextQuestionId) this.hideBranch(opt.nextQuestionId);
     }
   }
 
-  initChart(canvas: HTMLCanvasElement) {
-    this.chart = new Chart(canvas, {
-      type: 'line',
-      data: {
-        labels: ['10/09/25', '12/09/25', '14/09/25', '01/10/25'],
-        datasets: [
-          {
-            label: 'Systolic (mmHg)',
-            data: [135, 145, 156, 120],
-            borderColor: '#1f4e79',
-            backgroundColor: '#1f4e79',
-            tension: 0.3,
-            pointRadius: 5,
-            pointHoverRadius: 6,
-            fill: false,
-          },
-          {
-            label: 'Diastolic (mmHg)',
-            data: [80, 85, 90, 80],
-            borderColor: '#e67e22',
-            backgroundColor: '#e67e22',
-            tension: 0.3,
-            pointRadius: 5,
-            pointHoverRadius: 6,
-            fill: false,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          },
-          tooltip: {
-            enabled: true,
-          },
-        },
-        scales: {
-          y: {
-            beginAtZero: false,
-            grid: {
-              display: true,
-            },
-          },
-          x: {
-            grid: {
-              display: true,
-            },
-          },
-        },
-      },
-    });
-  }
-
-  initDiabetesChart(canvas: HTMLCanvasElement) {
-    this.diabetesChart = new Chart(canvas, {
-      type: 'line',
-      data: {
-        labels: ['11/09/25', '15/09/2025', '22/09/2025', '25/10/2025', '27/10/2025', '30/10/2025'],
-        datasets: [
-          {
-            label: 'Systolic (mmHg)',
-            data: [125, 99, 145, 120, 130, 85],
-            borderColor: '#1f4e79',
-            backgroundColor: '#1f4e79',
-            tension: 0.3,
-            pointRadius: 5,
-            fill: false,
-          },
-          {
-            label: 'Diastolic (mmHg)',
-            data: [224, 228, 178, 145, 230, 178],
-            borderColor: '#e67e22',
-            backgroundColor: '#e67e22',
-            tension: 0.3,
-            pointRadius: 5,
-            fill: false,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          },
-          tooltip: {
-            enabled: true,
-          },
-        },
-        scales: {
-          y: {
-            beginAtZero: false,
-            grid: {
-              display: true,
-            },
-          },
-          x: {
-            grid: {
-              display: true,
-            },
-          },
-        },
-      },
-    });
-  }
-
-  /**
-   * Prepare questionnaire data for submission
-   * Transforms form data into the required database payload format
-   */
+  // ===================== Save Subjective =====================
   prepareQuestionnairePayload(): QuestionnaireSubmissionPayload {
     const answers: AnswerPayloadItem[] = [];
 
-    // Iterate through all questions in the questionnaire
-    this.questionnaire.forEach((question) => {
-      const formControlName = `question_${question.questionId}`;
-      const formValue = this.questionnaireForm?.get(formControlName)?.value;
-      const normalizedType = this.normalizeQuestionType(question.questionType);
+    for (const q of this.questionnaire) {
+      if (!this.visibleQuestions.has(q.questionId)) continue;
 
-      // Skip if no answer provided
-      if (!formValue || (Array.isArray(formValue) && formValue.length === 0) || formValue === '') {
-        return; // Continue to next question
+      const name = `question_${q.questionId}`;
+      const val = this.questionnaireForm.get(name)?.value;
+      const t = this.normalizeQuestionType(q.questionType);
+
+      if (val === null || val === undefined || val === '' || (Array.isArray(val) && val.length === 0)) continue;
+
+      const getOptionText = (optionId: number) =>
+        q.options?.find((o) => o.optionId === optionId)?.optionText ?? String(optionId);
+
+      if (t === 'MCQ') {
+        (val as number[]).forEach((optId) => {
+          answers.push({ questionId: q.questionId, optionId: optId, answerText: getOptionText(optId) });
+        });
+      } else if (t === 'SCQ') {
+        const optId = val as number;
+        answers.push({ questionId: q.questionId, optionId: optId, answerText: getOptionText(optId) });
+      } else {
+        answers.push({ questionId: q.questionId, optionId: null, answerText: val as string });
       }
-
-      if (normalizedType === 'MCQ') {
-        // MCQ: Create one answer object per selected option
-        const selectedOptions = formValue as number[];
-        selectedOptions.forEach((optionId) => {
-          answers.push({
-            questionId: question.questionId,
-            optionId: optionId,
-            answerText: null,
-          });
-        });
-      } else if (normalizedType === 'SCQ') {
-        // SCQ: Create one answer object with selected optionId
-        answers.push({
-          questionId: question.questionId,
-          optionId: formValue as number,
-          answerText: null,
-        });
-      } else if (normalizedType === 'TEXT') {
-        // TEXT: Create one answer object with answerText and optionId = null
-        answers.push({
-          questionId: question.questionId,
-          optionId: null,
-          answerText: formValue as string,
-        });
-      }
-    });
-
-    return {
-      campId: this.campId,
-      patientId: this.patientId!,
-      answers: answers,
-    };
-  }
-
-  /**
-   * Save questionnaire answers
-   */
-  onSaveSubjective() {
-    if (!this.patientId) {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Patient ID is missing',
-      });
-      return;
     }
 
-    // Prepare the payload
+    return { campId: this.campId, patientId: this.patientId ?? 0, answers };
+  }
+
+  onSaveSubjective() {
+    if (!this.patientId) return;
+
     const payload = this.prepareQuestionnairePayload();
 
-    // Log the payload for debugging
-    // console.log('Questionnaire Submission Payload:', JSON.stringify(payload, null, 2));
-
-    // TODO: Call the API service to submit the data
-    // this.patientService.submitQuestionnaireAnswers(payload).subscribe({
-    //   next: (response) => {
-    //     this.messageService.add({
-    //       severity: 'success',
-    //       summary: 'Success',
-    //       detail: 'Questionnaire answers saved successfully!',
-    //     });
-    //   },
-    //   error: (error) => {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Error',
-    //       detail: 'Failed to save questionnaire answers',
-    //     });
-    //     console.error('Error saving questionnaire:', error);
-    //   }
-    // });
-
-    // For now, show success message
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: `Questionnaire saved with ${payload.answers.length} answers. Check console for payload.`,
+    this.patientService.submitQuestionnaireAnswers(payload).subscribe({
+      next: (res: any) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Saved',
+          detail: res?.message || 'Patient answers saved successfully',
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to save answers' });
+      },
     });
   }
 
-  /**
-   * Cancel questionnaire and reset form
-   */
   onCancelSubjective() {
     if (confirm('Are you sure you want to cancel? All unsaved changes will be lost.')) {
       this.questionnaireForm.reset();
       this.visibleQuestions.clear();
-      this.answeredQuestions.clear();
-      this.updateVisibleQuestions();
-
-      this.messageService.add({
-        severity: 'info',
-        summary: 'Cancelled',
-        detail: 'Questionnaire has been reset',
-      });
+      this.expandedQuestionMap = {};
+      this.initDefaultVisibleQuestions();
     }
+  }
+
+  // ===================== Objective Load (only once) =====================
+  private loadObjectiveDataOnce() {
+    if (this.objectiveLoaded) return;
+    this.objectiveLoaded = true;
+
+    this.loadVitals();
+    this.loadLabs();
+  }
+
+  private loadVitals() {
+    this.vitalsLoading = true;
+
+    this.patientService.getVitalsList().subscribe({
+      next: (res: Vital[]) => {
+        const list = (res || []).filter((v) => v?.isActive);
+        this.vitalsList = list.map((v) => {
+          const { icon, iconClass } = this.getVitalIcon(v.vitalName);
+          return {
+            ...v,
+            value: v.value ?? '',
+            icon,
+            iconClass,
+            unit: this.extractUnit(v.referenceRange),
+          };
+        });
+        this.vitalsLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.vitalsLoading = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load vitals' });
+      },
+    });
+  }
+
+  private loadLabs() {
+    this.labsLoading = true;
+
+    this.patientService.getLabsList().subscribe({
+      next: (res: LabTest[]) => {
+        const raw = res || [];
+
+        const hasAnyRealLab = raw.some((x) => !!(x?.labTestName || '').trim());
+        if (!hasAnyRealLab) {
+          this.labsList = this.buildLabPlaceholders();
+        } else {
+          this.labsList = raw.map((x, idx) => ({
+            ...x,
+            labTestName: (x.labTestName ?? `Lab Test ${idx + 1}`) as string,
+            description: x.description ?? '—',
+            isActive: x.isActive ?? true,
+          }));
+        }
+
+        this.initLabGroupsFromLabsList();
+        this.labsLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.labsList = this.buildLabPlaceholders();
+        this.initLabGroupsFromLabsList();
+        this.labsLoading = false;
+
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Warning',
+          detail: 'Labs API failed, showing placeholders',
+        });
+      },
+    });
+  }
+
+  private initLabGroupsFromLabsList() {
+    // make 1 group per lab
+    this.labGroups = (this.labsList || []).map((lab, idx) => ({
+      labTestLookupId: lab.id ?? idx + 1, // fallback id
+      labTestName: (lab.labTestName ?? `Lab Test ${idx + 1}`) as string,
+      entries: [this.createEmptyLabEntry()],
+    }));
+  }
+
+  private createEmptyLabEntry(): LabEntryRow {
+    return {
+      labTestDate: '',
+      testWithMedicineS: '',
+      testResultValue: '',
+      testResultUnit: '',
+      referenceValue: '',
+      remark: '',
+    };
+  }
+
+  addEntryToGroup(group: LabGroup) {
+    group.entries.push(this.createEmptyLabEntry());
+  }
+
+  removeEntryFromGroup(group: LabGroup, entryIndex: number) {
+    group.entries.splice(entryIndex, 1);
+    if (group.entries.length === 0) group.entries.push(this.createEmptyLabEntry());
+  }
+
+  // ===================== Objective Save =====================
+  private buildObjectivePayload(): ObjectiveSavePayload {
+    const vitals: VitalSaveItem[] = (this.vitalsList || [])
+      .filter((v) => v.value !== null && v.value !== undefined && String(v.value).trim() !== '')
+      .map((v) => ({
+        vitalLookupId: v.vitalId,
+        measurementType: v.vitalName ?? '',
+        vitalValue: String(v.value).trim(),
+      }));
+
+    const labTests: LabTestSaveItem[] = (this.labGroups || []).flatMap((g) =>
+      (g.entries || [])
+        .filter((e) => e.labTestDate || e.testWithMedicineS || e.testResultValue || e.remark)
+        .map((e) => ({
+          labTestLookupId: g.labTestLookupId,
+          labTestDate: e.labTestDate || '',
+          testWithMedicineS: e.testWithMedicineS || '',
+          testResultValue: e.testResultValue || '',
+          testResultUnit: e.testResultUnit || '',
+          referenceValue: e.referenceValue || '',
+          remark: e.remark || '',
+        }))
+    );
+
+    return {
+      patientId: Number(this.patientId ?? 0),
+      patientVisitId: 0,
+      labTests,
+      vitals,
+    };
+  }
+
+  onSaveObjective() {
+    if (!this.patientId) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Patient ID is missing' });
+      return;
+    }
+
+    const payload = this.buildObjectivePayload();
+    console.log('Objective Payload:', payload);
+
+    this.patientService.saveObjective(payload).subscribe({
+      next: (res: any) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Saved',
+          detail: res?.message || 'Objective saved successfully',
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to save objective' });
+      },
+    });
+  }
+
+  // ===================== Icons + Units =====================
+  private getVitalIcon(vitalName: string): { icon: string; iconClass: string } {
+    const name = (vitalName || '').toLowerCase();
+
+    if (name.includes('temperature')) return { icon: '🌡️', iconClass: 'bg-purple' };
+    if (name.includes('pulse') || name.includes('heart')) return { icon: '❤️', iconClass: 'bg-red' };
+    if (name.includes('systolic') || name.includes('diastolic') || name.includes('bp') || name.includes('blood')) {
+      return { icon: '🩺', iconClass: 'bg-lightblue' };
+    }
+    if (name.includes('respiratory') || name.includes('breath')) return { icon: '🫁', iconClass: 'bg-green' };
+    if (name.includes('oxygen') || name.includes('spo2') || name.includes('saturation')) return { icon: '🫁', iconClass: 'bg-green' };
+    if (name.includes('glucose') || name.includes('fbs') || name.includes('ppbs')) return { icon: '🧪', iconClass: 'bg-blue' };
+    if (name.includes('hba1c')) return { icon: '🧬', iconClass: 'bg-blue' };
+    if (name.includes('bmi')) return { icon: '⚖️', iconClass: 'bg-blue' };
+
+    return { icon: '📌', iconClass: 'bg-blue' };
+  }
+
+  private extractUnit(referenceRange: string): string {
+    const rr = (referenceRange || '').trim();
+    if (!rr) return '';
+    const match = rr.match(/([a-zA-Z%°/²µ]+)$/);
+    return match?.[1] ?? '';
+  }
+
+  private buildLabPlaceholders(count = this.DEFAULT_LABS_COUNT): LabTest[] {
+    return Array.from({ length: count }).map((_, i) => ({
+      id: null,
+      labTestName: `Lab Test ${i + 1}`,
+      description: '—',
+      isActive: true,
+    }));
+  }
+
+  // ===================== Utils =====================
+  calculateDOBToAge(dob?: string | Date): number {
+    if (!dob) return 0;
+    const today = new Date();
+    const birthDate = new Date(Number(dob), today.getMonth(), today.getDate());
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+    return age;
   }
 }

@@ -246,4 +246,51 @@ export class PatientService {
       );
     }
   }
+
+  /**
+ * Send camp patient answers
+ * @param payload - answers payload
+ * @returns Observable of any
+ */
+  submitQuestionnaireAnswers(payload: any): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_QUESTIONS.ANSWERS);
+    return this.http.post<any>(url, payload).pipe(
+      catchError((error) => {
+        console.error('Error creating patient:', error);
+        throw error;
+      }),
+    );
+  }
+
+  getVitalsList(): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.VITALS);
+    return this.http.get<any>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching vitals:', error);
+        throw error;
+      }),
+    );
+  }
+
+  getLabsList(): Observable<any> {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.PATIENTS.LABS);
+    return this.http.get<any>(url).pipe(
+      catchError((error) => {
+        console.error('Error fetching lab details:', error);
+        throw error;
+      }),
+    );
+  }
+
+  saveObjective(payload: any) {
+    const url = getApiUrl(API_CONFIG.ENDPOINTS.CAMP_QUESTIONS.SAVELABSVITALS);
+    return this.http.post<any>(url, payload).pipe(
+      catchError((error) => {
+        console.error('Error creating patient:', error);
+        throw error;
+      }),
+    );
+  }
+
+
 }

@@ -1,4 +1,9 @@
+<!-- soap-note.component.html -->
+<p-toast></p-toast>
+
+<!-- ========================= SOAP NOTE FULL HTML ========================= -->
 <div class="container-fluid medical-wrapper p-0">
+  <!-- ========================= HEADER ========================= -->
   <div class="patient-header card" style="padding: 0.2rem">
     <div class="card-body">
       <div class="row align-items-center g-3">
@@ -7,16 +12,14 @@
           <div class="patient-avatar"></div>
           <div>
             @if (patient) {
-              <div class="patient-name">
-                {{ patient.mrNumber }} | {{ patient.firstName }} {{ patient.lastName }} |
-                {{ patient.gender }} |
-                {{
-                  patient.age.toString().length > 2 ? calculateDOBToAge(patient.age) : patient.age
-                }}
-              </div>
-              <div class="patient-sub">
-                {{ patient.fatherName }} | {{ patient.patientAddressesList[0].city }}
-              </div>
+            <div class="patient-name">
+              {{ patient.mrNumber }} | {{ patient.firstName }} {{ patient.lastName }} |
+              {{ patient.gender }} |
+              {{ patient.age.toString().length > 2 ? calculateDOBToAge(patient.age) : patient.age }}
+            </div>
+            <div class="patient-sub">
+              {{ patient.fatherName }} | {{ patient.patientAddressesList[0].city }}
+            </div>
             }
           </div>
         </div>
@@ -24,7 +27,6 @@
         <!-- Vitals -->
         <div class="col-lg-3 border-end pe-4">
           <div class="section-title-small">Vitals</div>
-
           <div class="d-flex flex-wrap gap-2 mt-2">
             <span class="vital-chip">Weight 75</span>
             <span class="vital-chip">BP 120/80</span>
@@ -37,7 +39,6 @@
         <!-- Diagnosis -->
         <div class="col-lg-3 border-end pe-4">
           <div class="section-title-small">Diagnosis</div>
-
           <div class="d-flex flex-wrap gap-2 mt-2">
             <span class="diag-chip red">Diabetes</span>
             <span class="diag-chip red">HTN</span>
@@ -50,7 +51,6 @@
         <!-- Allergies -->
         <div class="col-lg-2">
           <div class="section-title-small">Allergies</div>
-
           <div class="d-flex flex-wrap gap-3 mt-2">
             <div>Drug <span class="status-chip yes">Yes</span></div>
             <div>Food <span class="status-chip no">No</span></div>
@@ -61,10 +61,10 @@
     </div>
   </div>
 
-  <!-- PrimeNG Tabs -->
+  <!-- ========================= BODY ========================= -->
   <div class="row g-0 mt-3">
-    <!-- LEFT SIDE -->
-    <div class="col-lg-8 left-panel">
+    <!-- ========================= LEFT PANEL ========================= -->
+    <div class="col-lg-8 left-panel p-0">
       <div class="card" style="padding: 0">
         <ul class="nav nav-tabs">
           <li [class.active]="activeTab() === 'Subject'" (click)="setActiveTab('Subject')">
@@ -73,27 +73,28 @@
               <div class="tab-sub">Chief Complaints</div>
             </div>
           </li>
+
           <li [class.active]="activeTab() === 'Objective'" (click)="setActiveTab('Objective')">
             <div class="med-tab">
               <div class="tab-title">Objective</div>
               <div class="tab-sub">Vitals / Labs</div>
             </div>
           </li>
+
           <li [class.active]="activeTab() === 'Assessment'" (click)="setActiveTab('Assessment')">
             <div class="med-tab">
               <div class="tab-title">Assessment</div>
               <div class="tab-sub">Diagnosis</div>
             </div>
           </li>
-          <li
-            [class.active]="activeTab() === 'Recommendation'"
-            (click)="setActiveTab('Recommendation')"
-          >
+
+          <li [class.active]="activeTab() === 'Recommendation'" (click)="setActiveTab('Recommendation')">
             <div class="med-tab">
               <div class="tab-title">Plan / Recommendation</div>
               <div class="tab-sub">Inside RX / Outside RX</div>
             </div>
           </li>
+
           <li [class.active]="activeTab() === 'Summary'" (click)="setActiveTab('Summary')">
             <div class="med-tab">
               <div class="tab-title">Summary</div>
@@ -102,481 +103,152 @@
           </li>
         </ul>
       </div>
+
+      <!-- ========================= SUBJECT TAB ========================= -->
       <div *ngIf="activeTab() === 'Subject'" id="SubjectQuestionnaire">
-        <!-- Dynamic Questionnaire Section -->
         @if (questionnaireLoading) {
-          <div class="medical-card mt-3">
-            <div class="card-body text-center">
-              <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-              <p class="mt-2">Loading questionnaire...</p>
-            </div>
+        <div class="medical-card mt-3">
+          <div class="card-body text-center">
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+            <p class="mt-2">Loading questionnaire...</p>
           </div>
+        </div>
         }
 
         @if (!questionnaireLoading && questionnaire.length > 0) {
-          <div class="medical-card mt-3">
-            <div class="card-body">
-              <h5 class="section-title">Medical Questionnaire</h5>
+        <div class="medical-card mt-3">
+          <div class="card-body">
+            <!-- ===== GENERAL QUESTIONS (col-md-6 only) ===== -->
+            @if (getVisibleQuestionsByCategory('generalquestions').length > 0) {
+            <div class="mt-3">
+              <h6 class="category-title">GENERAL QUESTIONS</h6>
 
-              <div class="questionnaire-container mt-3 row">
-                @for (question of getVisibleQuestionsInOrder(); track question.questionId) {
-                  <div
-                    class="col-md-6 mb-4"
-                    [class.active]="isLastVisibleQuestion(question.questionId)"
-                    [class.readonly]="isQuestionReadonly(question.questionId)"
-                  >
-                    <!-- Question Number and Text -->
-                    <div class="d-flex align-items-start gap-3 mb-3">
-                      <span class="question-number">
-                        {{ questionnaire.indexOf(question) + 1 }}
-                      </span>
-                      <div class="flex-grow-1">
-                        <p class="question-text mb-0">{{ question.questionText }}</p>
-                      </div>
-                    </div>
-
-                    <!-- MCQ - Multiple Choice with Checkboxes -->
-                    @if (normalizeQuestionType(question.questionType) === 'MCQ') {
-                      <div class="options-container app-checkboxSmall">
-                        @for (option of question.options; track option.optionId) {
-                          <div class="form-check mb-2">
-                            <p-checkbox
-                              [inputId]="'mcq_' + question.questionId + '_' + option.optionId"
-                              [value]="option.optionId"
-                              [binary]="true"
-                              [disabled]="isQuestionReadonly(question.questionId)"
-                              [ngModel]="isMCQOptionSelected(question.questionId, option.optionId)"
-                              (onChange)="
-                                onMCQChange(question.questionId, option.optionId, $event.checked)
-                              "
-                            />
-                            <label
-                              [for]="'mcq_' + question.questionId + '_' + option.optionId"
-                              class="form-check-label ms-2"
-                            >
-                              {{ option.optionText }}
-                            </label>
-                          </div>
-                        }
-                      </div>
-                    }
-
-                    <!-- SCQ - Single Choice with Radio Buttons -->
-                    @if (normalizeQuestionType(question.questionType) === 'SCQ') {
-                      <div class="options-container">
-                        @for (option of question.options; track option.optionId) {
-                          <div class="form-check mb-2">
-                            <p-radioButton
-                              [inputId]="'scq_' + question.questionId + '_' + option.optionId"
-                              [name]="'question_' + question.questionId"
-                              [value]="option.optionId"
-                              [disabled]="isQuestionReadonly(question.questionId)"
-                              [formControl]="getQuestionFormControl(question.questionId)"
-                              (onClick)="onAnswerChange(question.questionId)"
-                            />
-                            <label
-                              [for]="'scq_' + question.questionId + '_' + option.optionId"
-                              class="form-check-label ms-2"
-                            >
-                              {{ option.optionText }}
-                            </label>
-                          </div>
-                        }
-                      </div>
-                    }
-
-                    <!-- TEXT - Text Input or Textarea -->
-                    @if (normalizeQuestionType(question.questionType) === 'TEXT') {
-                      <div class="options-container">
-                        @if (question.questionText.length > 100) {
-                          <textarea
-                            pInputTextarea
-                            [id]="'text_' + question.questionId"
-                            [formControl]="getQuestionFormControl(question.questionId)"
-                            [disabled]="isQuestionReadonly(question.questionId)"
-                            (blur)="onAnswerChange(question.questionId)"
-                            rows="4"
-                            class="w-100"
-                            placeholder="Enter your answer here..."
-                          ></textarea>
-                        } @else {
-                          <input
-                            pInputText
-                            type="text"
-                            [id]="'text_' + question.questionId"
-                            [formControl]="getQuestionFormControl(question.questionId)"
-                            [disabled]="isQuestionReadonly(question.questionId)"
-                            (blur)="onAnswerChange(question.questionId)"
-                            class="w-100"
-                            placeholder="Enter your answer here..."
-                          />
-                        }
-                      </div>
-                    }
-                  </div>
+              <div class="row g-3 mt-1">
+                @for (question of getVisibleQuestionsByCategory('generalquestions'); track question.questionId) {
+                <div class="col-md-6">
+                  <ng-container *ngTemplateOutlet="questionTemplate; context: { $implicit: question }"></ng-container>
+                </div>
                 }
               </div>
             </div>
+            }
+
+            <!-- ===== OTHER CATEGORIES (one by one + background) ===== -->
+            @for (cat of getNonGeneralCategoriesInOrder(); track cat) {
+            @let qList = getVisibleQuestionsByCategory(cat);
+
+            @if (qList.length > 0) {
+            <div class="mt-4 categories">
+              <h6 class="category-title">{{ cat | uppercase }}</h6>
+
+              <div class="later-questions-wrapper">
+                @for (question of qList; track question.questionId) {
+                <div class="question-row">
+                  <ng-container *ngTemplateOutlet="questionTemplate; context: { $implicit: question }"></ng-container>
+                </div>
+                }
+              </div>
+            </div>
+            }
+            }
           </div>
+        </div>
         }
 
-        <!-- Content -->
-
-        <!-- Footer Buttons -->
+        <!-- Footer -->
         <div class="mt-3" style="padding: 1rem">
           <div class="footer-bar">
-            <button class="btn btn-outline-secondary" (click)="onCancelSubjective()">
-              Cancel subjective
-            </button>
+            <button class="btn btn-outline-secondary" (click)="onCancelSubjective()">Cancel subjective</button>
             <button class="btn btn-save" (click)="onSaveSubjective()">Save subjective</button>
-          </div>
-        </div>
-
-        <div class="general-questions" style="border: 0">
-          <h5 class="section-title">General Questions <span>(సాధారణ ప్రశ్నలు)</span></h5>
-
-          <div class="row mt-3">
-            <!-- LEFT SIDE -->
-            <div class="col-md-6">
-              <!-- Frequent Infections -->
-              <div class="question-block">
-                <label class="app-checkbox">
-                  <input type="checkbox" [(ngModel)]="soapData.frequent_infections" />
-                  <span class="checkmark"></span>
-                  Frequent Infections (తరచుగా వచ్చే ఇన్ఫెక్షన్లు)
-                </label>
-
-                <div class="sub-options" *ngIf="soapData.frequent_infections">
-                  <label class="app-checkboxSmall"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.frequent_infections_skin"
-                      name="frequent_infections_skin"
-                    />
-                    <span class="checkmarkSmall"></span>
-                    Skin (చర్మం)</label
-                  >
-                  <label class="app-checkboxSmall"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.frequent_infections_gum"
-                      name="frequent_infections_gum"
-                    />
-                    <span class="checkmarkSmall"></span>
-                    Gum (చిగుళ్లు)</label
-                  >
-                  <label class="app-checkbox"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.frequent_infections_vaginal"
-                      name="frequent_infections_vaginal"
-                    />
-                    <span class="checkmark"></span>
-                    Vaginal (యోని)</label
-                  >
-                </div>
-              </div>
-            </div>
-
-            <!-- RIGHT SIDE -->
-            <div class="col-md-6">
-              <!-- Darkened Skin -->
-              <div class="question-block">
-                <label class="app-checkbox">
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="soapData.darkened_skin"
-                    name="darkened_skin"
-                  />
-                  <span class="checkmark"></span>
-                  <span>Darkened skin in folds (చర్మ మడతల్లో నల్లబడం)</span>
-                </label>
-
-                <div class="sub-options" *ngIf="soapData.darkened_skin">
-                  <label class="app-checkboxSmall"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.darkened_skin_neck"
-                      name="darkened_skin_neck"
-                    />
-                    <span class="checkmarkSmall"></span>
-                    Neck (చర్మం)</label
-                  >
-                  <label class="app-checkboxSmall"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.darkened_skin_armpits"
-                      name="darkened_skin_armpits"
-                    />
-                    <span class="checkmarkSmall"></span>
-                    Armpits (చంక)</label
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-12">
-              <!-- Tired or Weak -->
-              <div class="question-block mb-2 mt-2">
-                <label class="app-checkbox">
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="soapData.feeling_tired_weak"
-                    name="feeling_tired_weak"
-                  />
-                  <span class="checkmark"></span>
-                  <span
-                    >Are you feeling tired or weak? (మీకు అలసట లేదా బలహీనతగా అనిపిస్తున్నదా?)</span
-                  >
-                </label>
-
-                <div class="sub-options" *ngIf="soapData.feeling_tired_weak">
-                  <label class="app-checkboxSmall"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.feeling_tired"
-                      name="feeling_tired"
-                    />
-                    <span class="checkmarkSmall"></span>
-                    Feeling tired (అలసటగా ఉంది)</label
-                  >
-                  <label class="app-checkboxSmall"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.feeling_weak"
-                      name="feeling_weak"
-                    />
-                    <span class="checkmarkSmall"></span>
-                    Feeling weak (బలహీనంగా ఉంది)</label
-                  >
-                  <label class="app-checkboxSmall"
-                    ><input
-                      type="checkbox"
-                      [(ngModel)]="soapData.feeling_both"
-                      name="feeling_both"
-                    />
-                    <span class="checkmarkSmall"></span>
-                    Both tired and weak</label
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="disease-wrapper">
-          <!-- Disease Strip -->
-          <div class="disease-strip">
-            <label class="disease-chip active app-checkbox">
-              <input type="checkbox" checked />
-              <span class="checkmark"></span>
-              Diabetes (మధుమేహం)
-            </label>
-
-            <label class="disease-chip app-checkbox">
-              <input type="checkbox" />
-              <span class="checkmark"></span>
-              HTN (అధిక రక్తపోటు)
-            </label>
-
-            <label class="disease-chip app-checkbox">
-              <input type="checkbox" />
-              <span class="checkmark"></span>
-              Seizures (మూర్చలు)
-            </label>
-
-            <label class="disease-chip app-checkbox">
-              <input type="checkbox" />
-              <span class="checkmark"></span>
-              Stroke (స్ట్రోక్)
-            </label>
-
-            <label class="disease-chip app-checkbox">
-              <input type="checkbox" />
-              <span class="checkmark"></span>
-              Asthma (ఆస్తమా)
-            </label>
-          </div>
-
-          <!-- Diabetes Card -->
-          <div class="disease-card mt-3">
-            <h5 class="card-title">Diabetes (మధుమేహం)</h5>
-
-            <!-- Type + Onset -->
-            <div class="row align-items-center mt-3">
-              <div class="col-lg-8">
-                <div class="type-options">
-                  <label>
-                    <input type="radio" name="diabetesType" checked />
-                    Type 1 (టైప్ 1)
-                  </label>
-
-                  <label>
-                    <input type="radio" name="diabetesType" />
-                    Type 2 (టైప్ 2)
-                  </label>
-
-                  <label>
-                    <input type="radio" name="diabetesType" />
-                    Gestational Diabetes
-                  </label>
-                </div>
-              </div>
-
-              <div class="col-lg-4">
-                <label class="onset-label">
-                  <input type="checkbox" checked />
-                  Onset Duration (ప్రారంభ కాలం)
-                </label>
-
-                <select class="form-select onset-dropdown mt-2">
-                  <option>Select Onset Duration</option>
-                  <option>3 Months</option>
-                  <option>6 Months</option>
-                  <option>1 Year</option>
-                  <option>18 Months</option>
-                  <option>2 Years</option>
-                  <option>3 Years</option>
-                </select>
-              </div>
-            </div>
-
-            <!-- Presenting Complaints -->
-            <div class="mt-4">
-              <label class="main-check app-checkbox">
-                <input
-                  type="checkbox"
-                  [(ngModel)]="soapData.presenting_complaints"
-                  name="presenting_complaints"
-                />
-                <span class="checkmark"></span>
-                Presenting Complaints (ప్రస్తుత లక్షణాలు)
-              </label>
-              <div class="complaint-grid mt-3 sub-options" *ngIf="soapData.presenting_complaints">
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Wounds
-                  (గాయాలు)</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Fatigue
-                  (అలసట)</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Vision
-                  Changes</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Polydipsia</label
-                >
-
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Polyuria</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Polyphagia</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Tingling /
-                  Numbness</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Unexplained
-                  weight</label
-                >
-
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Taking
-                  Medicines?</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Smoking</label
-                >
-                <label class="app-checkboxSmall"
-                  ><input type="checkbox" /> <span class="checkmarkSmall"></span>Drinking</label
-                >
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
+      <!-- ========================= QUESTION TEMPLATE ========================= -->
+      <ng-template #questionTemplate let-question>
+        <div class="question-item" [class.readonly]="isQuestionReadonly(question.questionId)">
+          <div class="d-flex gap-2 question-sec align-items-start">
+            <p-checkbox styleClass="blue-checkbox" [binary]="true" [disabled]="isQuestionReadonly(question.questionId)"
+              [ngModel]="isQuestionExpanded(question.questionId)"
+              (onChange)="toggleQuestion(question.questionId, $event.checked)"></p-checkbox>
+
+            <div class="flex-grow-1 d-flex flex-column gap-2">
+              <p class="question-text mb-0">{{ question.questionText }}</p>
+
+              @if (isQuestionExpanded(question.questionId)) {
+
+              @if (normalizeQuestionType(question.questionType) === 'MCQ') {
+              <div class="options-container app-checkboxSmall">
+                @for (option of question.options; track option.optionId) {
+                <div class="form-check">
+                  <p-checkbox styleClass="blue-checkbox" [binary]="true"
+                    [disabled]="isQuestionReadonly(question.questionId)"
+                    [ngModel]="isMCQOptionSelected(question.questionId, option.optionId)"
+                    (onChange)="onMCQChange(question.questionId, option.optionId, $event.checked)"></p-checkbox>
+
+                  <label class="form-check-label ms-2">{{ option.optionText }}</label>
+                </div>
+                }
+              </div>
+              }
+
+              @if (normalizeQuestionType(question.questionType) === 'SCQ') {
+              <div class="options-container">
+                @for (option of question.options; track option.optionId) {
+                <div class="form-check">
+                  <p-radioButton [name]="'question_' + question.questionId" [value]="option.optionId"
+                    [disabled]="isQuestionReadonly(question.questionId)"
+                    [formControl]="getQuestionFormControl(question.questionId)"
+                    (onClick)="onSCQSelect(question.questionId)"></p-radioButton>
+
+                  <label class="form-check-label ms-2">{{ option.optionText }}</label>
+                </div>
+                }
+              </div>
+              }
+
+              @if (normalizeQuestionType(question.questionType) === 'TEXT') {
+              <div class="options-container">
+                <input pInputText type="text" [formControl]="getQuestionFormControl(question.questionId)"
+                  [disabled]="isQuestionReadonly(question.questionId)" class="w-100"
+                  placeholder="Enter your answer here..." />
+              </div>
+              }
+              }
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- ========================= OBJECTIVE TAB ========================= -->
       <div *ngIf="activeTab() === 'Objective'" class="p-3">
         <div class="objective-wrapper">
+          <!-- ===== VITALS GRID ===== -->
           <div class="container-fluid">
-            <div class="row g-3">
-              <!-- Weight -->
-              <div class="col mt-0">
+            <div class="row row-cols-5 g-2">
+              <div class="col mt-0" *ngFor="let vital of vitalsList">
                 <div class="vital-box d-flex align-items-center gap-2">
-                  <div class="vital-icon weight-icon mt-4">⚖</div>
-                  <div>
-                    <label class="vital-label">Weight</label>
-                    <div class="input-group">
-                      <input class="form-control" />
-                      <span class="input-group-text-soap">Kg’s</span>
-                    </div>
+                  <div class="vital-icon" [ngClass]="vital.iconClass">
+                    {{ vital.icon }}
                   </div>
-                </div>
-              </div>
 
-              <!-- BP -->
-              <div class="col mt-0">
-                <div class="vital-box d-flex align-items-center gap-2">
-                  <div class="vital-icon bp-icon mt-4">🩺</div>
-                  <div>
-                    <label class="vital-label">BP</label>
-                    <div class="input-group">
-                      <input class="form-control" />
-                      <span class="input-group-text-soap">mmHg</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  <div class="w-100">
+                    <label class="vital-label one-line">{{ vital.vitalName }}</label>
 
-              <!-- Pulse -->
-              <div class="col mt-0">
-                <div class="vital-box d-flex align-items-center gap-2">
-                  <div class="vital-icon pulse-icon mt-4">❤</div>
-                  <div>
-                    <label class="vital-label">Pulse</label>
-                    <div class="input-group">
-                      <input class="form-control" />
-                      <span class="input-group-text-soap">/min</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Temp -->
-              <div class="col mt-0">
-                <div class="vital-box d-flex align-items-center gap-2">
-                  <div class="vital-icon temp-icon mt-4">🌡</div>
-                  <div>
-                    <label class="vital-label">Temp</label>
-                    <div class="input-group">
-                      <input class="form-control" />
-                      <span class="input-group-text-soap">°F</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- SpO2 -->
-              <div class="col mt-0">
-                <div class="vital-box d-flex align-items-center gap-2">
-                  <div class="vital-icon spo2-icon mt-4">🫁</div>
-                  <div>
-                    <label class="vital-label">SpO2</label>
-                    <div class="input-group">
-                      <input class="form-control" />
-                      <span class="input-group-text-soap">%</span>
+                    <div class="input-group position-relative">
+                      <input class="form-control" [(ngModel)]="vital.value" />
+                      <span class="input-group-text-soap">{{ vital.unit }}</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <div *ngIf="vitalsLoading" class="text-muted mt-2">Loading vitals...</div>
           </div>
 
-          <!-- Lab Table -->
-          <div class="lab-table-wrapper">
+          <!-- ===== LAB TABLE (GROUPED) ===== -->
+          <div class="lab-table-wrapper mt-3">
             <table class="table lab-table">
               <thead>
                 <tr>
@@ -592,282 +264,97 @@
               </thead>
 
               <tbody>
-                <!-- Row Example -->
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>BP</td>
+                <ng-container *ngFor="let group of labGroups; let gi = index">
+                  <!-- Render rows per entry -->
+                  <tr *ngFor="let row of group.entries; let ri = index" class="lab-row">
+                    <td *ngIf="ri === 0" [attr.rowspan]="group.entries.length" class="select-col">
+                      <input type="checkbox" />
+                    </td>
 
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
+                    <td *ngIf="ri === 0" [attr.rowspan]="group.entries.length" class="name-col">
+                      <strong>{{ group.labTestName }}</strong>
+                    </td>
 
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
+                    <!-- Date -->
+                    <td class="date-col">
+                      
+                      <input type="date" class="form-control" placeholder="Select" [(ngModel)]="row.labTestDate" />
+                    </td>
 
-                  <td>
-                    <input class="form-control" />
-                  </td>
+                    <!-- Test With Medicine -->
+                    <td class="twm-col">
+                      <div class="d-flex align-items-center gap-3">
+                        <label class="d-flex align-items-center gap-2 mb-0">
+                          <input type="radio" [name]="'twm_' + group.labTestLookupId + '_' + ri" value="Yes"
+                            [(ngModel)]="row.testWithMedicineS" />
+                          Yes
+                        </label>
 
-                  <td>-</td>
+                        <label class="d-flex align-items-center gap-2 mb-0">
+                          <input type="radio" [name]="'twm_' + group.labTestLookupId + '_' + ri" value="No"
+                            [(ngModel)]="row.testWithMedicineS" />
+                          No
+                        </label>
+                      </div>
+                    </td>
 
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
+                    <!-- Clinical Results -->
+                    <td class="clinical-col">
+                      <input class="form-control" [(ngModel)]="row.testResultValue" placeholder="Enter result" />
+                    </td>
 
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>FBS</td>
+                    <!-- Result Difference -->
+                    <td class="diff-col text-center">-</td>
 
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
+                    <!-- Add Multiple -->
+                    <td class="add-col text-center">
+                      <!-- + only on LAST row -->
+                      <button *ngIf="ri === group.entries.length - 1" class="icon-btn add-btn" type="button"
+                        (click)="addEntryToGroup(group)">
+                        +
+                      </button>
 
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
+                      <!-- delete on rows if more than 1 -->
+                      <button *ngIf="group.entries.length > 1 && ri !== group.entries.length - 1"
+                        class="icon-btn delete-btn ms-2" type="button" (click)="removeEntryFromGroup(group, ri)">
+                        🗑
+                      </button>
+                    </td>
 
-                  <td>
-                    <input class="form-control" />
-                  </td>
+                    <!-- History icons (only once) -->
+                    <td *ngIf="ri === 0" [attr.rowspan]="group.entries.length" class="history-col text-center">
+                      <div class="d-flex justify-content-center gap-2">
+                        <span class="history-icon">📄</span>
+                        <span class="history-icon">📊</span>
+                      </div>
+                    </td>
+                  </tr>
+                </ng-container>
 
-                  <td>-</td>
-
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>PPBS</td>
-
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
-
-                  <td>
-                    <input class="form-control" />
-                  </td>
-
-                  <td>-</td>
-
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>HBA1C</td>
-
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
-
-                  <td>
-                    <input class="form-control" />
-                  </td>
-
-                  <td>-</td>
-
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>RBS</td>
-
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
-
-                  <td>
-                    <input class="form-control" />
-                  </td>
-
-                  <td>-</td>
-
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>CHL</td>
-
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
-
-                  <td>
-                    <input class="form-control" />
-                  </td>
-
-                  <td>-</td>
-
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>LDL</td>
-
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
-
-                  <td>
-                    <input class="form-control" />
-                  </td>
-
-                  <td>-</td>
-
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><input type="checkbox" /></td>
-                  <td>HDL</td>
-
-                  <td>
-                    <input type="text" class="form-control" placeholder="Select" />
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-3">
-                      <label><input type="radio" name="bp" /> Yes</label>
-                      <label><input type="radio" name="bp" /> No</label>
-                    </div>
-                  </td>
-
-                  <td>
-                    <input class="form-control" />
-                  </td>
-
-                  <td>-</td>
-
-                  <td>
-                    <button class="icon-btn add-btn">+</button>
-                  </td>
-
-                  <td>
-                    <div class="d-flex gap-2">
-                      <span class="history-icon">📄</span>
-                      <span class="history-icon">📊</span>
-                    </div>
-                  </td>
+                <tr *ngIf="!labsLoading && labGroups.length === 0">
+                  <td colspan="8" class="text-center text-muted">No labs available</td>
                 </tr>
               </tbody>
             </table>
+
+            <div *ngIf="labsLoading" class="text-muted mt-2">Loading labs...</div>
           </div>
 
-          <!-- Footer Buttons for only objective -->
+          <!-- Footer -->
           <div class="footer-bar">
-            <button class="btn btn-outline-secondary">Cancel objective</button>
-            <button class="btn btn-save">Save objective</button>
+            <button class="btn btn-outline-secondary" type="button">Cancel objective</button>
+            <button class="btn btn-save" type="button" (click)="onSaveObjective()">Save objective</button>
           </div>
         </div>
       </div>
+
+      <!-- ========================= ASSESSMENT TAB ========================= -->
       <div *ngIf="activeTab() === 'Assessment'" class="p-3">
         <div class="assessment-wrapper container-fluid">
-          <!-- ===== HTN SECTION ===== -->
           <div class="disease-section">
             <h5 class="disease-title">HTN</h5>
 
             <div class="row g-3">
-              <!-- LEFT TABLE -->
               <div class="col-lg-7">
                 <table class="table history-table">
                   <thead>
@@ -877,7 +364,6 @@
                       <th>Results</th>
                     </tr>
                   </thead>
-
                   <tbody>
                     <tr>
                       <td>10/09/2025</td>
@@ -903,7 +389,6 @@
                 </table>
               </div>
 
-              <!-- RIGHT CHART -->
               <div class="col-lg-5">
                 <div class="chart-card">
                   <canvas id="myChart" #myChart style="width: 100%; max-width: 600px"></canvas>
@@ -911,14 +396,12 @@
               </div>
             </div>
 
-            <!-- NOTES -->
             <div class="notes-block mt-4">
               <label>Notes</label>
               <textarea class="form-control notes-area"></textarea>
             </div>
           </div>
 
-          <!-- ===== DIABETES SECTION ===== -->
           <div class="disease-section mt-5">
             <h5 class="disease-title">Diabetes</h5>
 
@@ -932,7 +415,6 @@
                       <th>Results (FBS / PPBS)</th>
                     </tr>
                   </thead>
-
                   <tbody>
                     <tr>
                       <td>11/09/2025</td>
@@ -950,28 +432,24 @@
 
               <div class="col-lg-5">
                 <div class="chart-card">
-                  <canvas
-                    id="diabetesChart"
-                    #diabetesChart
-                    style="width: 100%; max-width: 600px"
-                  ></canvas>
+                  <canvas id="diabetesChart" #diabetesChart style="width: 100%; max-width: 600px"></canvas>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- FOOTER -->
           <div class="footer-actions">
             <button class="btn btn-outline-secondary">Cancel</button>
             <button class="btn btn-save">Save</button>
           </div>
         </div>
       </div>
+
+      <!-- ========================= RECOMMENDATION TAB ========================= -->
       <div *ngIf="activeTab() === 'Recommendation'" class="p-3">
         <div class="rx-wrapper">
           <div class="table-responsive rx-table-wrapper">
             <table class="table rx-table" id="rxTable">
-              <!-- HEADER -->
               <thead>
                 <tr>
                   <th rowspan="2" class="select-col">Select</th>
@@ -981,7 +459,6 @@
                   <th rowspan="2">No. of Days</th>
                   <th rowspan="2">Quantity ordered</th>
                 </tr>
-
                 <tr class="sub-header">
                   <th>Morning</th>
                   <th>Afternoon</th>
@@ -989,7 +466,6 @@
                 </tr>
               </thead>
 
-              <!-- BODY -->
               <tbody>
                 <tr>
                   <td><input type="checkbox" /></td>
@@ -1001,7 +477,6 @@
                   <td class="text-center">56</td>
                   <td><input class="qty-input" value="112" /></td>
                 </tr>
-
                 <tr>
                   <td><input type="checkbox" /></td>
                   <td class="med-name">A.BENZ 10 MG</td>
@@ -1148,60 +623,47 @@
             </table>
           </div>
 
-          <!-- FOOTER -->
           <div class="rx-footer">
             <button class="btn btn-outline-secondary">Cancel</button>
             <button class="btn btn-save">Save</button>
           </div>
         </div>
       </div>
+
+      <!-- ========================= SUMMARY TAB ========================= -->
       <div *ngIf="activeTab() === 'Summary'" class="p-3">Summary Tab Content</div>
     </div>
+
+    <!-- ========================= RIGHT PANEL ========================= -->
     <div class="col-lg-4 right-panel">
-      <!-- Medical Condition Card -->
       <div class="card medical-condition-card">
-        <!-- Header -->
         <div class="condition-header">
           <div class="nav-arrow">←</div>
-
-          <div class="condition-title">
-            MEDICAL CONDITION
-            <i class="pi pi-print ms-2"></i>
-          </div>
-
+          <div class="condition-title">MEDICAL CONDITION <i class="pi pi-print ms-2"></i></div>
           <div class="nav-arrow">→</div>
         </div>
 
-        <!-- Camp Info -->
         <div class="camp-info">
           <div class="camp-logo">GBR</div>
-
           <div class="camp-details">
-            <div>
-              <small>Date</small>
+            <div><small>Date</small>
               <div>12/09/2025</div>
             </div>
-
-            <div>
-              <small>Camp Name</small>
+            <div><small>Camp Name</small>
               <div>JVV BAPATLA</div>
             </div>
-
-            <div>
-              <small>Doctor</small>
-              <div>Dr. Ramesh Naidu</div>
-              <small>Neurologist</small>
+            <div><small>Doctor</small>
+              <div>Dr. Ramesh Naidu</div><small>Neurologist</small>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- New code start -->
+      <!-- SUMMARY RIGHT SIDE (keep your existing block) -->
       <div class="summary-wrapper container-fluid mt-3">
-        <!-- DIAGNOSIS -->
+        <!-- ...same as your code... -->
         <div class="summary-section" style="padding-top: 0">
           <h5 class="section-title">DIAGNOSIS</h5>
-
           <div class="chip-row">
             <span class="chip red">Diabetes</span>
             <span class="chip red">HTN</span>
@@ -1210,17 +672,13 @@
             <span class="chip red">Asthama</span>
           </div>
         </div>
-        <div
-          class="ObjectiveSection"
-          id="objectiveSection"
-          *ngIf="
+        <div class="ObjectiveSection" id="objectiveSection" *ngIf="
             activeTab() === 'Objective' ||
             activeTab() === 'Assessment' ||
             activeTab() === 'Plan' ||
             activeTab() === 'Recommendation' ||
             activeTab() === 'Summary'
-          "
-        >
+          ">
           <!-- VITALS SUMMARY -->
           <div class="summary-section">
             <h5 class="section-title">VITALS SUMMARY</h5>
@@ -1314,14 +772,9 @@
           </div>
         </div>
         <!-- MEDICATION TABLE -->
-        <div
-          class="summary-section"
-          id="objectiveSection"
-          *ngIf="
+        <div class="summary-section" id="objectiveSection" *ngIf="
             activeTab() === 'Assessment' || activeTab() === 'Plan' || activeTab() === 'Summary'
-          "
-          style="overflow-x: auto"
-        >
+          " style="overflow-x: auto">
           <h5 class="section-title">MEDICATION</h5>
 
           <table class="table medication-table">
@@ -1361,8 +814,6 @@
           </table>
         </div>
       </div>
-
-      <!-- New code End -->
     </div>
   </div>
 </div>
